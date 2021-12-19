@@ -16,10 +16,7 @@ export class LoginComponent implements OnInit {
   }
 
   async login(username: string, password: string) {
-    console.log('Login...')
     let result = await this.auth.signInWithEmailAndPassword(username, password);
-    console.log(result.user)
     const token = await result.user?.getIdToken();
-    localStorage.setItem('firebase', token ?? '')
   }
 }
