@@ -16,12 +16,11 @@ import {SignUpComponent} from './sign-up/sign-up.component';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
-import {provideFirebaseApp, getApp, initializeApp} from '@angular/fire/app';
-import {getFirestore, provideFirestore} from '@angular/fire/firestore';
 import {AngularFireModule} from '@angular/fire/compat';
 import * as secrets from './firebaseConfig.json';
 import {SamplesComponent} from './samples/samples.component';
 import {AngularFireAuthGuard} from '@angular/fire/compat/auth-guard';
+import {EditSampleComponent} from './edit-sample/edit-sample.component';
 
 
 @NgModule({
@@ -30,7 +29,8 @@ import {AngularFireAuthGuard} from '@angular/fire/compat/auth-guard';
     LoginComponent,
     NavigationBarComponent,
     SignUpComponent,
-    SamplesComponent
+    SamplesComponent,
+    EditSampleComponent
   ],
   imports: [
     BrowserModule,
@@ -40,6 +40,11 @@ import {AngularFireAuthGuard} from '@angular/fire/compat/auth-guard';
       [
         {path: '', component: LoginComponent},
         {path: 'signup', component: SignUpComponent},
+        {
+          path: 'samples/:id',
+          component: EditSampleComponent,
+          canActivate: [AngularFireAuthGuard]
+        },
         {
           path: 'samples',
           component: SamplesComponent,
