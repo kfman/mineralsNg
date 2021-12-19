@@ -8,7 +8,7 @@
   "files": [
     "src/main.ts",
     "src/polyfills.ts",
-    "src/app/firebaseConfig.ts"
+    "src/app/firebaseConfig.json"
   ],
   "include": [
     "src/**/*.d.ts"
