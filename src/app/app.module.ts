@@ -19,7 +19,9 @@ import {MatButtonModule} from '@angular/material/button';
 import {provideFirebaseApp, getApp, initializeApp} from '@angular/fire/app';
 import {getFirestore, provideFirestore} from '@angular/fire/firestore';
 import {AngularFireModule} from '@angular/fire/compat';
-import * as secrets  from './firebaseConfig.json';
+import * as secrets from './firebaseConfig.json';
+import {SamplesComponent} from './samples/samples.component';
+import {AngularFireAuthGuard} from '@angular/fire/compat/auth-guard';
 
 
 @NgModule({
@@ -27,15 +29,23 @@ import * as secrets  from './firebaseConfig.json';
     AppComponent,
     LoginComponent,
     NavigationBarComponent,
-    SignUpComponent
+    SignUpComponent,
+    SamplesComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     RouterModule.forRoot(
-      [{path: '', component: LoginComponent},
-        {path: 'signup', component: SignUpComponent}],
+      [
+        {path: '', component: LoginComponent},
+        {path: 'signup', component: SignUpComponent},
+        {
+          path: 'samples',
+          component: SamplesComponent,
+          canActivate: [AngularFireAuthGuard]
+        },
+      ],
     ),
     NgbModule,
     MatFormFieldModule,
