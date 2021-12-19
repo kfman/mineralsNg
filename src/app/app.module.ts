@@ -11,6 +11,9 @@ import {RouterModule} from '@angular/router';
 import { NavigationBarComponent } from './widgets/navigation-bar/navigation-bar.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SignUpComponent } from './sign-up/sign-up.component';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -25,9 +28,12 @@ import { SignUpComponent } from './sign-up/sign-up.component';
     BrowserAnimationsModule,
     RouterModule.forRoot(
       [{path: '', component: LoginComponent},
-        {path:'signup', component: SignUpComponent}],
+        {path: 'signup', component: SignUpComponent}],
     ),
     NgbModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
 
   ],
   providers: [

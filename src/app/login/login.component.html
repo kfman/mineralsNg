@@ -1,3 +1,16 @@
-
-<input type="text" />
-<input type="text" />
+<h1>Login</h1>
+<p>
+  <mat-form-field appearance="fill">
+    <mat-label>Benutzername</mat-label>
+    <input matInput #username>
+  </mat-form-field>
+</p>
+<p>
+  <mat-form-field appearance="fill">
+    <mat-label>Passwort</mat-label>
+    <input matInput #password type="password">
+  </mat-form-field>
+</p>
+<button mat-raised-button color="primary" (click)="login(username.value, password.value)">
+  Login
+</button>
