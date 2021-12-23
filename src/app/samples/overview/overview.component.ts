@@ -1,17 +1,16 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {AngularFirestore} from '@angular/fire/compat/firestore';
 import {AngularFireAuth} from '@angular/fire/compat/auth';
-import {Sample} from '../models/Sample';
+import {Sample} from '../../models/Sample';
 import firebase from 'firebase/compat';
 import QueryDocumentSnapshot = firebase.firestore.QueryDocumentSnapshot;
 
 @Component({
-  selector: 'app-samples',
-  templateUrl: './samples.component.html',
-  styleUrls: ['./samples.component.css']
+  selector: 'app-overview',
+  templateUrl: './overview.component.html',
+  styleUrls: ['./overview.component.css']
 })
-export class SamplesComponent implements OnInit {
-
+export class OverviewComponent implements OnInit {
   public samples: Sample[] = [];
 
   constructor(private firestore: AngularFirestore, private auth: AngularFireAuth) {
@@ -27,5 +26,4 @@ export class SamplesComponent implements OnInit {
       });
     });
   }
-
 }

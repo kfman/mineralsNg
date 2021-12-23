@@ -18,13 +18,12 @@ import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {AngularFireModule} from '@angular/fire/compat';
 import * as secrets from './firebaseConfig.json';
-import {SamplesComponent} from './samples/samples.component';
 import {AngularFireAuthGuard} from '@angular/fire/compat/auth-guard';
-import {EditSampleComponent} from './edit-sample/edit-sample.component';
+import {EditSampleComponent} from './samples/edit-sample/edit-sample.component';
 import {InputsModule} from '@progress/kendo-angular-inputs';
 import {LabelModule} from '@progress/kendo-angular-label';
-import { GridModule } from '@progress/kendo-angular-grid';
-
+import {GridModule} from '@progress/kendo-angular-grid';
+import {OverviewComponent} from './samples/overview/overview.component';
 
 
 @NgModule({
@@ -33,8 +32,8 @@ import { GridModule } from '@progress/kendo-angular-grid';
     LoginComponent,
     NavigationBarComponent,
     SignUpComponent,
-    SamplesComponent,
-    EditSampleComponent
+    OverviewComponent,
+    EditSampleComponent,
   ],
   imports: [
     BrowserModule,
@@ -45,13 +44,13 @@ import { GridModule } from '@progress/kendo-angular-grid';
         {path: '', component: LoginComponent},
         {path: 'signup', component: SignUpComponent},
         {
-          path: 'samples/:id',
-          component: EditSampleComponent,
+          path: 'samples/overview',
+          component: OverviewComponent,
           canActivate: [AngularFireAuthGuard]
         },
         {
-          path: 'samples',
-          component: SamplesComponent,
+          path: 'samples/:id',
+          component: EditSampleComponent,
           canActivate: [AngularFireAuthGuard]
         },
       ],
