@@ -1,6 +1,9 @@
 <h1>Proben</h1>
-<ul>
-  <li *ngFor="let item of samples">
-    <a [routerLink]="['/samples/' + item.id]">Edit</a>
-    {{item.mineral}}</li>
-</ul>
+
+<button class="btn-primary btn btn-sm">Neu</button>
+
+<kendo-grid [data]="samples">
+  <kendo-grid-column field="sampleNumber" title="Name"></kendo-grid-column>
+  <kendo-grid-column field="mineral" title="Mineral"></kendo-grid-column>
+
+</kendo-grid>

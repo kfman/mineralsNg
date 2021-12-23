@@ -21,6 +21,10 @@ import * as secrets from './firebaseConfig.json';
 import {SamplesComponent} from './samples/samples.component';
 import {AngularFireAuthGuard} from '@angular/fire/compat/auth-guard';
 import {EditSampleComponent} from './edit-sample/edit-sample.component';
+import {InputsModule} from '@progress/kendo-angular-inputs';
+import {LabelModule} from '@progress/kendo-angular-label';
+import { GridModule } from '@progress/kendo-angular-grid';
+
 
 
 @NgModule({
@@ -57,6 +61,9 @@ import {EditSampleComponent} from './edit-sample/edit-sample.component';
     MatInputModule,
     MatButtonModule,
     AngularFireModule.initializeApp(secrets),
+    InputsModule,
+    LabelModule,
+    GridModule,
   ],
   providers: [
     AngularFireAuth,

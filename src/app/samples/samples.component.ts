@@ -12,7 +12,7 @@ import QueryDocumentSnapshot = firebase.firestore.QueryDocumentSnapshot;
 })
 export class SamplesComponent implements OnInit {
 
-  public samples: Array<Sample> = [];
+  public samples: Sample[] = [];
 
   constructor(private firestore: AngularFirestore, private auth: AngularFireAuth) {
   }
