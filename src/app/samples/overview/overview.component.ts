@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {
   AngularFirestore,
   DocumentSnapshot
@@ -7,6 +7,7 @@ import {AngularFireAuth} from '@angular/fire/compat/auth';
 import {Sample} from '../../models/Sample';
 import firebase from 'firebase/compat';
 import QueryDocumentSnapshot = firebase.firestore.QueryDocumentSnapshot;
+import {CollectionNames} from '../../system-constants';
 
 @Component({
   selector: 'app-overview',
@@ -21,10 +22,12 @@ export class OverviewComponent implements OnInit {
 
   ngOnInit(): void {
     this.auth.user.subscribe(v => {
-      this.firestore.collection('users').doc(v?.uid).collection('samples').get().subscribe(s => {
-        let temp :Sample[] = [];
+      this.firestore.collection(CollectionNames.userCollection).doc(v?.uid)
+        .collection(CollectionNames.sampleCollection).get().subscribe(s => {
+        let temp: Sample[] = [];
         for (let item of s.docs) {
           temp.push(Sample.fromDocument(item as DocumentSnapshot<Sample>));
+          console.log(item)
         }
         this.samples = temp;
       });

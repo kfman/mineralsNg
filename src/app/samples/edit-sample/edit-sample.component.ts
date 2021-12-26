@@ -6,6 +6,7 @@ import {
 import {ActivatedRoute} from '@angular/router';
 import {AngularFireAuth} from '@angular/fire/compat/auth';
 import {Sample} from '../../models/Sample';
+import {CollectionNames} from '../../system-constants';
 
 
 @Component({
@@ -26,8 +27,8 @@ export class EditSampleComponent implements OnInit {
       let id = p['id'];
       this.auth.user.subscribe((value => {
         const userId = value?.uid;
-        this.firestore.collection('user').doc(userId)
-          .collection('samples').doc(id).get().subscribe((value) => {
+        this.firestore.collection(CollectionNames.userCollection).doc(userId)
+          .collection(CollectionNames.sampleCollection).doc(id).get().subscribe((value) => {
           this.sample = Sample.fromDocument(value as DocumentSnapshot<Sample>);
           console.log(value.ref);
           console.log(this.sample)
