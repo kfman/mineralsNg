@@ -24,6 +24,7 @@ import {InputsModule} from '@progress/kendo-angular-inputs';
 import {LabelModule} from '@progress/kendo-angular-label';
 import {GridModule} from '@progress/kendo-angular-grid';
 import {OverviewComponent} from './samples/overview/overview.component';
+import {ImportCsvComponent} from './samples/import-csv/import-csv.component';
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import {OverviewComponent} from './samples/overview/overview.component';
     SignUpComponent,
     OverviewComponent,
     EditSampleComponent,
+    ImportCsvComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,6 +48,11 @@ import {OverviewComponent} from './samples/overview/overview.component';
         {
           path: 'samples/overview',
           component: OverviewComponent,
+          canActivate: [AngularFireAuthGuard]
+        },
+        {
+          path: 'samples/import',
+          component: ImportCsvComponent,
           canActivate: [AngularFireAuthGuard]
         },
         {
