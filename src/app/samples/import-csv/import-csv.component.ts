@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-import-csv',
@@ -7,9 +7,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ImportCsvComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
 
+  async readFile(files: FileList | null) {
+    console.log(files);
+    if (files?.length ?? 0 == 0) {
+      return;
+    }
+
+    let file = files!.item(0)!;
+    let fileReader: FileReader = new FileReader();
+    fileReader.onload = (e) => {
+      console.log(e);
+      console.log(fileReader.result);
+    };
+    fileReader.readAsText(file, 'UTF-8');
+  }
 }
