@@ -5,14 +5,36 @@
 
 <table class="table table-bordered">
   <tr>
+    <th>Probennummer</th>
     <th>Mineral</th>
-    <th class="d-none d-lg-block">Begleitmineral</th>
+    <th>Begleitmineral</th>
+    <th>Analyse</th>
+    <th>Bemerkung</th>
+    <th>Fundort</th>
+    <th>Seriennummer</th>
+    <th>Größe</th>
+    <th>Zeitpunkt</th>
+    <th>Wert</th>
     <th>&nbsp;</th>
   </tr>
 
   <tr *ngFor="let sample of samples">
+    <td>{{sample.sampleNumber}}</td>
     <td>{{sample.mineral}}</td>
-    <td class="d-none d-lg-block">{{sample.sideMineral}}</td>
-    <td><button class="btn btn-sm btn-primary">Edit</button></td>
+    <td>{{sample.sideMineral}}</td>
+    <td>{{sample.analytics}}</td>
+    <td>{{sample.annotation}}</td>
+    <td>{{sample.imageName}}</td>
+    <td>{{sample.location}}</td>
+    <td>{{sample.origin}}</td>
+    <td>{{sample.serial}}</td>
+    <td>{{sample.size}}</td>
+    <td>{{sample.timeStamp}}</td>
+    <td>{{sample.value}}</td>
+
+
+    <td>
+      <button class="btn btn-sm btn-primary" [routerLink]="['/samples/'+sample.id]">Edit</button>
+    </td>
   </tr>
 </table>
