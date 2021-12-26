@@ -2,8 +2,17 @@
 
 <button class="btn-primary btn btn-sm">Neu</button>
 
-<kendo-grid [data]="samples">
-  <kendo-grid-column field="sampleNumber" title="Name"></kendo-grid-column>
-  <kendo-grid-column field="mineral" title="Mineral"></kendo-grid-column>
-  <kendo-grid-column field="sideMineral" title="Begleitmineral"></kendo-grid-column>
-</kendo-grid>
+
+<table class="table table-bordered">
+  <tr>
+    <th>Mineral</th>
+    <th class="d-none d-lg-block">Begleitmineral</th>
+    <th>&nbsp;</th>
+  </tr>
+
+  <tr *ngFor="let sample of samples">
+    <td>{{sample.mineral}}</td>
+    <td class="d-none d-lg-block">{{sample.sideMineral}}</td>
+    <td><button class="btn btn-sm btn-primary">Edit</button></td>
+  </tr>
+</table>
