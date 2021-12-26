@@ -1,10 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {AngularFirestore} from '@angular/fire/compat/firestore';
+import {
+  AngularFirestore,
+  DocumentSnapshot
+} from '@angular/fire/compat/firestore';
 import {ActivatedRoute} from '@angular/router';
 import {AngularFireAuth} from '@angular/fire/compat/auth';
 import {Sample} from '../../models/Sample';
-import firebase from 'firebase/compat';
-import QueryDocumentSnapshot = firebase.firestore.QueryDocumentSnapshot;
+
 
 @Component({
   selector: 'app-edit-sample',
@@ -26,7 +28,9 @@ export class EditSampleComponent implements OnInit {
         const userId = value?.uid;
         this.firestore.collection('user').doc(userId)
           .collection('samples').doc(id).get().subscribe((value) => {
-          this.sample = Sample.fromDocument(value as QueryDocumentSnapshot<Sample>);
+          this.sample = Sample.fromDocument(value as DocumentSnapshot<Sample>);
+          console.log(value.ref);
+          console.log(this.sample)
         });
       }));
     });

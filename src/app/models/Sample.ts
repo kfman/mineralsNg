@@ -1,4 +1,5 @@
-import {QueryDocumentSnapshot} from '@angular/fire/compat/firestore';
+import {DocumentSnapshot} from '@angular/fire/compat/firestore';
+
 
 export class Sample {
   public id: string = '';
@@ -15,7 +16,7 @@ export class Sample {
   public timeStamp: string = '';
   public value: number = 0;
 
-  public static fromDocument(item: QueryDocumentSnapshot<Sample>): Sample {
+  public static fromDocument(item: DocumentSnapshot<Sample>): Sample {
     let result = new Sample();
     result.id = item.id;
     result.sampleNumber = item.get('sampleNumber');
