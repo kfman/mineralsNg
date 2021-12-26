@@ -14,12 +14,12 @@ export class ImportCsvComponent implements OnInit {
   }
 
   async readFile(files: FileList | null) {
-    console.log(files);
-    if (files?.length ?? 0 == 0) {
+    if ((files?.length ?? 0) == 0) {
       return;
     }
 
     let file = files!.item(0)!;
+    console.log(file);
     let fileReader: FileReader = new FileReader();
     fileReader.onload = (e) => {
       console.log(e);
