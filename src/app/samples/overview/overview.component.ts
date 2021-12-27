@@ -8,6 +8,7 @@ import {Sample} from '../../models/Sample';
 import firebase from 'firebase/compat';
 import QueryDocumentSnapshot = firebase.firestore.QueryDocumentSnapshot;
 import {CollectionNames} from '../../system-constants';
+import {limit, orderBy} from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-overview',
@@ -23,13 +24,13 @@ export class OverviewComponent implements OnInit {
   ngOnInit(): void {
     this.auth.user.subscribe(v => {
       this.firestore.collection(CollectionNames.userCollection).doc(v?.uid)
-        .collection(CollectionNames.sampleCollection).get().subscribe(s => {
+        .collection(CollectionNames.sampleCollection, ref => ref.orderBy('sampleNumber', 'desc')).get().subscribe(s => {
         let temp: Sample[] = [];
         for (let item of s.docs) {
           temp.push(Sample.fromDocument(item as DocumentSnapshot<Sample>));
-          console.log(item)
+          console.log(item);
         }
-        this.samples = temp.sort((a,b)=> a.sampleNumber.localeCompare(b.sampleNumber));
+        this.samples = temp.sort((a, b) => a.sampleNumber.localeCompare(b.sampleNumber));
       });
     });
   }
