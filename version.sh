@@ -21,3 +21,6 @@ git commit -m "Version updated to V$1"
 git tag -a V$1 -m "Version $1"
 
 ng build -c production
+
+git push
+git push --tags

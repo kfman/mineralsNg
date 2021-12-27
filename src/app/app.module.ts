@@ -26,6 +26,8 @@ import {GridModule} from '@progress/kendo-angular-grid';
 import {OverviewComponent} from './samples/overview/overview.component';
 import {ImportCsvComponent} from './samples/import-csv/import-csv.component';
 import { SampleListComponent } from './widgets/sample-list/sample-list.component';
+import {MatCardModule} from '@angular/material/card';
+import {MatIconModule} from '@angular/material/icon';
 
 
 @NgModule({
@@ -72,6 +74,8 @@ import { SampleListComponent } from './widgets/sample-list/sample-list.component
     InputsModule,
     LabelModule,
     GridModule,
+    MatCardModule,
+    MatIconModule,
   ],
   providers: [
     AngularFireAuth,
