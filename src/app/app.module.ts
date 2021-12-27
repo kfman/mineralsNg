@@ -25,6 +25,7 @@ import {LabelModule} from '@progress/kendo-angular-label';
 import {GridModule} from '@progress/kendo-angular-grid';
 import {OverviewComponent} from './samples/overview/overview.component';
 import {ImportCsvComponent} from './samples/import-csv/import-csv.component';
+import { SampleListComponent } from './widgets/sample-list/sample-list.component';
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import {ImportCsvComponent} from './samples/import-csv/import-csv.component';
     OverviewComponent,
     EditSampleComponent,
     ImportCsvComponent,
+    SampleListComponent,
   ],
   imports: [
     BrowserModule,

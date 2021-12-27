@@ -29,7 +29,7 @@ export class OverviewComponent implements OnInit {
           temp.push(Sample.fromDocument(item as DocumentSnapshot<Sample>));
           console.log(item)
         }
-        this.samples = temp;
+        this.samples = temp.sort((a,b)=> a.sampleNumber.localeCompare(b.sampleNumber));
       });
     });
   }

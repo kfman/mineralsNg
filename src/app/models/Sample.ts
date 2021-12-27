@@ -1,8 +1,10 @@
 import {DocumentSnapshot} from '@angular/fire/compat/firestore';
+import firebase from 'firebase/compat';
+import DocumentData = firebase.firestore.DocumentData;
 
 
 export class Sample {
-  public id: string = '';
+  public id: string | undefined = undefined;
   public sampleNumber: string = '';
   public analytics: string = '';
   public annotation: string = '';
@@ -15,6 +17,7 @@ export class Sample {
   public size: string = '';
   public timeStamp: string = '';
   public value: number = 0;
+  public printed: string = '';
 
   public static fromDocument(item: DocumentSnapshot<Sample>): Sample {
     let result = new Sample();
@@ -36,5 +39,22 @@ export class Sample {
 
   constructor() {
 
+  }
+
+  toDocumentData() {
+    return {
+      sampleNumber: this.sampleNumber,
+      analytics: this.analytics,
+      annotation: this.annotation,
+      imageName: this.imageName,
+      location: this.location,
+      mineral: this.mineral,
+      origin: this.origin,
+      serial: this.serial,
+      sideMineral: this.sideMineral,
+      size: this.size,
+      timeStamp: this.timeStamp,
+      value: this.value
+    };
   }
 }
