@@ -1,36 +1,66 @@
-<table class="table table-bordered">
-  <tr>
-    <th>Probennummer</th>
-    <th>Mineral</th>
-    <th>Begleitmineral</th>
-    <th>Analyse</th>
-    <th>Bemerkung</th>
-    <th>Seriennummer</th>
-    <th>Größe</th>
-    <th>Zeitpunkt</th>
-    <th>Wert</th>
-    <th>Fundort</th>
-    <th>Herkunft</th>
-    <th *ngIf="showEdit">&nbsp;</th>
-  </tr>
+<div class="d-md-none">
+  <ng-container *ngFor="let sample of samples">
+  <table class="table table-bordered">
+    <tr>
+      <th class="col-1">Probennummer</th>
+      <td>{{sample.sampleNumber}}</td>
+    </tr>
+    <tr>
+      <th>Mineral</th>
+      <td>{{sample.mineral}}</td>
+    </tr>
+    <tr>
+      <th>Fundort</th>
+      <td>{{sample.location}}</td>
+    </tr>
+    <tr>
+      <th>Zeitpunkt</th>
+      <td>{{sample.timeStamp}}</td>
+    </tr>
+    <tr>
+      <th>Wert</th>
+      <td>{{sample.value | currency}}</td>
+    </tr>
+  </table>
+  </ng-container>
+</div>
 
-  <tr *ngFor="let sample of samples">
-    <td>{{sample.sampleNumber}}</td>
-    <td>{{sample.mineral}}</td>
-    <td>{{sample.sideMineral}}</td>
-    <td>{{sample.analytics}}</td>
-    <td>{{sample.annotation}}</td>
-    <td>{{sample.serial}}</td>
-    <td>{{sample.size}}</td>
-    <td>{{sample.timeStamp}}</td>
-    <td>{{sample.value}}</td>
-    <td>{{sample.location}}</td>
-    <td>{{sample.origin}}</td>
+<div class="d-none d-md-block">
+  <table class="table table-bordered">
+    <tr>
+      <th>Probennummer</th>
+      <th>Mineral</th>
+      <th>Begleitmineral</th>
+      <th>Analyse</th>
+      <th>Bemerkung</th>
+      <th>Seriennummer</th>
+      <th>Größe</th>
+      <th>Zeitpunkt</th>
+      <th>Wert</th>
+      <th>Fundort</th>
+      <th>Herkunft</th>
+      <th *ngIf="showEdit">&nbsp;</th>
+    </tr>
+
+    <tr *ngFor="let sample of samples">
+      <td>{{sample.sampleNumber}}</td>
+      <td>{{sample.mineral}}</td>
+      <td>{{sample.sideMineral}}</td>
+      <td>{{sample.analytics}}</td>
+      <td>{{sample.annotation}}</td>
+      <td>{{sample.serial}}</td>
+      <td>{{sample.size}}</td>
+      <td>{{sample.timeStamp}}</td>
+      <td>{{sample.value | currency}}</td>
+      <td>{{sample.location}}</td>
+      <td>{{sample.origin}}</td>
 
 
-    <td *ngIf="showEdit">
-      <button class="btn btn-sm btn-primary" [routerLink]="['/samples/'+sample.id]">Edit</button>
-    </td>
-  </tr>
-</table>
-
+      <td *ngIf="showEdit">
+        <button class="btn btn-sm btn-primary"
+                [routerLink]="['/samples/'+sample.id]">Edit
+        </button>
+      </td>
+    </tr>
+  </table>
+</div>

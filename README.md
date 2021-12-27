@@ -7,8 +7,8 @@ with [Angular CLI](https://github.com/angular/angular-cli) version 13.1.2.
 
 ## Sample list widget
 
-Creating a sample list widget could be used in csv data import and as default
-list widget.
+- Creating a sample list widget could be used in csv data import and as default
+  list widget.
 
 # Secrets
 

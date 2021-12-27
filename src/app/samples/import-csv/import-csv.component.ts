@@ -36,6 +36,9 @@ export class ImportCsvComponent implements OnInit {
       for (let line of fileReader.result!.toString().split('\n')) {
         try {
           let columns = line.split(';');
+          if (columns.length < 13) {
+            continue;
+          }
           if (columns[0] == 'ID') {
             continue;
           }

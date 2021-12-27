@@ -26,6 +26,7 @@ import {GridModule} from '@progress/kendo-angular-grid';
 import {OverviewComponent} from './samples/overview/overview.component';
 import {ImportCsvComponent} from './samples/import-csv/import-csv.component';
 import { SampleListComponent } from './widgets/sample-list/sample-list.component';
+import {MatCardModule} from '@angular/material/card';
 
 
 @NgModule({
@@ -39,40 +40,41 @@ import { SampleListComponent } from './widgets/sample-list/sample-list.component
     ImportCsvComponent,
     SampleListComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    RouterModule.forRoot(
-      [
-        {path: '', component: LoginComponent},
-        {path: 'signup', component: SignUpComponent},
-        {
-          path: 'samples/overview',
-          component: OverviewComponent,
-          canActivate: [AngularFireAuthGuard]
-        },
-        {
-          path: 'samples/import',
-          component: ImportCsvComponent,
-          canActivate: [AngularFireAuthGuard]
-        },
-        {
-          path: 'samples/:id',
-          component: EditSampleComponent,
-          canActivate: [AngularFireAuthGuard]
-        },
-      ],
-    ),
-    NgbModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    AngularFireModule.initializeApp(secrets),
-    InputsModule,
-    LabelModule,
-    GridModule,
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        RouterModule.forRoot(
+            [
+                {path: '', component: LoginComponent},
+                {path: 'signup', component: SignUpComponent},
+                {
+                    path: 'samples/overview',
+                    component: OverviewComponent,
+                    canActivate: [AngularFireAuthGuard]
+                },
+                {
+                    path: 'samples/import',
+                    component: ImportCsvComponent,
+                    canActivate: [AngularFireAuthGuard]
+                },
+                {
+                    path: 'samples/:id',
+                    component: EditSampleComponent,
+                    canActivate: [AngularFireAuthGuard]
+                },
+            ],
+        ),
+        NgbModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        AngularFireModule.initializeApp(secrets),
+        InputsModule,
+        LabelModule,
+        GridModule,
+        MatCardModule,
+    ],
   providers: [
     AngularFireAuth,
     AngularFireDatabase,
