@@ -27,6 +27,7 @@ import {OverviewComponent} from './samples/overview/overview.component';
 import {ImportCsvComponent} from './samples/import-csv/import-csv.component';
 import { SampleListComponent } from './widgets/sample-list/sample-list.component';
 import {MatCardModule} from '@angular/material/card';
+import {MatIconModule} from '@angular/material/icon';
 
 
 @NgModule({
@@ -40,41 +41,42 @@ import {MatCardModule} from '@angular/material/card';
     ImportCsvComponent,
     SampleListComponent,
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        RouterModule.forRoot(
-            [
-                {path: '', component: LoginComponent},
-                {path: 'signup', component: SignUpComponent},
-                {
-                    path: 'samples/overview',
-                    component: OverviewComponent,
-                    canActivate: [AngularFireAuthGuard]
-                },
-                {
-                    path: 'samples/import',
-                    component: ImportCsvComponent,
-                    canActivate: [AngularFireAuthGuard]
-                },
-                {
-                    path: 'samples/:id',
-                    component: EditSampleComponent,
-                    canActivate: [AngularFireAuthGuard]
-                },
-            ],
-        ),
-        NgbModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatButtonModule,
-        AngularFireModule.initializeApp(secrets),
-        InputsModule,
-        LabelModule,
-        GridModule,
-        MatCardModule,
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    RouterModule.forRoot(
+      [
+        {path: '', component: LoginComponent},
+        {path: 'signup', component: SignUpComponent},
+        {
+          path: 'samples/overview',
+          component: OverviewComponent,
+          canActivate: [AngularFireAuthGuard]
+        },
+        {
+          path: 'samples/import',
+          component: ImportCsvComponent,
+          canActivate: [AngularFireAuthGuard]
+        },
+        {
+          path: 'samples/:id',
+          component: EditSampleComponent,
+          canActivate: [AngularFireAuthGuard]
+        },
+      ],
+    ),
+    NgbModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    AngularFireModule.initializeApp(secrets),
+    InputsModule,
+    LabelModule,
+    GridModule,
+    MatCardModule,
+    MatIconModule,
+  ],
   providers: [
     AngularFireAuth,
     AngularFireDatabase,
