@@ -18,9 +18,14 @@ import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {AngularFireModule} from '@angular/fire/compat';
 import * as secrets from './firebaseConfig.json';
-import {SamplesComponent} from './samples/samples.component';
 import {AngularFireAuthGuard} from '@angular/fire/compat/auth-guard';
-import {EditSampleComponent} from './edit-sample/edit-sample.component';
+import {EditSampleComponent} from './samples/edit-sample/edit-sample.component';
+import {InputsModule} from '@progress/kendo-angular-inputs';
+import {LabelModule} from '@progress/kendo-angular-label';
+import {GridModule} from '@progress/kendo-angular-grid';
+import {OverviewComponent} from './samples/overview/overview.component';
+import {ImportCsvComponent} from './samples/import-csv/import-csv.component';
+import { SampleListComponent } from './widgets/sample-list/sample-list.component';
 
 
 @NgModule({
@@ -29,8 +34,10 @@ import {EditSampleComponent} from './edit-sample/edit-sample.component';
     LoginComponent,
     NavigationBarComponent,
     SignUpComponent,
-    SamplesComponent,
-    EditSampleComponent
+    OverviewComponent,
+    EditSampleComponent,
+    ImportCsvComponent,
+    SampleListComponent,
   ],
   imports: [
     BrowserModule,
@@ -41,13 +48,18 @@ import {EditSampleComponent} from './edit-sample/edit-sample.component';
         {path: '', component: LoginComponent},
         {path: 'signup', component: SignUpComponent},
         {
-          path: 'samples/:id',
-          component: EditSampleComponent,
+          path: 'samples/overview',
+          component: OverviewComponent,
           canActivate: [AngularFireAuthGuard]
         },
         {
-          path: 'samples',
-          component: SamplesComponent,
+          path: 'samples/import',
+          component: ImportCsvComponent,
+          canActivate: [AngularFireAuthGuard]
+        },
+        {
+          path: 'samples/:id',
+          component: EditSampleComponent,
           canActivate: [AngularFireAuthGuard]
         },
       ],
@@ -57,6 +69,9 @@ import {EditSampleComponent} from './edit-sample/edit-sample.component';
     MatInputModule,
     MatButtonModule,
     AngularFireModule.initializeApp(secrets),
+    InputsModule,
+    LabelModule,
+    GridModule,
   ],
   providers: [
     AngularFireAuth,

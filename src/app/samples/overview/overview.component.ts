@@ -1,0 +1,36 @@
+import {Component, OnInit} from '@angular/core';
+import {
+  AngularFirestore,
+  DocumentSnapshot
+} from '@angular/fire/compat/firestore';
+import {AngularFireAuth} from '@angular/fire/compat/auth';
+import {Sample} from '../../models/Sample';
+import firebase from 'firebase/compat';
+import QueryDocumentSnapshot = firebase.firestore.QueryDocumentSnapshot;
+import {CollectionNames} from '../../system-constants';
+
+@Component({
+  selector: 'app-overview',
+  templateUrl: './overview.component.html',
+  styleUrls: ['./overview.component.css']
+})
+export class OverviewComponent implements OnInit {
+  public samples: Sample[] = [];
+
+  constructor(private firestore: AngularFirestore, private auth: AngularFireAuth) {
+  }
+
+  ngOnInit(): void {
+    this.auth.user.subscribe(v => {
+      this.firestore.collection(CollectionNames.userCollection).doc(v?.uid)
+        .collection(CollectionNames.sampleCollection).get().subscribe(s => {
+        let temp: Sample[] = [];
+        for (let item of s.docs) {
+          temp.push(Sample.fromDocument(item as DocumentSnapshot<Sample>));
+          console.log(item)
+        }
+        this.samples = temp.sort((a,b)=> a.sampleNumber.localeCompare(b.sampleNumber));
+      });
+    });
+  }
+}

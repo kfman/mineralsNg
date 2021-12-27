@@ -1,0 +1,8 @@
+<h1>Import CSV Datei</h1>
+
+<input type="file" id="file" #file (change)="readFile(file.files)"/>
+<app-sample-list [samples]="samples" [showEdit]="false"></app-sample-list>
+
+<button *ngIf="samples.length > 0" class="btn btn-primary" (click)="import()">
+  Import durchführen
+</button>

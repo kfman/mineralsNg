@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SamplesComponent } from './samples.component';
+import { ImportCsvComponent } from './import-csv.component';
 
-describe('SamplesComponent', () => {
-  let component: SamplesComponent;
-  let fixture: ComponentFixture<SamplesComponent>;
+describe('ImportCsvComponent', () => {
+  let component: ImportCsvComponent;
+  let fixture: ComponentFixture<ImportCsvComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SamplesComponent ]
+      declarations: [ ImportCsvComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SamplesComponent);
+    fixture = TestBed.createComponent(ImportCsvComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
