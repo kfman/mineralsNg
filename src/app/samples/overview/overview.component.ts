@@ -24,13 +24,13 @@ export class OverviewComponent implements OnInit {
   ngOnInit(): void {
     this.auth.user.subscribe(v => {
       this.firestore.collection(CollectionNames.userCollection).doc(v?.uid)
-        .collection(CollectionNames.sampleCollection, ref => ref.orderBy('sampleNumber', 'desc')).get().subscribe(s => {
+        .collection(CollectionNames.sampleCollection, ref => ref.orderBy('sampleNumber', 'desc').limit(20)).get().subscribe(s => {
         let temp: Sample[] = [];
         for (let item of s.docs) {
           temp.push(Sample.fromDocument(item as DocumentSnapshot<Sample>));
           console.log(item);
         }
-        this.samples = temp.sort((a, b) => a.sampleNumber.localeCompare(b.sampleNumber));
+        this.samples = temp.sort((a, b) => b.sampleNumber.localeCompare(a.sampleNumber));
       });
     });
   }

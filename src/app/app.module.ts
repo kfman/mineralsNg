@@ -28,6 +28,8 @@ import {ImportCsvComponent} from './samples/import-csv/import-csv.component';
 import { SampleListComponent } from './widgets/sample-list/sample-list.component';
 import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
+import { SettingsComponent } from './settings/settings.component';
+import {environment} from '../environments/environment';
 
 
 @NgModule({
@@ -40,6 +42,7 @@ import {MatIconModule} from '@angular/material/icon';
     EditSampleComponent,
     ImportCsvComponent,
     SampleListComponent,
+    SettingsComponent,
   ],
   imports: [
     BrowserModule,
@@ -48,6 +51,7 @@ import {MatIconModule} from '@angular/material/icon';
     RouterModule.forRoot(
       [
         {path: '', component: LoginComponent},
+        {path: 'settings', component: SettingsComponent},
         {path: 'signup', component: SignUpComponent},
         {
           path: 'samples/overview',
@@ -80,6 +84,7 @@ import {MatIconModule} from '@angular/material/icon';
   providers: [
     AngularFireAuth,
     AngularFireDatabase,
+    {provide: 'VERSION', useValue: environment.version},
 
   ],
   bootstrap: [AppComponent]

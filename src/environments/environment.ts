@@ -1,9 +1,14 @@
+import PackageInfo from '../../package.json';
+
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+const versionNr = PackageInfo.version + '-DEBUG';
+
 export const environment = {
-  production: false
+  production: false,
+  version: versionNr
 };
 
 /*
