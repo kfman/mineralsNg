@@ -4,7 +4,7 @@ import PackageInfo from '../../package.json';
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-const versionNr = PackageInfo.version + '-DEBUG';
+const versionNr = PackageInfo.version + '-development';
 
 export const environment = {
   production: false,
