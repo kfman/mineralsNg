@@ -30,6 +30,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
 import { SettingsComponent } from './settings/settings.component';
 import {environment} from '../environments/environment';
+import {PdfCreatorService} from './services/pdf-creator.service';
 
 
 @NgModule({
@@ -85,7 +86,7 @@ import {environment} from '../environments/environment';
     AngularFireAuth,
     AngularFireDatabase,
     {provide: 'VERSION', useValue: environment.version},
-
+    PdfCreatorService
   ],
   bootstrap: [AppComponent]
 })
