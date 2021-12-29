@@ -83,6 +83,5 @@ export interface ILabelPage {
   yOffset: number;
   rowOffset: number;
   colOffset: number;
-
 }
 

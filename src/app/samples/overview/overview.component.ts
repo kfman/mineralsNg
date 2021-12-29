@@ -39,6 +39,6 @@ export class OverviewComponent implements OnInit {
   }
 
   createPdf() :void{
-    this.pdfCreator.create(this.samples, "GS");
+    this.pdfCreator.create(this.samples, PdfCreatorService.Page_GS);
   }
 }
