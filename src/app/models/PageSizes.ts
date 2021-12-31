@@ -1,5 +1,6 @@
 import {IPrintSample} from './Sample';
-import {StyleDictionary} from 'pdfmake/interfaces';
+import {StyleDictionary, TDocumentDefinitions} from 'pdfmake/interfaces';
+import {off} from '@angular/fire/database';
 
 export interface IOffset {
   x: number;
@@ -21,8 +22,8 @@ export abstract class ILabelPage {
 
   getCellOffset(row: number, column: number): IOffset {
     return {
-      x: row * this.width + this.xOffset,
-      y: column * this.height + this.yOffset
+      x: 0.3 * row * this.width + this.xOffset,
+      y: 0.3 * column * this.height + this.yOffset
     };
   };
 
@@ -30,8 +31,30 @@ export abstract class ILabelPage {
 
   abstract labelFrom(sample: IPrintSample, row: number, column: number): any[];
 
-  createPage(): any[] {
-    return [];
+  createPage(showGrid: boolean = false): any[] {
+    let result = [];
+
+    for (let row = 0; row < this.rows; row++) {
+      for (let column = 0; column < this.columns; column++) {
+        const sample = this.samples[column + row * this.columns];
+        if (showGrid) {
+          const offset = this.getCellOffset(row, column);
+          result.push(
+            {
+              canvas: [{
+                type: 'rect',
+                x: offset.x,
+                y: offset.y,
+                w: this.width,
+                h: this.height
+              }]
+            }
+          );
+        }
+        result.push(this.labelFrom(sample, row, column));
+      }
+    }
+    return result;
   }
 }
 
@@ -51,55 +74,64 @@ export class Page_GS extends ILabelPage {
 
   override labelFrom(sample: IPrintSample, row: number, column: number): any[] {
     const cellOffset = super.getCellOffset(row, column);
+    const center = cellOffset.x + this.width / 2;
     return [
       {
         text: sample.sampleNumber,
-        absolutePosition: {x: cellOffset.x + 10, y: cellOffset.y + 10},
+        absolutePosition: {x: center, y: cellOffset.y},
+        style: 'sampleNumber'
       },
       {
         text: sample.mineral,
-        absolutePosition: {x: cellOffset.x + 10, y: cellOffset.y + 10},
+        absolutePosition: {x: center, y: cellOffset.y + 10},
+        style: 'mineral'
       },
       {
         text: sample.location,
-        absolutePosition: {x: cellOffset.x + 10, y: cellOffset.y + 10},
+        absolutePosition: {x: center, y: cellOffset.y + 20},
+        style: 'location'
       },
       {
         text: sample.timeStamp,
-        absolutePosition: {x: cellOffset.x + 10, y: cellOffset.y + 10},
+        absolutePosition: {x: center, y: cellOffset.y + 30},
+        style: 'timeStamp'
+      },
+      {
+        text: sample.value,
+        absolutePosition: {x: center, y: cellOffset.y + 40},
+        style: 'value'
       },
     ];
-
   };
 
   override getStyles(): StyleDictionary {
     return {
       sampleNumber: {
-        fontSize: 22,
+        fontSize: 12,
         bold: true,
         italics: false,
         alignment: 'center'
       },
       location: {
-        fontSize: 22,
+        fontSize: 10,
         bold: true,
         italics: false,
         alignment: 'center'
       },
       value: {
-        fontSize: 22,
+        fontSize: 10,
         bold: true,
         italics: false,
         alignment: 'center'
       },
       mineral: {
-        fontSize: 22,
+        fontSize: 10,
         bold: true,
         italics: false,
         alignment: 'center'
       },
       timeStamp: {
-        fontSize: 22,
+        fontSize: 8,
         bold: true,
         italics: false,
         alignment: 'center'

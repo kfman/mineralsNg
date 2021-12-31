@@ -14,6 +14,6 @@ export class SettingsComponent implements OnInit {
   }
 
   createPdf() {
-    this.pdfService.createDummy();
+    this.pdfService.printerSetupPage();
   }
 }

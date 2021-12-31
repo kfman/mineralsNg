@@ -25,12 +25,13 @@ export class PdfCreatorService {
     }
 
     let document: TDocumentDefinitions = {
+      pageSize: 'A4',
       content: labels,
     };
 
   }
 
-  printerSetupPage(size: ILabelPage): TDocumentDefinitions {
+  printerSetupPage() {
     let dummies: IPrintSample[] = [];
 
     for (let i = 0; i < 100; i++) {
@@ -47,7 +48,8 @@ export class PdfCreatorService {
     const size4 = new Page_4(dummies);
     const size2 = new Page_2(dummies);
 
-    return {
+    let document: TDocumentDefinitions = {
+      pageSize: 'A4',
       info: {
         title: 'MineralsNg',
         author: 'Klaus Fischer',
@@ -56,42 +58,43 @@ export class PdfCreatorService {
       },
       styles: {
         sampleNumber: {
-          fontSize: 22,
+          fontSize: 12,
           bold: true,
           italics: false,
           alignment: 'center'
         },
         location: {
-          fontSize: 22,
-          bold: true,
-          italics: false,
+          fontSize: 6,
+          bold: false,
+          italics: true,
           alignment: 'center'
         },
         value: {
-          fontSize: 22,
-          bold: true,
+          fontSize: 6,
+          bold: false,
           italics: false,
           alignment: 'center'
         },
         mineral: {
-          fontSize: 22,
+          fontSize: 10,
           bold: true,
           italics: false,
           alignment: 'center'
         },
         timeStamp: {
-          fontSize: 22,
-          bold: true,
-          italics: false,
+          fontSize: 10,
+          bold: false,
+          italics: true,
           alignment: 'center'
         }
       },
       content: [
-        sizeGs.createPage(),
-        size4.createPage(),
-        size2.createPage()
+        sizeGs.createPage(true),
+        size4.createPage(true),
+        size2.createPage(true)
       ]
     };
+    pdfMake.createPdf(document).download('export.pdf');
   };
 
   createDummy() {
