@@ -10,6 +10,7 @@ import QueryDocumentSnapshot = firebase.firestore.QueryDocumentSnapshot;
 import {CollectionNames} from '../../system-constants';
 import {limit, orderBy} from '@angular/fire/firestore';
 import {PdfCreatorService} from '../../services/pdf-creator.service';
+import {Page_GS} from '../../models/PageSizes';
 
 @Component({
   selector: 'app-overview',
@@ -38,7 +39,7 @@ export class OverviewComponent implements OnInit {
     });
   }
 
-  createPdf() :void{
-    this.pdfCreator.create(this.samples, PdfCreatorService.Page_GS);
+  createPdf(): void {
+    this.pdfCreator.create(new Page_GS(this.samples));
   }
 }

@@ -1,52 +1,51 @@
 import {Injectable} from '@angular/core';
-import {Sample} from '../models/Sample';
+import {IPrintSample} from '../models/Sample';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
+import {ILabelPage, Page_GS, Page_2, Page_4} from '../models/PageSizes';
+import {TDocumentDefinitions} from 'pdfmake/interfaces';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PdfCreatorService {
 
-  public static readonly Page_GS: ILabelPage = {
-    height: 50,
-    width: 20,
-    columns: 6,
-    rows: 20,
-    xOffset: 10,
-    yOffset: 20,
-    rowOffset: 5,
-    colOffset: 5
-  };
-  public static readonly Page_2: ILabelPage = {
-    height: 50,
-    width: 20,
-    columns: 6,
-    rows: 20,
-    xOffset: 10,
-    yOffset: 20,
-    rowOffset: 5,
-    colOffset: 5
-
-  };
-  public static readonly Page_4: ILabelPage = {
-    height: 50,
-    width: 20,
-    columns: 6,
-    rows: 20,
-    xOffset: 10,
-    yOffset: 20,
-    rowOffset: 5,
-    colOffset: 5
-
-  };
 
   constructor() {
     pdfMake.vfs = pdfFonts.pdfMake.vfs;
   }
 
-  create(samples: Sample[], size: ILabelPage) {
+  create(page: ILabelPage) {
+    let pageSamples = [];
 
+    let labels = [];
+    for (let i = 0; i < page.width * page.height; i++) {
+      const temp = page.labelFrom(page.samples[i], 0, 0);
+      labels.push(temp);
+    }
+
+    let document: TDocumentDefinitions = {
+      content: labels,
+    };
+
+  }
+
+  printerSetupPage(size: ILabelPage) {
+    let dummies: IPrintSample[] = [];
+
+    for (let i = 0; i < 100; i++) {
+      dummies.push({
+          sampleNumber: `TS${i.toString().padStart(6, '0')}`,
+          mineral: 'AURUM',
+          value: i,
+          location: 'SAMPLE',
+          timeStamp: '01/1900'
+        }
+      );
+    }
+    new Page_GS(dummies);
+    new Page_4(dummies);
+    new Page_2(dummies);
   }
 
   createDummy() {
@@ -72,16 +71,5 @@ export class PdfCreatorService {
     };
     pdfMake.createPdf(document).download('export.pdf');
   }
-}
-
-export interface ILabelPage {
-  height: number;
-  width: number;
-  columns: number;
-  rows: number;
-  xOffset: number;
-  yOffset: number;
-  rowOffset: number;
-  colOffset: number;
 }
 
