@@ -22,8 +22,8 @@ export abstract class ILabelPage {
 
   getCellOffset(row: number, column: number): IOffset {
     return {
-      x: 0.3 * row * this.width + this.xOffset,
-      y: 0.3 * column * this.height + this.yOffset
+      x: 595.0 / 210.0 * (row * this.width + this.xOffset),
+      y: 841.0 / 297.0 * (column * this.height + this.yOffset)
     };
   };
 
