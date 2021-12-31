@@ -30,7 +30,7 @@ export class PdfCreatorService {
 
   }
 
-  printerSetupPage(size: ILabelPage) {
+  printerSetupPage(size: ILabelPage): TDocumentDefinitions {
     let dummies: IPrintSample[] = [];
 
     for (let i = 0; i < 100; i++) {
@@ -43,10 +43,56 @@ export class PdfCreatorService {
         }
       );
     }
-    new Page_GS(dummies);
-    new Page_4(dummies);
-    new Page_2(dummies);
-  }
+    const sizeGs = new Page_GS(dummies);
+    const size4 = new Page_4(dummies);
+    const size2 = new Page_2(dummies);
+
+    return {
+      info: {
+        title: 'MineralsNg',
+        author: 'Klaus Fischer',
+        subject: 'Label',
+        keywords: 'Printer test pages',
+      },
+      styles: {
+        sampleNumber: {
+          fontSize: 22,
+          bold: true,
+          italics: false,
+          alignment: 'center'
+        },
+        location: {
+          fontSize: 22,
+          bold: true,
+          italics: false,
+          alignment: 'center'
+        },
+        value: {
+          fontSize: 22,
+          bold: true,
+          italics: false,
+          alignment: 'center'
+        },
+        mineral: {
+          fontSize: 22,
+          bold: true,
+          italics: false,
+          alignment: 'center'
+        },
+        timeStamp: {
+          fontSize: 22,
+          bold: true,
+          italics: false,
+          alignment: 'center'
+        }
+      },
+      content: [
+        sizeGs.createPage(),
+        size4.createPage(),
+        size2.createPage()
+      ]
+    };
+  };
 
   createDummy() {
     let document = {

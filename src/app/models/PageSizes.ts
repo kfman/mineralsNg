@@ -1,4 +1,10 @@
 import {IPrintSample} from './Sample';
+import {StyleDictionary} from 'pdfmake/interfaces';
+
+export interface IOffset {
+  x: number;
+  y: number;
+}
 
 export abstract class ILabelPage {
   height: number = 0;
@@ -20,12 +26,13 @@ export abstract class ILabelPage {
     };
   };
 
-  abstract labelFrom(sample: IPrintSample, row: number, column: number): any[];
-}
+  abstract getStyles(): StyleDictionary;
 
-export interface IOffset {
-  x: number;
-  y: number;
+  abstract labelFrom(sample: IPrintSample, row: number, column: number): any[];
+
+  createPage(): any[] {
+    return [];
+  }
 }
 
 
@@ -42,8 +49,7 @@ export class Page_GS extends ILabelPage {
     this.colOffset = 5;
   }
 
-
-  labelFrom(sample: IPrintSample, row: number, column: number): any[] {
+  override labelFrom(sample: IPrintSample, row: number, column: number): any[] {
     const cellOffset = super.getCellOffset(row, column);
     return [
       {
@@ -65,13 +71,82 @@ export class Page_GS extends ILabelPage {
     ];
 
   };
+
+  override getStyles(): StyleDictionary {
+    return {
+      sampleNumber: {
+        fontSize: 22,
+        bold: true,
+        italics: false,
+        alignment: 'center'
+      },
+      location: {
+        fontSize: 22,
+        bold: true,
+        italics: false,
+        alignment: 'center'
+      },
+      value: {
+        fontSize: 22,
+        bold: true,
+        italics: false,
+        alignment: 'center'
+      },
+      mineral: {
+        fontSize: 22,
+        bold: true,
+        italics: false,
+        alignment: 'center'
+      },
+      timeStamp: {
+        fontSize: 22,
+        bold: true,
+        italics: false,
+        alignment: 'center'
+      }
+    };
+  }
 }
 
 export class Page_2 extends ILabelPage {
-  labelFrom(sample: IPrintSample, row: number, column: number): any[] {
+  override labelFrom(sample: IPrintSample, row: number, column: number): any[] {
     return [];
   };
 
+  override getStyles(): StyleDictionary {
+    return {
+      sampleNumber: {
+        fontSize: 22,
+        bold: true,
+        italics: false,
+        alignment: 'center'
+      },
+      location: {
+        fontSize: 22,
+        bold: true,
+        italics: false,
+        alignment: 'center'
+      },
+      value: {
+        fontSize: 22,
+        bold: true,
+        italics: false,
+        alignment: 'center'
+      },
+      mineral: {
+        fontSize: 22,
+        bold: true,
+        italics: false,
+        alignment: 'center'
+      },
+      timeStamp: {
+        fontSize: 22,
+        bold: true,
+        italics: false,
+        alignment: 'center'
+      }
+    };
+  }
 
   constructor(samples: IPrintSample[]) {
     super(samples);
@@ -88,9 +163,44 @@ export class Page_2 extends ILabelPage {
 }
 
 export class Page_4 extends ILabelPage {
-  labelFrom(sample: IPrintSample, row: number, column: number): any[] {
+  override labelFrom(sample: IPrintSample, row: number, column: number): any[] {
     return [];
   };
+
+  override getStyles(): StyleDictionary {
+    return {
+      sampleNumber: {
+        fontSize: 22,
+        bold: true,
+        italics: false,
+        alignment: 'center'
+      },
+      location: {
+        fontSize: 22,
+        bold: true,
+        italics: false,
+        alignment: 'center'
+      },
+      value: {
+        fontSize: 22,
+        bold: true,
+        italics: false,
+        alignment: 'center'
+      },
+      mineral: {
+        fontSize: 22,
+        bold: true,
+        italics: false,
+        alignment: 'center'
+      },
+      timeStamp: {
+        fontSize: 22,
+        bold: true,
+        italics: false,
+        alignment: 'center'
+      }
+    };
+  }
 
   constructor(samples: IPrintSample[]) {
     super(samples);
