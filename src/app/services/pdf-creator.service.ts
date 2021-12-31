@@ -50,6 +50,7 @@ export class PdfCreatorService {
 
     let document: TDocumentDefinitions = {
       pageSize: 'A4',
+      pageMargins: [0, 0, 0, 0],
       info: {
         title: 'MineralsNg',
         author: 'Klaus Fischer',
@@ -61,31 +62,31 @@ export class PdfCreatorService {
           fontSize: 12,
           bold: true,
           italics: false,
-          alignment: 'center'
+          alignment: 'left'
         },
         location: {
           fontSize: 6,
           bold: false,
           italics: true,
-          alignment: 'center'
+          alignment: 'left'
         },
         value: {
           fontSize: 6,
           bold: false,
           italics: false,
-          alignment: 'center'
+          alignment: 'left'
         },
         mineral: {
           fontSize: 10,
           bold: true,
           italics: false,
-          alignment: 'center'
+          alignment: 'left'
         },
         timeStamp: {
           fontSize: 10,
           bold: false,
           italics: true,
-          alignment: 'center'
+          alignment: 'left'
         }
       },
       content: [
@@ -94,7 +95,9 @@ export class PdfCreatorService {
         size2.createPage(true)
       ]
     };
-    pdfMake.createPdf(document).download('export.pdf');
+
+    console.log(document);
+    // pdfMake.createPdf(document).download('export.pdf');
   };
 
   createDummy() {
