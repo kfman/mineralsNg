@@ -27,3 +27,17 @@ from git. As JSON content:
   "measurementId": "..."
 }
 ```
+
+## page dimension
+
+```typescript
+var dd = {
+  pageSize: 'A4',
+  pageMargins: [0, 0, 0, 0],
+  content: {
+    canvas: [
+      {type: 'rect', x: 0, y: 0, w: 595, h: 841},
+    ]
+  }
+}
+```

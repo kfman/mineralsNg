@@ -2,9 +2,16 @@ import {DocumentSnapshot} from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat';
 import DocumentData = firebase.firestore.DocumentData;
 
+export interface IPrintSample {
+  sampleNumber: string;
+  location: string;
+  mineral: string;
+  timeStamp: string;
+  value: number;
+}
 
-export class Sample {
-  public id: string | undefined = undefined;
+export class Sample implements IPrintSample {
+  public id?: string = undefined;
   public sampleNumber: string = '';
   public analytics: string = '';
   public annotation: string = '';

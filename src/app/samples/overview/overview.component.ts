@@ -9,6 +9,8 @@ import firebase from 'firebase/compat';
 import QueryDocumentSnapshot = firebase.firestore.QueryDocumentSnapshot;
 import {CollectionNames} from '../../system-constants';
 import {limit, orderBy} from '@angular/fire/firestore';
+import {PdfCreatorService} from '../../services/pdf-creator.service';
+import {Page_GS} from '../../models/Page_GS';
 
 @Component({
   selector: 'app-overview',
@@ -18,7 +20,9 @@ import {limit, orderBy} from '@angular/fire/firestore';
 export class OverviewComponent implements OnInit {
   public samples: Sample[] = [];
 
-  constructor(private firestore: AngularFirestore, private auth: AngularFireAuth) {
+  constructor(private firestore: AngularFirestore,
+              private auth: AngularFireAuth,
+              private pdfCreator: PdfCreatorService) {
   }
 
   ngOnInit(): void {
@@ -33,5 +37,9 @@ export class OverviewComponent implements OnInit {
         this.samples = temp.sort((a, b) => b.sampleNumber.localeCompare(a.sampleNumber));
       });
     });
+  }
+
+  createPdf(): void {
+    this.pdfCreator.create(new Page_GS(this.samples));
   }
 }
