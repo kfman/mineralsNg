@@ -108,7 +108,7 @@ export class PdfCreatorService {
     };
 
     console.log(document);
-    // pdfMake.createPdf(document).download('export.pdf');
+    pdfMake.createPdf(document).download('export.pdf');
   };
 
   createDummy() {
