@@ -2,8 +2,11 @@ import {Injectable} from '@angular/core';
 import {IPrintSample} from '../models/Sample';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
-import {ILabelPage, Page_GS, Page_2, Page_4} from '../models/PageSizes';
+import {ILabelPage} from '../models/ILabelPage';
 import {TDocumentDefinitions} from 'pdfmake/interfaces';
+import {Page_GS} from '../models/Page_GS';
+import {Page_4} from '../models/Page_4';
+import {Page_2} from '../models/Page_2';
 
 @Injectable({
   providedIn: 'root'
@@ -91,7 +94,15 @@ export class PdfCreatorService {
       },
       content: [
         sizeGs.createPage(true),
+        {
+          text: '',
+          pageBreak: 'after'
+        },
         size4.createPage(true),
+        {
+          text: '',
+          pageBreak: 'after'
+        },
         size2.createPage(true)
       ]
     };

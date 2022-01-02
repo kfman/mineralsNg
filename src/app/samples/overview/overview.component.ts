@@ -10,7 +10,7 @@ import QueryDocumentSnapshot = firebase.firestore.QueryDocumentSnapshot;
 import {CollectionNames} from '../../system-constants';
 import {limit, orderBy} from '@angular/fire/firestore';
 import {PdfCreatorService} from '../../services/pdf-creator.service';
-import {Page_GS} from '../../models/PageSizes';
+import {Page_GS} from '../../models/Page_GS';
 
 @Component({
   selector: 'app-overview',
