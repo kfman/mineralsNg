@@ -62,31 +62,31 @@ export class PdfCreatorService {
           fontSize: 12,
           bold: true,
           italics: false,
-          alignment: 'left'
+          alignment: 'center'
         },
         location: {
           fontSize: 6,
           bold: false,
           italics: true,
-          alignment: 'left'
+          alignment: 'center'
         },
         value: {
           fontSize: 6,
           bold: false,
           italics: false,
-          alignment: 'left'
+          alignment: 'center'
         },
         mineral: {
           fontSize: 10,
           bold: true,
           italics: false,
-          alignment: 'left'
+          alignment: 'center'
         },
         timeStamp: {
           fontSize: 10,
           bold: false,
           italics: true,
-          alignment: 'left'
+          alignment: 'center'
         }
       },
       content: [

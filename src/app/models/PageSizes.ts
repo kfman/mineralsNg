@@ -3,8 +3,12 @@ import {StyleDictionary, TDocumentDefinitions} from 'pdfmake/interfaces';
 import {off} from '@angular/fire/database';
 
 export interface IOffset {
-  x: number;
-  y: number;
+  cellX: number;
+  cellY: number;
+  innerX: number;
+  innerY: number;
+  centerX: number;
+  centerY:number;
 }
 
 export abstract class ILabelPage {
@@ -14,15 +18,17 @@ export abstract class ILabelPage {
   rows: number = 0;
   xOffset: number = 0;
   yOffset: number = 0;
-  rowOffset: number = 0;
-  colOffset: number = 0;
+  innerCellOffsetY: number = 0;
+
+  readonly pageWidth = 595.0;
+  readonly pageHeight = 841.0;
 
   get heightPx() {
-    return this.height * 841.0 / 297.0;
+    return this.height * this.pageHeight / 297.0;
   }
 
   get widthPx() {
-    return this.width * 595.0 / 210.0;
+    return this.width * this.pageWidth / 210.0;
   }
 
   protected constructor(public samples: IPrintSample[]) {
@@ -38,8 +44,12 @@ export abstract class ILabelPage {
    */
   getCellOffset(row: number, column: number): IOffset {
     return {
-      x: (column * this.width + this.xOffset) * 595.0 / 210.0,
-      y: (row * this.height + this.yOffset) * 841.0 / 297.0
+      cellX: (column * this.width + this.xOffset) * 595.0 / 210.0,
+      cellY: (row * this.height + this.yOffset) * 841.0 / 297.0,
+      innerX: 0,
+      innerY: 0,
+      centerX: 0,
+      centerY: 0
     };
   };
 
@@ -59,8 +69,8 @@ export abstract class ILabelPage {
           canvas_items.push(
             {
               type: 'rect',
-              x: offset.x,
-              y: offset.y,
+              x: offset.cellX,
+              y: offset.cellY,
               w: this.widthPx,
               h: this.heightPx
             }
@@ -83,39 +93,54 @@ export class Page_GS extends ILabelPage {
     this.width = 44;
     this.columns = 4;
     this.rows = 8;
-    this.xOffset = 1;
-    this.yOffset = 1;
-    this.rowOffset = 5;
-    this.colOffset = 5;
+    this.xOffset = 10;
+    this.yOffset = 10;
+    this.innerCellOffsetY = 20;
   }
 
   override labelFrom(sample: IPrintSample, row: number, column: number): any[] {
     const cellOffset = super.getCellOffset(row, column);
-    const center = cellOffset.x + this.widthPx / 2;
+    const center = cellOffset.cellX + this.widthPx - this.pageWidth + column * this.widthPx;
+
+    const offsetX = center + this.xOffset * 2;
+    const offsetY = cellOffset.cellY + this.innerCellOffsetY + this.yOffset;
+
     return [
       {
         text: sample.sampleNumber,
-        absolutePosition: {x: center, y: cellOffset.y},
+        absolutePosition: {x: offsetX, y: offsetY},
         style: 'sampleNumber'
       },
       {
         text: sample.mineral,
-        absolutePosition: {x: center, y: cellOffset.y + 10},
+        absolutePosition: {
+          x: offsetX,
+          y: offsetY + 10
+        },
         style: 'mineral'
       },
       {
         text: sample.location,
-        absolutePosition: {x: center, y: cellOffset.y + 20},
+        absolutePosition: {
+          x: offsetX,
+          y: offsetY + 20
+        },
         style: 'location'
       },
       {
         text: sample.timeStamp,
-        absolutePosition: {x: center, y: cellOffset.y + 30},
+        absolutePosition: {
+          x: offsetX,
+          y: offsetY + 30
+        },
         style: 'timeStamp'
       },
       {
         text: sample.value,
-        absolutePosition: {x: center, y: cellOffset.y + 40},
+        absolutePosition: {
+          x: offsetX,
+          y: offsetY + 40
+        },
         style: 'value'
       },
     ];
@@ -205,8 +230,6 @@ export class Page_2 extends ILabelPage {
     this.rows = 10;
     this.xOffset = 10;
     this.yOffset = 20;
-    this.rowOffset = 5;
-    this.colOffset = 5;
   }
 
 }
@@ -259,8 +282,6 @@ export class Page_4 extends ILabelPage {
     this.rows = 8;
     this.xOffset = 10;
     this.yOffset = 20;
-    this.rowOffset = 5;
-    this.colOffset = 5;
   }
 
 }
