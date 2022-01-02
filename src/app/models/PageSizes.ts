@@ -8,7 +8,7 @@ export interface IOffset {
   innerX: number;
   innerY: number;
   centerX: number;
-  centerY:number;
+  centerY: number;
 }
 
 export abstract class ILabelPage {
@@ -43,13 +43,18 @@ export abstract class ILabelPage {
    * @param column
    */
   getCellOffset(row: number, column: number): IOffset {
+    const cellX = (column * this.width + this.xOffset) * 595.0 / 210.0;
+    const cellY = (row * this.height + this.yOffset) * 841.0 / 297.0;
+    const centerX = cellX + this.widthPx - this.pageWidth + column * this.widthPx;
+    const innerX = centerX + this.xOffset * 2;
+
     return {
-      cellX: (column * this.width + this.xOffset) * 595.0 / 210.0,
-      cellY: (row * this.height + this.yOffset) * 841.0 / 297.0,
-      innerX: 0,
-      innerY: 0,
-      centerX: 0,
-      centerY: 0
+      cellX,
+      cellY,
+      innerX,
+      innerY: cellY + this.innerCellOffsetY + this.yOffset,
+      centerX,
+      centerY: cellY + this.heightPx / 2
     };
   };
 
@@ -100,46 +105,44 @@ export class Page_GS extends ILabelPage {
 
   override labelFrom(sample: IPrintSample, row: number, column: number): any[] {
     const cellOffset = super.getCellOffset(row, column);
-    const center = cellOffset.cellX + this.widthPx - this.pageWidth + column * this.widthPx;
-
-    const offsetX = center + this.xOffset * 2;
-    const offsetY = cellOffset.cellY + this.innerCellOffsetY + this.yOffset;
-
     return [
       {
         text: sample.sampleNumber,
-        absolutePosition: {x: offsetX, y: offsetY},
+        absolutePosition: {
+          x: cellOffset.innerX,
+          y: cellOffset.innerY
+        },
         style: 'sampleNumber'
       },
       {
         text: sample.mineral,
         absolutePosition: {
-          x: offsetX,
-          y: offsetY + 10
+          x: cellOffset.innerX,
+          y: cellOffset.innerY + 10
         },
         style: 'mineral'
       },
       {
         text: sample.location,
         absolutePosition: {
-          x: offsetX,
-          y: offsetY + 20
+          x: cellOffset.innerX,
+          y: cellOffset.innerY + 20
         },
         style: 'location'
       },
       {
         text: sample.timeStamp,
         absolutePosition: {
-          x: offsetX,
-          y: offsetY + 30
+          x: cellOffset.innerX,
+          y: cellOffset.innerY + 30
         },
         style: 'timeStamp'
       },
       {
         text: sample.value,
         absolutePosition: {
-          x: offsetX,
-          y: offsetY + 40
+          x: cellOffset.innerX,
+          y: cellOffset.innerY + 40
         },
         style: 'value'
       },
