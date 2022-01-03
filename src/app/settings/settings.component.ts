@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {PdfCreatorService} from '../services/pdf-creator.service';
 
 @Component({
@@ -8,7 +8,8 @@ import {PdfCreatorService} from '../services/pdf-creator.service';
 })
 export class SettingsComponent implements OnInit {
 
-  constructor(private pdfService: PdfCreatorService) { }
+  constructor(private pdfService: PdfCreatorService) {
+  }
 
   ngOnInit(): void {
   }

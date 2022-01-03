@@ -39,7 +39,7 @@ export class Page_2 extends ILabelPage {
         style: 'timeStamp'
       },
       {
-        text: sample.value,
+        text: sample.sideMineral,
         absolutePosition: {
           x: cellOffset.innerX,
           y: cellOffset.innerY + 40
@@ -87,12 +87,12 @@ export class Page_2 extends ILabelPage {
 
   constructor(samples: IPrintSample[]) {
     super(samples);
-    this.height = 26;
-    this.width = 32;
+    this.height = 28;
+    this.width = 35;
     this.columns = 6;
     this.rows = 10;
-    this.xOffset = 10;
-    this.yOffset = 20;
+    this.xOffset = 1;
+    this.yOffset = 10;
   }
 
 }

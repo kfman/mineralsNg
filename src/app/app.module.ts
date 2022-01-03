@@ -31,6 +31,7 @@ import {MatIconModule} from '@angular/material/icon';
 import { SettingsComponent } from './settings/settings.component';
 import {environment} from '../environments/environment';
 import {PdfCreatorService} from './services/pdf-creator.service';
+import {ReactiveFormsModule} from '@angular/forms';
 
 
 @NgModule({
@@ -81,6 +82,7 @@ import {PdfCreatorService} from './services/pdf-creator.service';
     GridModule,
     MatCardModule,
     MatIconModule,
+    ReactiveFormsModule,
   ],
   providers: [
     AngularFireAuth,

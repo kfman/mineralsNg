@@ -1,55 +1,65 @@
 <h1>Mineral bearbeiten</h1>
 
-<form>
+<form [formGroup]="form" (ngSubmit)="submitForm()">
   <div class="form-group row">
     <label for="text" class="col-4 col-form-label">Mineral</label>
     <div class="col-8">
-      <input id="text" name="text" type="text" class="form-control">
+      <input id="text" name="text" type="text" class="form-control"
+             formControlName="mineral">
     </div>
   </div>
   <div class="form-group row">
     <label for="text1" class="col-4 col-form-label">Begleitmineral</label>
     <div class="col-8">
-      <input id="text1" name="text1" type="text" class="form-control">
+      <input id="text1" name="text1" type="text" class="form-control"
+             formControlName="sideMineral">
     </div>
   </div>
   <div class="form-group row">
     <label for="text2" class="col-4 col-form-label">Analyse</label>
     <div class="col-8">
-      <input id="text2" name="text2" type="text" class="form-control">
+      <input id="text2" name="text2" type="text" class="form-control"
+             formControlName="analytics">
     </div>
   </div>
   <div class="form-group row">
     <label for="textarea" class="col-4 col-form-label">Bemerkung</label>
     <div class="col-8">
-      <textarea id="textarea" name="textarea" cols="40" rows="5" class="form-control"></textarea>
+      <textarea id="textarea" name="textarea" cols="40" rows="5"
+                class="form-control" formControlName="annotation"></textarea>
     </div>
   </div>
   <div class="form-group row">
     <label for="text3" class="col-4 col-form-label">Herkunftsort</label>
     <div class="col-8">
-      <input id="text3" name="text3" type="text" class="form-control">
+      <textarea id="text3" name="text3" type="text" class="form-control"
+                rows="3" cols="40"
+                formControlName="location"></textarea>
     </div>
   </div>
   <div class="form-group row">
     <label for="text4" class="col-4 col-form-label">Größe</label>
     <div class="col-8">
-      <input id="text4" name="text4" type="text" class="form-control">
+      <input id="text4" name="text4" type="text" class="form-control"
+             formControlName="size">
     </div>
   </div>
   <div class="form-group row">
     <label class="col-4">Etikettengröße</label>
     <div class="col-8">
       <div class="custom-control custom-radio custom-control-inline">
-        <input name="radio" id="radio_0" type="radio" class="custom-control-input" value="rabbit">
+        <input name="radio" id="radio_0" type="radio"
+               class="custom-control-input" value="rabbit">
         <label for="radio_0" class="custom-control-label">2</label>
       </div>
       <div class="custom-control custom-radio custom-control-inline">
-        <input name="radio" id="radio_1" type="radio" class="custom-control-input" value="duck">
+        <input name="radio" id="radio_1" type="radio"
+               class="custom-control-input" value="duck">
         <label for="radio_1" class="custom-control-label">4</label>
       </div>
       <div class="custom-control custom-radio custom-control-inline">
-        <input name="radio" id="radio_2" type="radio" class="custom-control-input" value="fish">
+        <input name="radio" id="radio_2" type="radio"
+               class="custom-control-input" value="fish">
         <label for="radio_2" class="custom-control-label">GS</label>
       </div>
     </div>
@@ -58,7 +68,8 @@
     <label for="text5" class="col-4 col-form-label">Wert</label>
     <div class="col-8">
       <div class="input-group">
-        <input id="text5" name="text5" type="text" class="form-control">
+        <input id="text5" name="text5" type="text" class="form-control"
+               formControlName="value">
         <div class="input-group-append">
           <div class="input-group-text">€</div>
         </div>
@@ -66,17 +77,19 @@
     </div>
   </div>
   <div class="form-group row">
-    <label for="text6" class="col-4 col-form-label">Funddatum</label>
+    <label for="text6" class="col-4 col-form-label" >Funddatum</label>
     <div class="col-8">
-      <input id="text6" name="text6" type="text" class="form-control">
+      <input id="text6" name="text6" type="text" class="form-control" formControlName="timeStamp">
     </div>
   </div>
   <div class="form-group row">
     <div class="offset-4 col-2">
-      <button name="submit" type="submit" class="btn btn-primary">Speichern</button>
+      <button name="submit" type="submit" class="btn btn-primary">Speichern
+      </button>
     </div>
     <div class="offset-4 col-2">
-      <button name="submit" type="submit" class="btn btn-danger">Abbrechen</button>
+      <button name="submit" type="submit" class="btn btn-danger">Abbrechen
+      </button>
     </div>
   </div>
 </form>

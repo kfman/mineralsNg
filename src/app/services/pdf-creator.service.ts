@@ -40,8 +40,8 @@ export class PdfCreatorService {
     for (let i = 0; i < 100; i++) {
       dummies.push({
           sampleNumber: `TS${i.toString().padStart(6, '0')}`,
-          mineral: 'AURUM',
-          value: i,
+          mineral: 'Opal',
+          sideMineral: 'Darmstadtium',
           location: 'SAMPLE',
           timeStamp: '01/1900'
         }
@@ -73,7 +73,7 @@ export class PdfCreatorService {
           italics: true,
           alignment: 'center'
         },
-        value: {
+        sideMineral: {
           fontSize: 6,
           bold: false,
           italics: false,
@@ -108,7 +108,7 @@ export class PdfCreatorService {
     };
 
     console.log(document);
-    // pdfMake.createPdf(document).download('export.pdf');
+    pdfMake.createPdf(document).download('export.pdf');
   };
 
   createDummy() {
