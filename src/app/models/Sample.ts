@@ -3,11 +3,11 @@ import firebase from 'firebase/compat';
 import DocumentData = firebase.firestore.DocumentData;
 
 export interface IPrintSample {
-  sampleNumber: string;
-  location: string;
   mineral: string;
+  sideMineral: string;
+  location: string;
   timeStamp: string;
-  value: number;
+  sampleNumber: string;
 }
 
 export class Sample implements IPrintSample {
