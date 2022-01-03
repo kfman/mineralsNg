@@ -18,7 +18,7 @@ export class Page_4 extends ILabelPage {
         text: sample.sideMineral,
         absolutePosition: {
           x: cellOffset.innerX,
-          y: cellOffset.innerY + 10
+          y: cellOffset.innerY + 20
         },
         style: 'sideMineral'
       },
@@ -26,7 +26,7 @@ export class Page_4 extends ILabelPage {
         text: sample.location,
         absolutePosition: {
           x: cellOffset.innerX,
-          y: cellOffset.innerY + 20
+          y: cellOffset.innerY + 30
         },
         style: 'location'
       },
@@ -34,7 +34,7 @@ export class Page_4 extends ILabelPage {
         text: `${sample.timeStamp} ${sample.sampleNumber}`,
         absolutePosition: {
           x: cellOffset.innerX,
-          y: cellOffset.innerY + 30
+          y: cellOffset.innerY + 40
         },
         style: 'timeStamp'
       },
@@ -57,7 +57,7 @@ export class Page_4 extends ILabelPage {
       },
       sideMineral: {
         fontSize: 10,
-        bold: true,
+        bold: false,
         italics: false,
         alignment: 'center'
       },
@@ -78,12 +78,12 @@ export class Page_4 extends ILabelPage {
 
   constructor(samples: IPrintSample[]) {
     super(samples);
-    this.height = 29;
-    this.width = 44;
+    this.height = 34;
+    this.width = 50;
     this.columns = 4;
     this.rows = 8;
-    this.xOffset = 10;
-    this.yOffset = 20;
+    this.xOffset = 5;
+    this.yOffset = 12;
   }
 
 }

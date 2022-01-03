@@ -5,12 +5,12 @@ import {ILabelPage} from './ILabelPage';
 export class Page_GS extends ILabelPage {
     constructor(samples: IPrintSample[]) {
         super(samples);
-        this.height = 34;
-        this.width = 44;
+        this.height = 37;
+        this.width = 50;
         this.columns = 4;
         this.rows = 8;
-        this.xOffset = 15;
-        this.yOffset = 15;
+        this.xOffset = 5;
+        this.yOffset = 1;
         this.innerCellOffsetY = 20;
     }
 
@@ -50,12 +50,12 @@ export class Page_GS extends ILabelPage {
                 style: 'timeStamp'
             },
             {
-                text: sample.value,
+                text: sample.sideMineral,
                 absolutePosition: {
                     x: cellOffset.innerX,
                     y: cellOffset.innerY + 40
                 },
-                style: 'value'
+                style: 'sideMineral'
             },
         ];
     };
