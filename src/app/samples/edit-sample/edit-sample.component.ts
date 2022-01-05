@@ -17,9 +17,8 @@ import {FormControl, FormGroup} from '@angular/forms';
 })
 export class EditSampleComponent implements OnInit {
 
-  public sample: Sample | null = null;
+  public sample?: Sample;
   public form = new FormGroup({
-    mineral: new FormControl(''),
     sideMineral: new FormControl(''),
     annotation: new FormControl(''),
     location: new FormControl(''),
@@ -52,15 +51,15 @@ export class EditSampleComponent implements OnInit {
         this.firestore.collection(CollectionNames.userCollection).doc(userId)
           .collection(CollectionNames.sampleCollection).doc(id).get().subscribe((value) => {
           this.sample = Sample.fromDocument(value as DocumentSnapshot<Sample>);
-
-          this.mineral?.setValue(this.sample.mineral);
-          this.sideMineral?.setValue(this.sample.sideMineral);
-          this.annotation?.setValue(this.sample.annotation);
-          this.location?.setValue(this.sample.location);
-          this.size?.setValue(this.sample.size);
-          this.value?.setValue(this.sample.value);
-          this.analytics?.setValue(this.sample.analytics);
-          this.timeStamp?.setValue(this.sample.timeStamp);
+          // this.mineral?.setValue(this.sample.mineral);
+          // this.sideMineral?.setValue(this.sample.sideMineral);
+          // this.annotation?.setValue(this.sample.annotation);
+          // this.location?.setValue(this.sample.location);
+          // this.size?.setValue(this.sample.size);
+          // this.value?.setValue(this.sample.value);
+          // this.analytics?.setValue(this.sample.analytics);
+          // this.timeStamp?.setValue(this.sample.timeStamp);
+           console.log('Loaded...')
 
         });
       }));
@@ -68,6 +67,6 @@ export class EditSampleComponent implements OnInit {
   }
 
   submitForm() {
-
+    console.log(this.sample?.mineral)
   }
 }

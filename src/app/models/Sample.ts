@@ -1,6 +1,5 @@
 import {DocumentSnapshot} from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat';
-import DocumentData = firebase.firestore.DocumentData;
 
 export interface IPrintSample {
   mineral: string;
