@@ -39,6 +39,8 @@ export class EditSampleComponent implements OnInit {
   get timeStamp(){return this.form.get('timeStamp');}
   // @formatter:on
 
+  private userId?: string;
+
   constructor(private firestore: AngularFirestore, private route: ActivatedRoute,
               private auth: AngularFireAuth) {
   }
@@ -47,8 +49,8 @@ export class EditSampleComponent implements OnInit {
     this.route.params.subscribe(p => {
       let id = p['id'];
       this.auth.user.subscribe((value => {
-        const userId = value?.uid;
-        this.firestore.collection(CollectionNames.userCollection).doc(userId)
+        this.userId = value?.uid;
+        this.firestore.collection(CollectionNames.userCollection).doc(this.userId)
           .collection(CollectionNames.sampleCollection).doc(id).get().subscribe((value) => {
           this.sample = Sample.fromDocument(value as DocumentSnapshot<Sample>);
           // this.mineral?.setValue(this.sample.mineral);
@@ -59,7 +61,7 @@ export class EditSampleComponent implements OnInit {
           // this.value?.setValue(this.sample.value);
           // this.analytics?.setValue(this.sample.analytics);
           // this.timeStamp?.setValue(this.sample.timeStamp);
-           console.log('Loaded...')
+          console.log('Loaded...')
 
         });
       }));
@@ -68,5 +70,16 @@ export class EditSampleComponent implements OnInit {
 
   submitForm() {
     console.log(this.sample?.mineral)
+  }
+
+  doWhat() {
+    this.sample = this.sample;
+  }
+
+  save() {
+    console.log(this.sample!.toDocumentData());
+
+    this.firestore.collection(CollectionNames.userCollection).doc(this.userId)
+      .collection(CollectionNames.sampleCollection).doc(this.sample?.id).set(this.sample!.toDocumentData());
   }
 }

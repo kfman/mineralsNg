@@ -50,17 +50,17 @@ export class Sample implements IPrintSample {
   toDocumentData() {
     return {
       sampleNumber: this.sampleNumber,
-      analytics: this.analytics,
-      annotation: this.annotation,
-      imageName: this.imageName,
-      location: this.location,
-      mineral: this.mineral,
-      origin: this.origin,
-      serial: this.serial,
-      sideMineral: this.sideMineral,
-      size: this.size,
-      timeStamp: this.timeStamp,
-      value: this.value
+      analytics: this.analytics ?? null,
+      annotation: this.annotation ?? null,
+      imageName: this.imageName ?? null,
+      location: this.location ?? null,
+      mineral: this.mineral ?? null,
+      origin: this.origin ?? null,
+      serial: this.serial ?? null,
+      sideMineral: this.sideMineral ?? null,
+      size: this.size ?? null,
+      timeStamp: this.timeStamp ?? null,
+      value: this.value ?? 0
     };
   }
 }
