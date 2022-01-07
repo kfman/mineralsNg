@@ -68,6 +68,11 @@ import { ToastContainerComponent } from './widgets/toast-container/toast-contain
                     canActivate: [AngularFireAuthGuard]
                 },
                 {
+                    path: 'samples/new',
+                    component: EditSampleComponent,
+                    canActivate: [AngularFireAuthGuard]
+                },
+                {
                     path: 'samples/:id',
                     component: EditSampleComponent,
                     canActivate: [AngularFireAuthGuard]
