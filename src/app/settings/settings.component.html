@@ -1,7 +1,8 @@
 <div style="padding: 3em">
 
-  <input type="text" class="form-control" [(ngModel)]="numbering">
-  <div class="btn btn-secondary" (click)="testNumbers()">Nummern laufen lassen
+  <input type="text" class="form-control" [(ngModel)]="numbering"
+         [ngClass]="{'bg-danger': patternError}">
+  <div class="btn btn-secondary"  (click)="testNumbers()">Nummern laufen lassen
   </div>
 
   <ul *ngIf="numbers">

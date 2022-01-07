@@ -11,8 +11,10 @@ import {NumberingService} from '../services/numbering.service';
 export class SettingsComponent implements OnInit {
   numbering: string = 'KF 0000000';
   numbers: string[] | undefined;
+  patternError = false;
 
-  constructor(private pdfService: PdfCreatorService, private toastService: ToastService,
+  constructor(private pdfService: PdfCreatorService,
+              private toastService: ToastService,
               private numberService: NumberingService) {
   }
 
@@ -32,10 +34,13 @@ export class SettingsComponent implements OnInit {
   }
 
   testNumbers() {
-    this.numbers = [];
-    for (let i = 0; i < 100; i++) {
-
-      this.numbers?.push(this.numberService.getNumber(this.numbering, i * 17));
+    try {
+      this.numberService.getNumber(this.numbering, 0);
+      this.patternError = false;
+    } catch (e) {
+      this.patternError = true;
+      this.toastService.show('Pattern ungültig',
+        {classname: 'bg-danger text-light', delay: 15000});
     }
   }
 }
