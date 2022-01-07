@@ -6,6 +6,12 @@
 
 # Development:
 
+## [0.0.6] - 2022-01-07
+ - added numbering service
+ - enabled change of sample
+ - added toast service
+ - added login failed messages
+
 ## [0.0.5] - 2022-01-03
 Label test page done
 
