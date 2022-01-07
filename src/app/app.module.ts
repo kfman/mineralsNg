@@ -32,6 +32,7 @@ import { SettingsComponent } from './settings/settings.component';
 import {environment} from '../environments/environment';
 import {PdfCreatorService} from './services/pdf-creator.service';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { ToastContainerComponent } from './widgets/toast-container/toast-container.component';
 
 
 @NgModule({
@@ -45,6 +46,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     ImportCsvComponent,
     SampleListComponent,
     SettingsComponent,
+    ToastContainerComponent,
   ],
     imports: [
         BrowserModule,

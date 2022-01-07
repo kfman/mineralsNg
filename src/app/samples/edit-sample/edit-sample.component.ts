@@ -8,6 +8,7 @@ import {AngularFireAuth} from '@angular/fire/compat/auth';
 import {Sample} from '../../models/Sample';
 import {CollectionNames} from '../../system-constants';
 import {FormControl, FormGroup} from '@angular/forms';
+import {ToastService} from '../../services/toast-service.service';
 
 
 @Component({
@@ -42,7 +43,9 @@ export class EditSampleComponent implements OnInit {
   private userId?: string;
 
   constructor(private firestore: AngularFirestore, private route: ActivatedRoute,
-              private auth: AngularFireAuth) {
+              private auth: AngularFireAuth,
+              private toastService: ToastService
+  ) {
   }
 
   ngOnInit(): void {
@@ -61,7 +64,7 @@ export class EditSampleComponent implements OnInit {
           // this.value?.setValue(this.sample.value);
           // this.analytics?.setValue(this.sample.analytics);
           // this.timeStamp?.setValue(this.sample.timeStamp);
-          console.log('Loaded...')
+          console.log('Loaded...');
 
         });
       }));
@@ -69,7 +72,7 @@ export class EditSampleComponent implements OnInit {
   }
 
   submitForm() {
-    console.log(this.sample?.mineral)
+    console.log(this.sample?.mineral);
   }
 
   doWhat() {
@@ -81,5 +84,10 @@ export class EditSampleComponent implements OnInit {
 
     this.firestore.collection(CollectionNames.userCollection).doc(this.userId)
       .collection(CollectionNames.sampleCollection).doc(this.sample?.id).set(this.sample!.toDocumentData());
+
+    this.toastService.show('Probe gespeichert', {
+      classname: 'bg-success text-light',
+      delay: 3000
+    });
   }
 }

@@ -1,3 +1,13 @@
 <p>settings works!</p>
 
-<button class="btn btn-danger" (click)="createPdf()">Create PDF</button>
+<ul>
+  <li>
+
+    <button class="btn btn-danger" (click)="createPdf()">Create PDF</button>
+  </li>
+  <li>
+    <div class="btn btn-dark" (click)="testToast()">Toast testen</div>
+  </li>
+</ul>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
