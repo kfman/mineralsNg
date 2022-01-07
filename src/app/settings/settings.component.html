@@ -1,4 +1,14 @@
-<p>settings works!</p>
+<div style="padding: 3em">
+
+  <input type="text" class="form-control" [(ngModel)]="numbering">
+  <div class="btn btn-secondary" (click)="testNumbers()">Nummern laufen lassen
+  </div>
+
+  <ul *ngIf="numbers">
+    <li *ngFor="let number of numbers">{{number}}</li>
+  </ul>
+
+</div>
 
 <ul>
   <li>
