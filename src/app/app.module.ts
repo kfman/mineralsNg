@@ -31,7 +31,8 @@ import {MatIconModule} from '@angular/material/icon';
 import { SettingsComponent } from './settings/settings.component';
 import {environment} from '../environments/environment';
 import {PdfCreatorService} from './services/pdf-creator.service';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { ToastContainerComponent } from './widgets/toast-container/toast-container.component';
 
 
 @NgModule({
@@ -45,45 +46,52 @@ import {ReactiveFormsModule} from '@angular/forms';
     ImportCsvComponent,
     SampleListComponent,
     SettingsComponent,
+    ToastContainerComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    RouterModule.forRoot(
-      [
-        {path: '', component: LoginComponent},
-        {path: 'settings', component: SettingsComponent},
-        {path: 'signup', component: SignUpComponent},
-        {
-          path: 'samples/overview',
-          component: OverviewComponent,
-          canActivate: [AngularFireAuthGuard]
-        },
-        {
-          path: 'samples/import',
-          component: ImportCsvComponent,
-          canActivate: [AngularFireAuthGuard]
-        },
-        {
-          path: 'samples/:id',
-          component: EditSampleComponent,
-          canActivate: [AngularFireAuthGuard]
-        },
-      ],
-    ),
-    NgbModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    AngularFireModule.initializeApp(secrets),
-    InputsModule,
-    LabelModule,
-    GridModule,
-    MatCardModule,
-    MatIconModule,
-    ReactiveFormsModule,
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        RouterModule.forRoot(
+            [
+                {path: '', component: LoginComponent},
+                {path: 'settings', component: SettingsComponent},
+                {path: 'signup', component: SignUpComponent},
+                {
+                    path: 'samples/overview',
+                    component: OverviewComponent,
+                    canActivate: [AngularFireAuthGuard]
+                },
+                {
+                    path: 'samples/import',
+                    component: ImportCsvComponent,
+                    canActivate: [AngularFireAuthGuard]
+                },
+                {
+                    path: 'samples/new',
+                    component: EditSampleComponent,
+                    canActivate: [AngularFireAuthGuard]
+                },
+                {
+                    path: 'samples/:id',
+                    component: EditSampleComponent,
+                    canActivate: [AngularFireAuthGuard]
+                },
+            ],
+        ),
+        NgbModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        AngularFireModule.initializeApp(secrets),
+        InputsModule,
+        LabelModule,
+        GridModule,
+        MatCardModule,
+        MatIconModule,
+        ReactiveFormsModule,
+        FormsModule,
+    ],
   providers: [
     AngularFireAuth,
     AngularFireDatabase,

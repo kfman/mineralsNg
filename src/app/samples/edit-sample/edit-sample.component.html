@@ -1,47 +1,56 @@
 <h1>Mineral bearbeiten</h1>
 
-<form [formGroup]="form" (ngSubmit)="submitForm()">
+<form (ngSubmit)="submitForm()" *ngIf="sample; else loading">
+  <div class="form-group row">
+    <label for="text" class="col-4 col-form-label">Probennummer</label>
+    <div class="col-8">
+      <input id="sampleNumber" name="sampleNumber" type="text" class="form-control"
+             [(ngModel)]="sample.sampleNumber">
+    </div>
+  </div>
   <div class="form-group row">
     <label for="text" class="col-4 col-form-label">Mineral</label>
     <div class="col-8">
       <input id="text" name="text" type="text" class="form-control"
-             formControlName="mineral">
+             [(ngModel)]="sample.mineral">
     </div>
   </div>
   <div class="form-group row">
     <label for="text1" class="col-4 col-form-label">Begleitmineral</label>
     <div class="col-8">
       <input id="text1" name="text1" type="text" class="form-control"
-             formControlName="sideMineral">
+             [(ngModel)]="sample.sideMineral"
+      >
     </div>
   </div>
   <div class="form-group row">
     <label for="text2" class="col-4 col-form-label">Analyse</label>
     <div class="col-8">
       <input id="text2" name="text2" type="text" class="form-control"
-             formControlName="analytics">
+             [(ngModel)]="sample.analytics"
+      >
     </div>
   </div>
   <div class="form-group row">
     <label for="textarea" class="col-4 col-form-label">Bemerkung</label>
     <div class="col-8">
       <textarea id="textarea" name="textarea" cols="40" rows="5"
-                class="form-control" formControlName="annotation"></textarea>
+                class="form-control" [(ngModel)]="sample.annotation"></textarea>
     </div>
   </div>
   <div class="form-group row">
     <label for="text3" class="col-4 col-form-label">Herkunftsort</label>
     <div class="col-8">
       <textarea id="text3" name="text3" type="text" class="form-control"
-                rows="3" cols="40"
-                formControlName="location"></textarea>
+                rows="3" cols="40" [(ngModel)]="sample.location"
+      ></textarea>
     </div>
   </div>
   <div class="form-group row">
     <label for="text4" class="col-4 col-form-label">Größe</label>
     <div class="col-8">
       <input id="text4" name="text4" type="text" class="form-control"
-             formControlName="size">
+      >
     </div>
   </div>
   <div class="form-group row">
@@ -69,7 +78,7 @@
     <div class="col-8">
       <div class="input-group">
         <input id="text5" name="text5" type="text" class="form-control"
-               formControlName="value">
+               [(ngModel)]="sample.value">
         <div class="input-group-append">
           <div class="input-group-text">€</div>
         </div>
@@ -77,19 +86,32 @@
     </div>
   </div>
   <div class="form-group row">
-    <label for="text6" class="col-4 col-form-label" >Funddatum</label>
+    <label for="text6" class="col-4 col-form-label">Funddatum</label>
     <div class="col-8">
-      <input id="text6" name="text6" type="text" class="form-control" formControlName="timeStamp">
+      <input id="text6" name="text6" type="text" class="form-control"
+             [(ngModel)]="sample.timeStamp">
     </div>
   </div>
+
+
   <div class="form-group row">
-    <div class="offset-4 col-2">
-      <button name="submit" type="submit" class="btn btn-primary">Speichern
+    <div class="col-6">
+      <button name="submit" type="submit" class="btn btn-primary"
+              (click)="save()">Speichern
       </button>
     </div>
-    <div class="offset-4 col-2">
-      <button name="submit" type="submit" class="btn btn-danger">Abbrechen
+    <div class="col-6" style="text-align: right">
+      <button name="submit" type="submit" class="btn btn-danger"
+              [routerLink]="['/samples/overview']">
+        Abbrechen
       </button>
     </div>
   </div>
 </form>
+
+<ng-template #loading>
+  Loading data...
+  <button class="btn btn-danger" (click)="doWhat()">Do what!</button>
+</ng-template>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>

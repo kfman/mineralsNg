@@ -1,3 +1,24 @@
-<p>settings works!</p>
+<div style="padding: 3em">
 
-<button class="btn btn-danger" (click)="createPdf()">Create PDF</button>
+  <input type="text" class="form-control" [(ngModel)]="numbering"
+         [ngClass]="{'bg-danger': patternError}">
+  <div class="btn btn-secondary"  (click)="testNumbers()">Nummern laufen lassen
+  </div>
+
+  <ul *ngIf="numbers">
+    <li *ngFor="let number of numbers">{{number}}</li>
+  </ul>
+
+</div>
+
+<ul>
+  <li>
+
+    <button class="btn btn-danger" (click)="createPdf()">Create PDF</button>
+  </li>
+  <li>
+    <div class="btn btn-dark" (click)="testToast()">Toast testen</div>
+  </li>
+</ul>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>

@@ -44,7 +44,7 @@ export class Page_2 extends ILabelPage {
           x: cellOffset.innerX,
           y: cellOffset.innerY + 40
         },
-        style: 'value'
+        style: 'sideMineral'
       },
     ];
   };
@@ -61,13 +61,13 @@ export class Page_2 extends ILabelPage {
         fontSize: 10,
         bold: true,
         italics: false,
-        alignment: 'right'
+        alignment: 'center'
       },
-      value: {
+      sideMineral: {
         fontSize: 10,
         bold: true,
         italics: false,
-        alignment: 'left'
+        alignment: 'center'
       },
       mineral: {
         fontSize: 10,
