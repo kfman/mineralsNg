@@ -6,6 +6,11 @@
 
 # Development:
 
+## [0.0.7] - ???
+ - store new sample
+ - generate sample number
+
+
 ## [0.0.6] - 2022-01-07
  - added numbering service
  - enabled change of sample
