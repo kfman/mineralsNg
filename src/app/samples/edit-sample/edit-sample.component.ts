@@ -85,7 +85,8 @@ export class EditSampleComponent implements OnInit {
     console.log(this.sample!.toDocumentData());
 
     if (this.id == 'new') {
-      console.log('neue Probe speichern....');
+      this.firestore.collection(CollectionNames.userCollection).doc(this.userId)
+        .collection(CollectionNames.sampleCollection).add(this.sample!.toDocumentData());
     } else {
       this.firestore.collection(CollectionNames.userCollection).doc(this.userId)
         .collection(CollectionNames.sampleCollection).doc(this.sample?.id).set(this.sample!.toDocumentData());
