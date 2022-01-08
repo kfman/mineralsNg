@@ -3,11 +3,14 @@ import {
   AngularFirestore,
   DocumentSnapshot
 } from '@angular/fire/compat/firestore';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {AngularFireAuth} from '@angular/fire/compat/auth';
 import {Sample} from '../../models/Sample';
 import {CollectionNames} from '../../system-constants';
 import {ToastService} from '../../services/toast-service.service';
+import {UserData} from '../../models/UserData';
+import {NumberingService} from '../../services/numbering.service';
+import {firstValueFrom} from 'rxjs';
 
 
 @Component({
@@ -22,24 +25,46 @@ export class EditSampleComponent implements OnInit {
   public sample?: Sample;
   private userId?: string;
 
-  constructor(private firestore: AngularFirestore, private route: ActivatedRoute,
+  constructor(private firestore: AngularFirestore,
+              private route: ActivatedRoute,
+              private router: Router,
               private auth: AngularFireAuth,
-              private toastService: ToastService
+              private toastService: ToastService,
+              private numbering: NumberingService
   ) {
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+
+    this.userId = (await firstValueFrom(this.auth.user))?.uid;
+
+    if (this.router.url.endsWith('new') ?? false) {
+      console.log('Creating new sample');
+      let sample = new Sample();
+      this.firestore
+        .collection(CollectionNames.userCollection).doc(this.userId)
+        .get().subscribe((value) => {
+        let userData = UserData.fromDocument(value);
+        sample.sampleNumber = this.numbering.getNumber(userData?.pattern, ++userData.count);
+
+        this.firestore
+          .collection(CollectionNames.userCollection).doc(this.userId)
+          .set(userData);
+        this.sample = sample;
+      });
+      return;
+    }
+
     this.route.params.subscribe(p => {
       this.id = p['id'];
-      this.auth.user.subscribe((value => {
+      this.auth.user.subscribe((async value => {
         this.userId = value?.uid;
-        if (this.id == 'new') {
-          this.sample = new Sample();
-          return;
-        }
 
-        this.firestore.collection(CollectionNames.userCollection).doc(this.userId)
-          .collection(CollectionNames.sampleCollection).doc(this.id).get().subscribe((value) => {
+
+        this.firestore
+          .collection(CollectionNames.userCollection).doc(this.userId)
+          .collection(CollectionNames.sampleCollection).doc(this.id)
+          .get().subscribe((value) => {
           this.sample = Sample.fromDocument(value as DocumentSnapshot<Sample>);
           console.log('Loaded...');
 
