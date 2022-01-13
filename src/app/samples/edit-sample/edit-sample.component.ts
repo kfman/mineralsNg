@@ -11,6 +11,8 @@ import {ToastService} from '../../services/toast-service.service';
 import {UserData} from '../../models/UserData';
 import {NumberingService} from '../../services/numbering.service';
 import {firstValueFrom} from 'rxjs';
+import firebase from 'firebase/compat';
+import DocumentData = firebase.firestore.DocumentData;
 
 
 @Component({
@@ -55,21 +57,15 @@ export class EditSampleComponent implements OnInit {
       return;
     }
 
-    this.route.params.subscribe(p => {
-      this.id = p['id'];
-      this.auth.user.subscribe((async value => {
-        this.userId = value?.uid;
+    this.id = (await firstValueFrom(this.route.params))['id'];
 
 
-        this.firestore
-          .collection(CollectionNames.userCollection).doc(this.userId)
-          .collection(CollectionNames.sampleCollection).doc(this.id)
-          .get().subscribe((value) => {
-          this.sample = Sample.fromDocument(value as DocumentSnapshot<Sample>);
-          console.log('Loaded...');
-
-        });
-      }));
+    this.firestore
+      .collection(CollectionNames.userCollection).doc(this.userId)
+      .collection(CollectionNames.sampleCollection).doc(this.id)
+      .get().subscribe((value) => {
+      this.sample = Sample.fromDocument(value as DocumentSnapshot<Sample>);
+      console.log('Loaded...');
     });
   }
 
