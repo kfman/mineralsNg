@@ -33,6 +33,7 @@ import {environment} from '../environments/environment';
 import {PdfCreatorService} from './services/pdf-creator.service';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ToastContainerComponent } from './widgets/toast-container/toast-container.component';
+import {MatRadioModule} from '@angular/material/radio';
 
 
 @NgModule({
@@ -91,6 +92,7 @@ import { ToastContainerComponent } from './widgets/toast-container/toast-contain
         MatIconModule,
         ReactiveFormsModule,
         FormsModule,
+        MatRadioModule,
     ],
   providers: [
     AngularFireAuth,
