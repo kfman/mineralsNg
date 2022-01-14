@@ -5,5 +5,10 @@
 <button class="btn btn-danger btn-sm" (click)="createPdf()">PDF erstellen
 </button>
 
-<app-sample-list [samples]="samples" [showEdit]="true"></app-sample-list>
+<div class="alert alert-info" style="margin-top: 2rem" *ngIf="samples.length == 0">
+  <h3>Keine Proben gefunden</h3>
+</div>
+
+<app-sample-list *ngIf="samples.length > 0" [samples]="samples"
+                 [showEdit]="true"></app-sample-list>
 

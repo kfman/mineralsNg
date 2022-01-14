@@ -29,8 +29,12 @@ export class OverviewComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.auth.user.subscribe(v => {
-      this.subscription = this.firestore.collection(CollectionNames.userCollection).doc(v?.uid)
-        .collection(CollectionNames.sampleCollection, ref => ref.orderBy('sampleNumber', 'desc').limit(20)).get().subscribe(s => {
+      this.subscription = this.firestore.collection(CollectionNames.userCollection)
+        .doc(v?.uid).collection(CollectionNames.sampleCollection,
+          ref => ref
+            .orderBy('sampleNumber', 'desc').limit(20)
+            .where('sampleNumber', ">=", 'KF 00002')
+        ).get().subscribe(s => {
           let temp: Sample[] = [];
           for (let item of s.docs) {
             temp.push(Sample.fromDocument(item as DocumentSnapshot<Sample>));
