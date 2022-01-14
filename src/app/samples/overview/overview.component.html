@@ -9,7 +9,7 @@
     </button>
   </div>
   <div class="col">
-    <mat-checkbox>Gedruckt</mat-checkbox>
+    <mat-checkbox (change)="refresh($event.checked)" [checked]="printedFilter">Gedruckt</mat-checkbox>
   </div>
   <div class="col">
     <mat-radio-button value="all  ">Alle</mat-radio-button>

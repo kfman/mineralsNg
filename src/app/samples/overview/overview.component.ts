@@ -5,14 +5,11 @@ import {
 } from '@angular/fire/compat/firestore';
 import {AngularFireAuth} from '@angular/fire/compat/auth';
 import {Sample} from '../../models/Sample';
-import firebase from 'firebase/compat';
-import QueryDocumentSnapshot = firebase.firestore.QueryDocumentSnapshot;
 import {CollectionNames} from '../../system-constants';
-import {limit, orderBy} from '@angular/fire/firestore';
 import {PdfCreatorService} from '../../services/pdf-creator.service';
 import {Page_GS} from '../../models/Page_GS';
-import {firstValueFrom, Observable, Subscription} from 'rxjs';
-import {ActivatedRoute} from '@angular/router';
+import {firstValueFrom, Subscription} from 'rxjs';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-overview',
@@ -22,24 +19,25 @@ import {ActivatedRoute} from '@angular/router';
 export class OverviewComponent implements OnInit, OnDestroy {
   public samples: Sample[] = [];
   private subscription?: Subscription;
+  public sizeFilter?: string;
+  public printedFilter: boolean = false;
 
   constructor(private firestore: AngularFirestore,
               private auth: AngularFireAuth,
               private route: ActivatedRoute,
+              private router: Router,
               private pdfCreator: PdfCreatorService) {
   }
 
   async ngOnInit(): Promise<void> {
 
-    let printed: boolean = (await firstValueFrom(this.route.queryParamMap)).get('printed') == 'true' ?? false;
+    this.printedFilter = (await firstValueFrom(this.route.queryParamMap)).get('printed') == 'true' ?? false;
 
     this.auth.user.subscribe(v => {
       this.subscription = this.firestore.collection(CollectionNames.userCollection)
         .doc(v?.uid).collection(CollectionNames.sampleCollection,
-          ref => printed
-            ? ref
-            : ref // (ref.where('printed', '==', null))
-              .orderBy('sampleNumber', 'desc').limit(20)
+          ref => ref.where('printed', this.printedFilter ? '==' : '!=', null)
+            .orderBy('sampleNumber', 'desc').limit(20)
         ).get().subscribe(s => {
           let temp: Sample[] = [];
           for (let item of s.docs) {
@@ -57,5 +55,9 @@ export class OverviewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription?.unsubscribe();
+  }
+
+  refresh(checked: boolean) {
+    this.router.navigate(['samples/overview'], {queryParams: {'printed': checked}});
   }
 }
