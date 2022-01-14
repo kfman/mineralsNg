@@ -24,6 +24,7 @@ export class EditSampleComponent implements OnInit, OnDestroy {
   public sample?: Sample;
   private userId?: string;
   private subscription?: Subscription;
+  private userData?: UserData;
 
   constructor(private firestore: AngularFirestore,
               private route: ActivatedRoute,
@@ -39,19 +40,14 @@ export class EditSampleComponent implements OnInit, OnDestroy {
     this.userId = (await firstValueFrom(this.auth.user))?.uid;
 
     if (this.router.url.endsWith('new') ?? false) {
-      console.log('Creating new sample');
       let sample = new Sample();
       let value = await firstValueFrom(this.firestore
         .collection(CollectionNames.userCollection).doc(this.userId)
-        .get()); //.subscribe((value) => {
-      let userData = UserData.fromDocument(value);
-      sample.sampleNumber = this.numbering.getNumber(userData?.pattern, ++userData.count);
+        .get());
+      this.userData = UserData.fromDocument(value);
+      sample.sampleNumber = this.numbering.getNumber(this.userData?.pattern, ++this.userData.count);
 
-      await this.firestore
-        .collection(CollectionNames.userCollection).doc(this.userId)
-        .set(userData);
       this.sample = sample;
-
       return;
     }
 
@@ -74,7 +70,7 @@ export class EditSampleComponent implements OnInit, OnDestroy {
     this.sample = this.sample;
   }
 
-  save() {
+  async save() {
     console.log(this.sample!.toDocumentData());
 
     if (this.id == 'new') {
@@ -88,6 +84,13 @@ export class EditSampleComponent implements OnInit, OnDestroy {
       classname: 'bg-success text-light',
       delay: 3000
     });
+
+    if (this.userData) {
+      await this.firestore
+        .collection(CollectionNames.userCollection).doc(this.userId)
+        .set(this.userData);
+
+    }
   }
 
   ngOnDestroy(): void {
