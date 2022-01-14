@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {
   AngularFirestore,
   DocumentSnapshot
@@ -10,9 +10,7 @@ import {CollectionNames} from '../../system-constants';
 import {ToastService} from '../../services/toast-service.service';
 import {UserData} from '../../models/UserData';
 import {NumberingService} from '../../services/numbering.service';
-import {firstValueFrom} from 'rxjs';
-import firebase from 'firebase/compat';
-import DocumentData = firebase.firestore.DocumentData;
+import {firstValueFrom, Subscription} from 'rxjs';
 
 
 @Component({
@@ -20,12 +18,12 @@ import DocumentData = firebase.firestore.DocumentData;
   templateUrl: './edit-sample.component.html',
   styleUrls: ['./edit-sample.component.css']
 })
-export class EditSampleComponent implements OnInit {
+export class EditSampleComponent implements OnInit, OnDestroy {
 
   public id: string = 'new';
-
   public sample?: Sample;
   private userId?: string;
+  private subscription?: Subscription;
 
   constructor(private firestore: AngularFirestore,
               private route: ActivatedRoute,
@@ -43,30 +41,29 @@ export class EditSampleComponent implements OnInit {
     if (this.router.url.endsWith('new') ?? false) {
       console.log('Creating new sample');
       let sample = new Sample();
-      this.firestore
+      let value = await firstValueFrom(this.firestore
         .collection(CollectionNames.userCollection).doc(this.userId)
-        .get().subscribe((value) => {
-        let userData = UserData.fromDocument(value);
-        sample.sampleNumber = this.numbering.getNumber(userData?.pattern, ++userData.count);
+        .get()); //.subscribe((value) => {
+      let userData = UserData.fromDocument(value);
+      sample.sampleNumber = this.numbering.getNumber(userData?.pattern, ++userData.count);
 
-        this.firestore
-          .collection(CollectionNames.userCollection).doc(this.userId)
-          .set(userData);
-        this.sample = sample;
-      });
+      await this.firestore
+        .collection(CollectionNames.userCollection).doc(this.userId)
+        .set(userData);
+      this.sample = sample;
+
       return;
     }
 
     this.id = (await firstValueFrom(this.route.params))['id'];
 
-
-    this.firestore
+    this.subscription = this.firestore
       .collection(CollectionNames.userCollection).doc(this.userId)
       .collection(CollectionNames.sampleCollection).doc(this.id)
       .get().subscribe((value) => {
-      this.sample = Sample.fromDocument(value as DocumentSnapshot<Sample>);
-      console.log('Loaded...');
-    });
+        this.sample = Sample.fromDocument(value as DocumentSnapshot<Sample>);
+        console.log('Loaded...', Date.now());
+      });
   }
 
   submitForm() {
@@ -91,5 +88,9 @@ export class EditSampleComponent implements OnInit {
       classname: 'bg-success text-light',
       delay: 3000
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }
