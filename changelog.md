@@ -9,6 +9,8 @@
 ## [0.0.7] - ???
  - store new sample
  - generate sample number
+ - layout login
+ - filtering samples
 
 
 ## [0.0.6] - 2022-01-07
