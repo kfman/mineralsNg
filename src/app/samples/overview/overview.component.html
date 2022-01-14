@@ -1,11 +1,35 @@
 <h1>Proben</h1>
 
-<button class="btn-primary btn btn-sm" [routerLink]="['/samples/new']">Neu
-</button>
-<button class="btn btn-danger btn-sm" (click)="createPdf()">PDF erstellen
-</button>
 
-<div class="alert alert-info" style="margin-top: 2rem" *ngIf="samples.length == 0">
+  <mat-radio-group>
+<div class="row">
+
+  <div class="col">
+    <button class="btn-primary btn btn-sm" [routerLink]="['/samples/new']">Neu
+    </button>
+  </div>
+  <div class="col">
+    <mat-checkbox>Gedruckt</mat-checkbox>
+  </div>
+  <div class="col">
+    <mat-radio-button value="all  ">Alle</mat-radio-button>
+  </div>
+  <div class="col">
+    <mat-radio-button value="2">2</mat-radio-button>
+  </div>
+  <div class="col">
+    <mat-radio-button value="4">4</mat-radio-button>
+  </div>
+  <div class="col">
+    <mat-radio-button value="GS">GS</mat-radio-button>
+  </div>
+</div>
+  </mat-radio-group>
+
+<div style="height: 1rem"></div>
+
+<div class="alert alert-info" style="margin-top: 2rem"
+     *ngIf="samples && samples.length == 0">
   <h3>Keine Proben gefunden</h3>
 </div>
 

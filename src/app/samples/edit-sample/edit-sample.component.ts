@@ -25,6 +25,7 @@ export class EditSampleComponent implements OnInit, OnDestroy {
   private userId?: string;
   private subscription?: Subscription;
   private userData?: UserData;
+  
 
   constructor(private firestore: AngularFirestore,
               private route: ActivatedRoute,
