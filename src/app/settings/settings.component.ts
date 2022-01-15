@@ -10,7 +10,7 @@ import {MineralDatabaseService} from '../services/mineral-database.service';
   styleUrls: ['./settings.component.css']
 })
 export class SettingsComponent implements OnInit {
-  numbering: string = 'KF 0000000';
+  numbering: string = '';
   numbers: string[] | undefined;
   patternError = false;
 
@@ -20,7 +20,8 @@ export class SettingsComponent implements OnInit {
               private numberService: NumberingService) {
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    this.numbering = await this.database.getPattern();
   }
 
   createPdf() {

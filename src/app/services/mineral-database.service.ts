@@ -113,4 +113,10 @@ export class MineralDatabaseService {
     let uid = (await firstValueFrom(this.auth.user))?.uid;
     await this.firebase.database.ref(`/users/${uid}`).update({'pattern': numbering});
   }
+
+  async getPattern(): Promise<string>{
+    let uid = (await firstValueFrom(this.auth.user))?.uid;
+    let data =  await this.firebase.database.ref(`/users/${uid}/pattern`).get();
+  return data.val();
+  }
 }
