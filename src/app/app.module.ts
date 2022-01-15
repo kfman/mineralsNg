@@ -63,22 +63,22 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
         {
           path: 'samples/overview',
           component: OverviewComponent,
-          canActivate: [AngularFireAuthGuard]
+          // canActivate: [AngularFireAuthGuard]
         },
         {
           path: 'samples/import',
           component: ImportCsvComponent,
-          canActivate: [AngularFireAuthGuard]
+          // canActivate: [AngularFireAuthGuard]
         },
         {
           path: 'samples/new',
           component: EditSampleComponent,
-          canActivate: [AngularFireAuthGuard]
+          // canActivate: [AngularFireAuthGuard]
         },
         {
           path: 'samples/:id',
           component: EditSampleComponent,
-          canActivate: [AngularFireAuthGuard]
+          // canActivate: [AngularFireAuthGuard]
         },
       ],
     ),

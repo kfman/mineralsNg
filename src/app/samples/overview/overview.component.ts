@@ -11,22 +11,30 @@ import {Page_GS} from '../../models/Page_GS';
 import {firstValueFrom, Subscription} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MineralDatabaseService} from '../../services/mineral-database.service';
-import {GridDataResult, PageChangeEvent} from '@progress/kendo-angular-grid';
+import {
+  DataStateChangeEvent,
+  GridDataResult,
+  PageChangeEvent
+} from '@progress/kendo-angular-grid';
+import {process, State} from '@progress/kendo-data-query';
 
 @Component({
   selector: 'app-overview',
   templateUrl: './overview.component.html',
   styleUrls: ['./overview.component.css']
 })
-export class OverviewComponent implements OnInit, OnDestroy {
+export class OverviewComponent implements OnInit {
   public samples: Sample[] = [];
   private subscription?: Subscription;
   public sizeFilter?: string;
   public printedFilter: boolean = false;
-  pageSize: number = 20;
-  skip: number = 0;
   allData: Sample[] = [];
-  public gridView: GridDataResult;
+
+  public state: State = {
+    skip: 0,
+    take: 20
+  };
+  public gridView: GridDataResult = process(this.allData, this.state);
 
 
   constructor(private firestore: AngularFirestore,
@@ -35,32 +43,25 @@ export class OverviewComponent implements OnInit, OnDestroy {
               private router: Router,
               private database: MineralDatabaseService,
               private pdfCreator: PdfCreatorService) {
-    this.gridView = {data:[], total: 0};
+    this.gridView = {data: [], total: 0};
   }
 
   async ngOnInit(): Promise<void> {
     this.printedFilter = (await firstValueFrom(this.route.queryParamMap)).get('printed') == 'true' ?? false;
     this.allData = (await this.database.getAll());
-    this.loadData()
+    this.loadData();
   }
 
-  loadData(){
-    this.gridView = {
-      data: this.allData.slice(this.skip, this.skip + this.pageSize),
-      total: this.allData.length
-    };
-  }
-
-  ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
+  loadData() {
+    this.gridView = process(this.allData, this.state);
   }
 
   refresh(checked: boolean) {
     this.router.navigate(['samples/overview'], {queryParams: {'printed': checked}});
   }
 
-  pageChange(event: PageChangeEvent) {
-    this.skip = event.skip;
-    this.loadData()
+  dataChanged(event: DataStateChangeEvent) {
+  this.state = event;
+  this.gridView = process(this.allData, this.state);
   }
 }
