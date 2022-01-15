@@ -45,7 +45,7 @@ export class ImportCsvComponent implements OnInit {
         sample.timeStamp = item['Datum'];
         sample.value = item['Wert'].replace('.', '').replace(',', '.');
         sample.origin = item['woher'];
-        sample.size = item['Größe'];
+        sample.size = item["Größe"];
         sample.annotation = item['Bemerkung'];
         sample.printed = item['Gedruckt'];
         sample.sideMineral = item['Begleitmineral'];

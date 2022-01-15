@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Sample} from '../models/Sample';
+import {NumberingService} from './numbering.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,15 @@ export class MineralDatabaseService {
 
   readonly #collectionName = 'samples';
 
-  constructor() {
+  constructor(private numbering: NumberingService) {
+  }
+
+
+  async getSampleNumber(): Promise<string> {
+    let all = await this.getAll();
+    let lastIndex = Number(all[0].sampleNumber.split(' ')[1]);
+
+    return this.numbering.getNumber('CR 00000', lastIndex + 1);
   }
 
   async getAll(): Promise<Sample[]> {
@@ -51,8 +60,12 @@ export class MineralDatabaseService {
     await this.save(all);
   }
 
-  async add(sample: Sample) {
-
+  async add(sample: Sample): Promise<string> {
+    sample.id = sample.sampleNumber;
+    let all = await this.getAll();
+    all.push(sample);
+    await this.save(all);
+    return sample.id;
   }
 
   private async save(dataset: Sample[]) {

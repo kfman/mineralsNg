@@ -1,6 +1,6 @@
 <h1>Mineral bearbeiten</h1>
 
-<form (ngSubmit)="submitForm()" *ngIf="loaded && sample; else loading">
+<form *ngIf="loaded && sample; else loading">
   <div class="form-group row">
     <label for="text" class="col-4 col-form-label">Probennummer</label>
     <div class="col-8">

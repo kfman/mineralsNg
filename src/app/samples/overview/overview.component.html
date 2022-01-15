@@ -35,10 +35,40 @@
 <div style="height: 1rem"></div>
 
 <div class="alert alert-info" style="margin-top: 2rem"
-     *ngIf="samples && samples.length == 0">
+     *ngIf="allData && allData.length == 0">
   <h3>Keine Proben gefunden</h3>
 </div>
 
-<app-sample-list *ngIf="samples.length > 0" [samples]="samples"
-                 [showEdit]="true"></app-sample-list>
+<kendo-grid [data]="gridView" [pageable]="true" [pageSize]="pageSize"
+            [skip]="skip"
+            (pageChange)="pageChange($event)"
+            [resizable]="true"
+>
+
+  <kendo-grid-column field="sampleNumber" title="ID"
+                     [width]="100"></kendo-grid-column>
+  <kendo-grid-column field="mineral" title="Mineral"></kendo-grid-column>
+  <kendo-grid-column field="size" title="Größe"
+                     [width]="70"></kendo-grid-column>
+  <kendo-grid-column field="timeStamp" title="Zeitpunkt"
+                     [width]="100"></kendo-grid-column>
+  <kendo-grid-column field="value" title="Wert"
+                     [class]="{ 'text-right': true }"
+                     [width]="80"></kendo-grid-column>
+  <kendo-grid-column field="location" title="Fundort"></kendo-grid-column>
+  <kendo-grid-column field="origin" title="Herkunft" [width]="200"></kendo-grid-column>
+  <kendo-grid-column [width]="80">
+
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <button class="btn btn-sm btn-primary"
+      [routerLink]="['/samples/' + dataItem.id]"
+      >Edit</button>
+    </ng-template>
+
+  </kendo-grid-column>
+
+</kendo-grid>
+
+<!--<app-sample-list *ngIf="samples.length > 0" [samples]="samples"-->
+<!--                 [showEdit]="true"></app-sample-list>-->
 

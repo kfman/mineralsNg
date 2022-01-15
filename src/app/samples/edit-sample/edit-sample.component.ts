@@ -29,29 +29,20 @@ export class EditSampleComponent implements OnInit, OnDestroy {
   private userData?: UserData;
 
 
-  constructor(private firestore: AngularFirestore,
-              private route: ActivatedRoute,
+  constructor(private route: ActivatedRoute,
               private router: Router,
               private database: MineralDatabaseService,
-              private auth: AngularFireAuth,
               private toastService: ToastService,
               private numbering: NumberingService
   ) {
   }
 
   async ngOnInit(): Promise<void> {
-
-    this.userId = (await firstValueFrom(this.auth.user))?.uid;
-
     if (this.router.url.endsWith('new') ?? false) {
       let sample = new Sample();
-      let value = await firstValueFrom(this.firestore
-        .collection(CollectionNames.userCollection).doc(this.userId)
-        .get());
-      this.userData = UserData.fromDocument(value);
-      sample.sampleNumber = this.numbering.getNumber(this.userData?.pattern, ++this.userData.count);
-
+      sample.sampleNumber = await this.database.getSampleNumber();
       this.sample = sample;
+      this.loaded = true;
       return;
     }
 
@@ -60,15 +51,12 @@ export class EditSampleComponent implements OnInit, OnDestroy {
     this.loaded = true;
   }
 
-  submitForm() {
-    console.log(this.sample?.mineral);
-  }
-
   async save() {
 
     if (this.id == 'new') {
-      this.firestore.collection(CollectionNames.userCollection).doc(this.userId)
-        .collection(CollectionNames.sampleCollection).add(this.sample!.toDocumentData());
+      let id = await this.database.add(this.sample!);
+      this.router.navigate([`/samples/${id}`]);
+      return;
     } else {
       await this.database.update(this.id, this.sample!);
     }
@@ -76,12 +64,6 @@ export class EditSampleComponent implements OnInit, OnDestroy {
       classname: 'bg-success text-light',
       delay: 3000
     });
-
-    if (this.userData) {
-      await this.firestore
-        .collection(CollectionNames.userCollection).doc(this.userId)
-        .set(this.userData);
-    }
   }
 
   ngOnDestroy(): void {
@@ -89,7 +71,9 @@ export class EditSampleComponent implements OnInit, OnDestroy {
   }
 
   async delete(id: string) {
-    await this.database.delete(id);
+    if (id != 'new') {
+      await this.database.delete(id);
+    }
     this.router.navigate(['/samples/overview']);
   }
 }
