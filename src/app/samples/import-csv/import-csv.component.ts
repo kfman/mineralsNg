@@ -3,10 +3,8 @@ import {Sample} from '../../models/Sample';
 import {AngularFirestore} from '@angular/fire/compat/firestore';
 import {AngularFireAuth} from '@angular/fire/compat/auth';
 import {CollectionNames} from '../../system-constants';
-import firebase from 'firebase/compat';
 import {AngularFireDatabase} from '@angular/fire/compat/database';
 import {Router} from '@angular/router';
-import database = firebase.database;
 import {firstValueFrom} from 'rxjs';
 import {MineralDatabaseService} from '../../services/mineral-database.service';
 
@@ -19,6 +17,7 @@ export class ImportCsvComponent implements OnInit {
   private useRealTimeDatabase = true;
   public samples: Sample[] = [];
   public userId: string | undefined = undefined;
+  public count?:number;
 
   constructor(private firestore: AngularFirestore,
               private firebase: AngularFireDatabase,
@@ -49,7 +48,7 @@ export class ImportCsvComponent implements OnInit {
         sample.timeStamp = item['Datum'];
         sample.value = item['Wert'].replace('.', '').replace(',', '.');
         sample.origin = item['woher'];
-        sample.size = item["Größe"];
+        sample.size = item['Größe'];
         sample.annotation = item['Bemerkung'];
         sample.printed = item['Gedruckt'];
         sample.sideMineral = item['Begleitmineral'];
@@ -116,7 +115,12 @@ export class ImportCsvComponent implements OnInit {
       localStorage.setItem('samples', JSON.stringify(jsonData));
 
       let uid = (await firstValueFrom(this.auth.user))?.uid;
-      await this.firebase.database.ref(`/users/${uid!}/samples`).set(this.samples);
+
+      this.count = 0;
+      for (let sample of this.samples) {
+        await this.firebase.database.ref(`/users/${uid!}/samples`).push(sample);
+        this.count++;
+      }
       this.router.navigate(['/samples/overview']);
       return;
     }

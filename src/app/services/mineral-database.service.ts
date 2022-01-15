@@ -100,7 +100,7 @@ export class MineralDatabaseService {
       this.router.navigate(['/login']);
       console.log('Not logged in');
     }
-    await this.firebase.database.ref(`/users/${uid}/samples`).set(dataset);
+    // await this.firebase.database.ref(`/users/${uid}/samples`).set(dataset);
 
   }
 

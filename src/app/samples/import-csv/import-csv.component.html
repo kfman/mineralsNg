@@ -5,7 +5,16 @@
   Import durchführen
 </button>
 
-<button class="btn btn-danger" (click)="deleteServerData()">Serverdaten löschen</button>
+<div *ngIf="count; else showData">
+  <h3>Import läuft {{count}} von {{samples.length}}</h3>
+  <mat-progress-bar mode="determinate"
+                    [value]="count/this.samples.length * 100"></mat-progress-bar>
+</div>
 
-<app-sample-list [samples]="samples" [showEdit]="false"></app-sample-list>
+<ng-template #showData>
+  <button class="btn btn-danger" (click)="deleteServerData()">Serverdaten
+    löschen
+  </button>
+  <app-sample-list [samples]="samples" [showEdit]="false"></app-sample-list>
+</ng-template>
 
