@@ -3,6 +3,8 @@ import {Sample} from '../../models/Sample';
 import {AngularFirestore} from '@angular/fire/compat/firestore';
 import {AngularFireAuth} from '@angular/fire/compat/auth';
 import {CollectionNames} from '../../system-constants';
+import firebase from 'firebase/compat';
+import {AngularFireDatabase} from '@angular/fire/compat/database';
 
 @Component({
   selector: 'app-import-csv',
@@ -10,11 +12,12 @@ import {CollectionNames} from '../../system-constants';
   styleUrls: ['./import-csv.component.css']
 })
 export class ImportCsvComponent implements OnInit {
-
+  private useRealTimeDatabase = true;
   public samples: Sample[] = [];
   public userId: string | undefined = undefined;
 
   constructor(private firestore: AngularFirestore,
+              private database: AngularFireDatabase,
               private auth: AngularFireAuth) {
   }
 
@@ -24,12 +27,42 @@ export class ImportCsvComponent implements OnInit {
     });
   }
 
+  async importJsonFile(file: File) {
+
+    console.log('Reading json file');
+    let fileReader: FileReader = new FileReader();
+    fileReader.onload = (e) => {
+      let json = JSON.parse(fileReader.result!.toString());
+
+      for (let item of json) {
+        let sample = new Sample();
+        sample.sampleNumber = item['Identifikation'];
+        sample.mineral = item['Mineral'];
+        sample.location = item['FundortZeile1'] + '\n' + item['FundortZeile2'] + '\n' + item['FundortZeile3'];
+        sample.timeStamp = item['Datum'];
+        sample.value = item['Wert'].replace('.', '').replace(',', '.');
+        sample.origin = item['woher'];
+        sample.size = item['Größe'];
+        sample.annotation = item['Bemerkung'];
+        sample.printed = item['Gedruckt'];
+        sample.sideMineral = item['Begleitmineral'];
+        this.samples.push(sample);
+      }
+    };
+    fileReader.readAsText(file, 'UTF-8');
+  }
+
   async readFile(files: FileList | null) {
     if ((files?.length ?? 0) == 0) {
       return;
     }
 
     let file = files!.item(0)!;
+    if (file.name.endsWith('.json')) {
+      await this.importJsonFile(file);
+      return;
+    }
+
     console.log(file);
     let fileReader: FileReader = new FileReader();
     fileReader.onload = (e) => {
@@ -66,9 +99,22 @@ export class ImportCsvComponent implements OnInit {
   }
 
   async import(): Promise<void> {
+    if (this.useRealTimeDatabase) {
+      var jsonData = [];
+      for (let sample of this.samples) {
+        jsonData.push(sample.toDocumentData());
+      }
+
+      // this.database.database.ref(`users/${this.userId}/samples`).set(jsonData);
+      localStorage.setItem('samples', JSON.stringify(jsonData));
+      return;
+    }
+
     for (let sample of this.samples) {
       const document = sample.toDocumentData();
       console.log(document);
+
+
       if (document != undefined) {
         sample.id = (await this.firestore.collection(CollectionNames.userCollection)
           .doc(this.userId).collection(CollectionNames.sampleCollection)
