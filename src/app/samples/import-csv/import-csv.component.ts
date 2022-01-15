@@ -89,7 +89,7 @@ export class ImportCsvComponent implements OnInit {
           sample.origin = columns[8]; // woher
           sample.size = columns[9]; // Größe
           sample.annotation = columns[11]; // Bemerkung
-          sample.printed = columns[12]; // Gedruckt
+          //sample.printed = Date(columns[12]); // Gedruckt
           sample.sideMineral = columns[13]; // Begeleitmineral
 
           this.samples.push(sample);

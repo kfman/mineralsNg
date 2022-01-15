@@ -32,7 +32,7 @@ export class OverviewComponent implements OnInit {
 
   public state: State = {
     skip: 0,
-    take: 20
+    take: 50
   };
   public gridView: GridDataResult = process(this.allData, this.state);
 
@@ -47,7 +47,8 @@ export class OverviewComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.printedFilter = (await firstValueFrom(this.route.queryParamMap)).get('printed') == 'true' ?? false;
+    this.printedFilter = (await firstValueFrom(this.route.queryParamMap))
+      .get('printed') == 'true' ?? false;
     this.allData = (await this.database.getAll());
     this.loadData();
   }
@@ -57,11 +58,14 @@ export class OverviewComponent implements OnInit {
   }
 
   refresh(checked: boolean) {
-    this.router.navigate(['samples/overview'], {queryParams: {'printed': checked}});
+    this.router.navigate(
+      ['samples/overview'],
+      {queryParams: {'printed': checked}}
+    );
   }
 
   dataChanged(event: DataStateChangeEvent) {
-  this.state = event;
-  this.gridView = process(this.allData, this.state);
+    this.state = event;
+    this.gridView = process(this.allData, this.state);
   }
 }
