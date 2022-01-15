@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {PdfCreatorService} from '../services/pdf-creator.service';
 import {ToastService} from '../services/toast-service.service';
 import {NumberingService} from '../services/numbering.service';
+import {MineralDatabaseService} from '../services/mineral-database.service';
 
 @Component({
   selector: 'app-settings',
@@ -15,6 +16,7 @@ export class SettingsComponent implements OnInit {
 
   constructor(private pdfService: PdfCreatorService,
               private toastService: ToastService,
+              private database: MineralDatabaseService,
               private numberService: NumberingService) {
   }
 
@@ -42,5 +44,10 @@ export class SettingsComponent implements OnInit {
       this.toastService.show('Pattern ungültig',
         {classname: 'bg-danger text-light', delay: 15000});
     }
+  }
+
+  async savePattern() {
+    await this.database.updatePattern(this.numbering);
+
   }
 }

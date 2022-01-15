@@ -5,6 +5,8 @@
   <div class="btn btn-secondary"  (click)="testNumbers()">Nummern laufen lassen
   </div>
 
+  <button class="btn btn-primary" (click)="savePattern()">Pattern speichern</button>
+
   <ul *ngIf="numbers">
     <li *ngFor="let number of numbers">{{number}}</li>
   </ul>

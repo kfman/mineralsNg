@@ -6,6 +6,9 @@ import {CollectionNames} from '../../system-constants';
 import firebase from 'firebase/compat';
 import {AngularFireDatabase} from '@angular/fire/compat/database';
 import {Router} from '@angular/router';
+import database = firebase.database;
+import {firstValueFrom} from 'rxjs';
+import {MineralDatabaseService} from '../../services/mineral-database.service';
 
 @Component({
   selector: 'app-import-csv',
@@ -18,8 +21,9 @@ export class ImportCsvComponent implements OnInit {
   public userId: string | undefined = undefined;
 
   constructor(private firestore: AngularFirestore,
-              private database: AngularFireDatabase,
+              private firebase: AngularFireDatabase,
               private router: Router,
+              private database: MineralDatabaseService,
               private auth: AngularFireAuth) {
   }
 
@@ -110,6 +114,9 @@ export class ImportCsvComponent implements OnInit {
 
       // this.database.database.ref(`users/${this.userId}/samples`).set(jsonData);
       localStorage.setItem('samples', JSON.stringify(jsonData));
+
+      let uid = (await firstValueFrom(this.auth.user))?.uid;
+      await this.firebase.database.ref(`/users/${uid!}/samples`).set(this.samples);
       this.router.navigate(['/samples/overview']);
       return;
     }
@@ -125,5 +132,9 @@ export class ImportCsvComponent implements OnInit {
           .add(document)).id;
       }
     }
+  }
+
+  async deleteServerData() {
+    await this.database.deleteServerData();
   }
 }
