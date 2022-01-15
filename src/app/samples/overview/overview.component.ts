@@ -10,6 +10,7 @@ import {PdfCreatorService} from '../../services/pdf-creator.service';
 import {Page_GS} from '../../models/Page_GS';
 import {firstValueFrom, Subscription} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
+import {MineralDatabaseService} from '../../services/mineral-database.service';
 
 @Component({
   selector: 'app-overview',
@@ -26,31 +27,14 @@ export class OverviewComponent implements OnInit, OnDestroy {
               private auth: AngularFireAuth,
               private route: ActivatedRoute,
               private router: Router,
+              private database: MineralDatabaseService,
               private pdfCreator: PdfCreatorService) {
   }
 
   async ngOnInit(): Promise<void> {
 
     this.printedFilter = (await firstValueFrom(this.route.queryParamMap)).get('printed') == 'true' ?? false;
-
-    this.auth.user.subscribe(v => {
-      this.subscription = this.firestore.collection(CollectionNames.userCollection)
-        .doc(v?.uid).collection(CollectionNames.sampleCollection,
-          ref => ref.where('printed', this.printedFilter ? '==' : '!=', null)
-            .orderBy('sampleNumber', 'desc').limit(20)
-        ).get().subscribe(s => {
-          let temp: Sample[] = [];
-          for (let item of s.docs) {
-            temp.push(Sample.fromDocument(item as DocumentSnapshot<Sample>));
-            console.log(item);
-          }
-          this.samples = temp.sort((a, b) => b.sampleNumber.localeCompare(a.sampleNumber));
-        });
-    });
-  }
-
-  createPdf(): void {
-    this.pdfCreator.create(new Page_GS(this.samples));
+    this.samples = await this.database.getAll();
   }
 
   ngOnDestroy(): void {

@@ -11,6 +11,7 @@ import {ToastService} from '../../services/toast-service.service';
 import {UserData} from '../../models/UserData';
 import {NumberingService} from '../../services/numbering.service';
 import {firstValueFrom, Subscription} from 'rxjs';
+import {MineralDatabaseService} from '../../services/mineral-database.service';
 
 
 @Component({
@@ -21,15 +22,17 @@ import {firstValueFrom, Subscription} from 'rxjs';
 export class EditSampleComponent implements OnInit, OnDestroy {
 
   public id: string = 'new';
+  public loaded: boolean = false;
   public sample?: Sample;
   private userId?: string;
   private subscription?: Subscription;
   private userData?: UserData;
-  
+
 
   constructor(private firestore: AngularFirestore,
               private route: ActivatedRoute,
               private router: Router,
+              private database: MineralDatabaseService,
               private auth: AngularFireAuth,
               private toastService: ToastService,
               private numbering: NumberingService
@@ -53,33 +56,21 @@ export class EditSampleComponent implements OnInit, OnDestroy {
     }
 
     this.id = (await firstValueFrom(this.route.params))['id'];
-
-    this.subscription = this.firestore
-      .collection(CollectionNames.userCollection).doc(this.userId)
-      .collection(CollectionNames.sampleCollection).doc(this.id)
-      .get().subscribe((value) => {
-        this.sample = Sample.fromDocument(value as DocumentSnapshot<Sample>);
-        console.log('Loaded...', Date.now());
-      });
+    this.sample = await this.database.get(this.id);
+    this.loaded = true;
   }
 
   submitForm() {
     console.log(this.sample?.mineral);
   }
 
-  doWhat() {
-    this.sample = this.sample;
-  }
-
   async save() {
-    console.log(this.sample!.toDocumentData());
 
     if (this.id == 'new') {
       this.firestore.collection(CollectionNames.userCollection).doc(this.userId)
         .collection(CollectionNames.sampleCollection).add(this.sample!.toDocumentData());
     } else {
-      this.firestore.collection(CollectionNames.userCollection).doc(this.userId)
-        .collection(CollectionNames.sampleCollection).doc(this.sample?.id).set(this.sample!.toDocumentData());
+      await this.database.update(this.id, this.sample!);
     }
     this.toastService.show('Probe gespeichert', {
       classname: 'bg-success text-light',
@@ -90,11 +81,15 @@ export class EditSampleComponent implements OnInit, OnDestroy {
       await this.firestore
         .collection(CollectionNames.userCollection).doc(this.userId)
         .set(this.userData);
-
     }
   }
 
   ngOnDestroy(): void {
     this.subscription?.unsubscribe();
+  }
+
+  async delete(id: string) {
+    await this.database.delete(id);
+    this.router.navigate(['/samples/overview']);
   }
 }

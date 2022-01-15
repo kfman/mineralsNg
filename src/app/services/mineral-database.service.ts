@@ -6,36 +6,57 @@ import {Sample} from '../models/Sample';
 })
 export class MineralDatabaseService {
 
-  private uid: string;
-  readonly #collectionName= 'samples';
+  readonly #collectionName = 'samples';
 
-  constructor(uid: string) {
-    this.uid = uid;
+  constructor() {
   }
 
   async getAll(): Promise<Sample[]> {
-    var result = [];
+    let result = [];
     let json = JSON.parse(localStorage.getItem(this.#collectionName)!);
-    for (let item of json){
-      result.push(Sample.fromDocument(item));
+    for (let item of json) {
+      result.push(item);
     }
-    return result;
-  }
-
-  async get(id: string): Promise<Sample | null> {
-    return null;
-  }
-
-  async delete(id: string){
+    return result.sort((a: Sample, b: Sample) => b.sampleNumber.localeCompare(a.sampleNumber));
 
   }
 
-  async update(id: string, sample:Sample){
+  async get(id: string): Promise<Sample | undefined> {
+    let all = await this.getAll();
+    return all.find(s => s.id == id);
+  }
+
+  async delete(id: string) {
+    let all = await this.getAll();
+    all.forEach((element, index) => {
+      if (element.id == id) {
+        all.splice(index, 1);
+      }
+    });
+
+    this.save(all);
+  }
+
+  async update(id: string, sample: Sample) {
+    let all = await this.getAll();
+
+    all.forEach((element, index) => {
+      if (element.id == id) {
+        all.splice(index, 1);
+      }
+    });
+
+    sample.id = id;
+    all.push(sample);
+    await this.save(all);
+  }
+
+  async add(sample: Sample) {
 
   }
 
-  async add(sample:Sample){
-
+  private async save(dataset: Sample[]) {
+    await localStorage.setItem(this.#collectionName, JSON.stringify(dataset));
   }
 
 }

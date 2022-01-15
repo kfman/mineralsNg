@@ -5,6 +5,7 @@ import {AngularFireAuth} from '@angular/fire/compat/auth';
 import {CollectionNames} from '../../system-constants';
 import firebase from 'firebase/compat';
 import {AngularFireDatabase} from '@angular/fire/compat/database';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-import-csv',
@@ -18,6 +19,7 @@ export class ImportCsvComponent implements OnInit {
 
   constructor(private firestore: AngularFirestore,
               private database: AngularFireDatabase,
+              private router: Router,
               private auth: AngularFireAuth) {
   }
 
@@ -37,6 +39,7 @@ export class ImportCsvComponent implements OnInit {
       for (let item of json) {
         let sample = new Sample();
         sample.sampleNumber = item['Identifikation'];
+        sample.id = sample.sampleNumber;
         sample.mineral = item['Mineral'];
         sample.location = item['FundortZeile1'] + '\n' + item['FundortZeile2'] + '\n' + item['FundortZeile3'];
         sample.timeStamp = item['Datum'];
@@ -107,6 +110,7 @@ export class ImportCsvComponent implements OnInit {
 
       // this.database.database.ref(`users/${this.userId}/samples`).set(jsonData);
       localStorage.setItem('samples', JSON.stringify(jsonData));
+      this.router.navigate(['/samples/overview']);
       return;
     }
 

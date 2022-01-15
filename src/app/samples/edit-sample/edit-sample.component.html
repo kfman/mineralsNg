@@ -1,6 +1,6 @@
 <h1>Mineral bearbeiten</h1>
 
-<form (ngSubmit)="submitForm()" *ngIf="sample; else loading">
+<form (ngSubmit)="submitForm()" *ngIf="loaded && sample; else loading">
   <div class="form-group row">
     <label for="text" class="col-4 col-form-label">Probennummer</label>
     <div class="col-8">
@@ -121,24 +121,39 @@
 
 
   <div class="form-group row">
-    <div class="col-6">
+    <div class="col-4">
       <button name="submit" type="submit" class="btn btn-primary"
               (click)="save()">Speichern
       </button>
     </div>
-    <div class="col-6" style="text-align: right">
+    <div class="col-4">
+      <button name="submit" type="submit" class="btn btn-outline-primary"
+              [routerLink]="['/samples/overview']">Abbrechen
+      </button>
+    </div>
+    <div class="col-4" style="text-align: right">
       <button name="submit" type="submit" class="btn btn-danger"
-              [routerLink]="['/samples/overview']">
-        Abbrechen
+              (click)="delete(this.id)">
+        Löschen
       </button>
     </div>
   </div>
 </form>
 
 <ng-template #loading>
+
+  <div *ngIf="loaded">
+    <div class="alert alert-danger">
+      <h3>Keine Daten gefunden...</h3>
+    </div>
+  </div>
+
+  <div *ngIf="!loaded">
+
   <mat-spinner></mat-spinner>
   Loading data...
-  <button class="btn btn-danger" (click)="doWhat()">Do what!</button>
+  <button class="btn btn-danger" (click)="this.sample = this.sample">Do what!</button>
+  </div>
 </ng-template>
 
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>

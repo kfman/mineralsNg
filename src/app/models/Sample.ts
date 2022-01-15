@@ -25,6 +25,7 @@ export class Sample implements IPrintSample {
   public value: number = 0;
   public printed: string = '';
 
+
   public static fromDocument(item: DocumentSnapshot<Sample>): Sample {
     let result = new Sample();
     result.id = item.id;
@@ -49,6 +50,7 @@ export class Sample implements IPrintSample {
 
   toDocumentData() {
     return {
+      id: this.id,
       sampleNumber: this.sampleNumber,
       analytics: this.analytics ?? null,
       annotation: this.annotation ?? null,
