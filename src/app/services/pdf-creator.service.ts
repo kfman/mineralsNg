@@ -22,7 +22,7 @@ export class PdfCreatorService {
     let pageSamples = [];
 
     let labels = [];
-    for (let i = 0; i < page.width * page.height; i++) {
+    for (let i = 0; i < page.width * page.height && i < pageSamples.length; i++) {
       const temp = page.labelFrom(page.samples[i], 0, 0);
       labels.push(temp);
     }
@@ -31,6 +31,8 @@ export class PdfCreatorService {
       pageSize: 'A4',
       content: labels,
     };
+
+    pdfMake.createPdf(document).download('export.pdf');
 
   }
 
@@ -107,7 +109,6 @@ export class PdfCreatorService {
       ]
     };
 
-    console.log(document);
     pdfMake.createPdf(document).download('export.pdf');
   };
 

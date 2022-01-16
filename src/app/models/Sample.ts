@@ -23,7 +23,8 @@ export class Sample implements IPrintSample {
   public size: string = '';
   public timeStamp: string = '';
   public value: number = 0;
-  public printed: string = '';
+  public printed?: Date | null;
+
 
   public static fromDocument(item: DocumentSnapshot<Sample>): Sample {
     let result = new Sample();
@@ -40,6 +41,7 @@ export class Sample implements IPrintSample {
     result.size = item.get('size');
     result.timeStamp = item.get('timeStamp');
     result.value = item.get('value');
+    result.printed = item.get('printed');
     return result;
   }
 
@@ -49,6 +51,7 @@ export class Sample implements IPrintSample {
 
   toDocumentData() {
     return {
+      id: this.id,
       sampleNumber: this.sampleNumber,
       analytics: this.analytics ?? null,
       annotation: this.annotation ?? null,
@@ -60,7 +63,8 @@ export class Sample implements IPrintSample {
       sideMineral: this.sideMineral ?? null,
       size: this.size ?? null,
       timeStamp: this.timeStamp ?? null,
-      value: this.value ?? 0
+      value: this.value ?? 0,
+      printed: this.printed
     };
   }
 }

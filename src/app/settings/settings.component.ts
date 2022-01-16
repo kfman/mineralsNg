@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {PdfCreatorService} from '../services/pdf-creator.service';
 import {ToastService} from '../services/toast-service.service';
 import {NumberingService} from '../services/numbering.service';
+import {MineralDatabaseService} from '../services/mineral-database.service';
 
 @Component({
   selector: 'app-settings',
@@ -9,16 +10,18 @@ import {NumberingService} from '../services/numbering.service';
   styleUrls: ['./settings.component.css']
 })
 export class SettingsComponent implements OnInit {
-  numbering: string = 'KF 0000000';
+  numbering: string = '';
   numbers: string[] | undefined;
   patternError = false;
 
   constructor(private pdfService: PdfCreatorService,
               private toastService: ToastService,
+              private database: MineralDatabaseService,
               private numberService: NumberingService) {
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    this.numbering = await this.database.getPattern();
   }
 
   createPdf() {
@@ -42,5 +45,15 @@ export class SettingsComponent implements OnInit {
       this.toastService.show('Pattern ungültig',
         {classname: 'bg-danger text-light', delay: 15000});
     }
+  }
+
+  async savePattern() {
+    await this.database.updatePattern(this.numbering);
+
+  }
+
+  async testDbLoad() {
+    let temp = await this.database.getAll(true);
+    console.log(temp);
   }
 }

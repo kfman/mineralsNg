@@ -1,9 +1,105 @@
 <h1>Proben</h1>
 
-<button class="btn-primary btn btn-sm" [routerLink]="['/samples/new']">Neu
-</button>
-<button class="btn btn-danger btn-sm" (click)="createPdf()">PDF erstellen
-</button>
 
-<app-sample-list [samples]="samples" [showEdit]="true"></app-sample-list>
+<div *ngIf="!samples" class="alert alert-info">
+  Lade daten...
+</div>
 
+<div class="row">
+  <div class="col">
+    <button class="btn btn-primary" [routerLink]="['/samples/new']">Neu
+    </button>
+  </div>
+
+  <div class="col" style="text-align: right">
+    <button class="btn btn-info" (click)="generateLabels('GS')">Drucken GS
+      ({{unprintedGs}})
+    </button>
+    <button class="btn btn-info" (click)="generateLabels('4')">Drucken 4
+      ({{unprinted4}})
+    </button>
+    <button class="btn btn-info" (click)="generateLabels('2')">Drucken 2
+      ({{unprinted2}})
+    </button>
+  </div>
+</div>
+
+<div style="height: 1rem"></div>
+
+<div class="alert alert-info" style="margin-top: 2rem"
+     *ngIf="samples && samples.length == 0">
+  <h3>Keine Proben gefunden</h3>
+</div>
+
+<kendo-grid [data]="gridView"
+            [pageable]="true"
+            [pageSize]="state.take!"
+            [skip]="state.skip!"
+            [sort]="state.sort!"
+            [sortable]="true"
+            [resizable]="true"
+            [filter]="state.filter!"
+            [columnMenu]="{ filter: true }"
+            (dataStateChange)="dataChanged($event)"
+>
+
+  <kendo-grid-column field="sampleNumber" title="ID"
+                     [width]="150"></kendo-grid-column>
+  <kendo-grid-column field="mineral" title="Mineral"></kendo-grid-column>
+  <kendo-grid-column field="size" title="Größe"
+                     [width]="120"></kendo-grid-column>
+  <kendo-grid-column field="timeStamp" title="Zeitpunkt"
+                     media="(min-width: 768px)"
+                     [filterable]="false"
+                     [width]="100"></kendo-grid-column>
+  <kendo-grid-column field="value" title="Wert"
+                     media="(min-width: 1500px)"
+                     [class]="{ 'text-right': true }"
+                     [width]="120"></kendo-grid-column>
+  <kendo-grid-column field="location" title="Fundort"
+                     media="(min-width: 600px)"
+  >
+
+  </kendo-grid-column>
+  <kendo-grid-column field="origin" title="Herkunft"
+                     media="(min-width: 1500px)"
+                     [width]="200"></kendo-grid-column>
+  <kendo-grid-column field="annotation" title="Bemerkung"
+                     media="(min-width: 1024px)"
+                     [width]="200"></kendo-grid-column>
+  <kendo-grid-column field="printed" title="Gedruckt" [width]="200"
+                     media="(min-width: 1500px)"
+
+  ></kendo-grid-column>
+  <kendo-grid-column [width]="80">
+
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <button class="btn btn-sm btn-primary"
+              [routerLink]="['/samples/' + dataItem.id]"
+      >Edit
+      </button>
+    </ng-template>
+
+  </kendo-grid-column>
+
+</kendo-grid>
+
+<!--<app-sample-list *ngIf="samples.length > 0" [samples]="samples"-->
+<!--                 [showEdit]="true"></app-sample-list>-->
+
+
+<kendo-dialog
+  title="Keine Etiketten"
+  *ngIf="dialogState.opened"
+  [minWidth]="250"
+  [width]="450"
+>
+  <p style="margin: 30px; text-align: center;">
+    {{dialogState.message}}
+  </p>
+  <kendo-dialog-actions>
+    <button kendoButton (click)="dialogState.opened = false" primary="true">
+      Ok
+    </button>
+  </kendo-dialog-actions>
+</kendo-dialog>

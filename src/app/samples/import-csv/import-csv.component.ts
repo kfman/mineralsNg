@@ -3,6 +3,10 @@ import {Sample} from '../../models/Sample';
 import {AngularFirestore} from '@angular/fire/compat/firestore';
 import {AngularFireAuth} from '@angular/fire/compat/auth';
 import {CollectionNames} from '../../system-constants';
+import {AngularFireDatabase} from '@angular/fire/compat/database';
+import {Router} from '@angular/router';
+import {firstValueFrom} from 'rxjs';
+import {MineralDatabaseService} from '../../services/mineral-database.service';
 
 @Component({
   selector: 'app-import-csv',
@@ -10,11 +14,15 @@ import {CollectionNames} from '../../system-constants';
   styleUrls: ['./import-csv.component.css']
 })
 export class ImportCsvComponent implements OnInit {
-
+  private useRealTimeDatabase = true;
   public samples: Sample[] = [];
   public userId: string | undefined = undefined;
+  public count?:number;
 
   constructor(private firestore: AngularFirestore,
+              private firebase: AngularFireDatabase,
+              private router: Router,
+              private database: MineralDatabaseService,
               private auth: AngularFireAuth) {
   }
 
@@ -24,12 +32,43 @@ export class ImportCsvComponent implements OnInit {
     });
   }
 
+  async importJsonFile(file: File) {
+
+    console.log('Reading json file');
+    let fileReader: FileReader = new FileReader();
+    fileReader.onload = (e) => {
+      let json = JSON.parse(fileReader.result!.toString());
+
+      for (let item of json) {
+        let sample = new Sample();
+        sample.sampleNumber = item['Identifikation'];
+        sample.id = sample.sampleNumber;
+        sample.mineral = item['Mineral'];
+        sample.location = item['FundortZeile1'] + '\n' + item['FundortZeile2'] + '\n' + item['FundortZeile3'];
+        sample.timeStamp = item['Datum'];
+        sample.value = item['Wert'].replace('.', '').replace(',', '.');
+        sample.origin = item['woher'];
+        sample.size = item['Größe'];
+        sample.annotation = item['Bemerkung'];
+        sample.printed = item['Gedruckt'];
+        sample.sideMineral = item['Begleitmineral'];
+        this.samples.push(sample);
+      }
+    };
+    fileReader.readAsText(file, 'UTF-8');
+  }
+
   async readFile(files: FileList | null) {
     if ((files?.length ?? 0) == 0) {
       return;
     }
 
     let file = files!.item(0)!;
+    if (file.name.endsWith('.json')) {
+      await this.importJsonFile(file);
+      return;
+    }
+
     console.log(file);
     let fileReader: FileReader = new FileReader();
     fileReader.onload = (e) => {
@@ -53,7 +92,7 @@ export class ImportCsvComponent implements OnInit {
           sample.origin = columns[8]; // woher
           sample.size = columns[9]; // Größe
           sample.annotation = columns[11]; // Bemerkung
-          sample.printed = columns[12]; // Gedruckt
+          //sample.printed = Date(columns[12]); // Gedruckt
           sample.sideMineral = columns[13]; // Begeleitmineral
 
           this.samples.push(sample);
@@ -66,14 +105,40 @@ export class ImportCsvComponent implements OnInit {
   }
 
   async import(): Promise<void> {
+    if (this.useRealTimeDatabase) {
+      var jsonData = [];
+      for (let sample of this.samples) {
+        jsonData.push(sample.toDocumentData());
+      }
+
+      // this.database.database.ref(`users/${this.userId}/samples`).set(jsonData);
+      localStorage.setItem('samples', JSON.stringify(jsonData));
+
+      let uid = (await firstValueFrom(this.auth.user))?.uid;
+
+      this.count = 0;
+      for (let sample of this.samples) {
+        await this.firebase.database.ref(`/users/${uid!}/samples`).push(sample);
+        this.count++;
+      }
+      this.router.navigate(['/samples/overview']);
+      return;
+    }
+
     for (let sample of this.samples) {
       const document = sample.toDocumentData();
       console.log(document);
+
+
       if (document != undefined) {
         sample.id = (await this.firestore.collection(CollectionNames.userCollection)
           .doc(this.userId).collection(CollectionNames.sampleCollection)
           .add(document)).id;
       }
     }
+  }
+
+  async deleteServerData() {
+    await this.database.deleteServerData();
   }
 }
