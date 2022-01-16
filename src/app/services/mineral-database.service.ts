@@ -2,10 +2,8 @@ import {Injectable} from '@angular/core';
 import {Sample} from '../models/Sample';
 import {NumberingService} from './numbering.service';
 import {AngularFireAuth} from '@angular/fire/compat/auth';
-import {AngularFirestore} from '@angular/fire/compat/firestore';
 import {firstValueFrom} from 'rxjs';
 import {Router} from '@angular/router';
-import {CollectionNames} from '../system-constants';
 import {AngularFireDatabase} from '@angular/fire/compat/database';
 
 @Injectable({
@@ -33,15 +31,10 @@ export class MineralDatabaseService {
 
 
   async getSampleNumber(): Promise<string> {
-    let all = await this.getAll();
-    let lastIndex = Number(all[0].sampleNumber.split(' ')[1]);
-
-    let uid = (await firstValueFrom(this.auth.user))?.uid;
-    await this.firebase.database.ref(`/users/${uid}`).update({
-      'pattern': 'CR 00000',
-      'index': lastIndex
-    });
-    return this.numbering.getNumber('CR 00000', lastIndex + 1);
+    let uid = await this.getUserId();
+    let pattern = (await this.firebase.database.ref(`/users/${uid}/pattern`).get()).val() as string;
+    let lastIndex = (await this.firebase.database.ref(`/users/${uid}/index`).get()).val() as number;
+    return this.numbering.getNumber(pattern, lastIndex + 1);
   }
 
   private async loadFromServer(): Promise<Sample[]> {
