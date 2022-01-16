@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Sample} from '../models/Sample';
 import {NumberingService} from './numbering.service';
 import {AngularFireAuth} from '@angular/fire/compat/auth';
-import {firstValueFrom, sample} from 'rxjs';
+import {firstValueFrom} from 'rxjs';
 import {Router} from '@angular/router';
 import {AngularFireDatabase} from '@angular/fire/compat/database';
 
@@ -43,7 +43,7 @@ export class MineralDatabaseService {
     let sampleMap = data.val() as Map<string, Sample>;
     let result: Sample[] = [];
 
-    for (let [key, value] of Object.entries(sampleMap)){
+    for (let [key, value] of Object.entries(sampleMap)) {
       let sample = value;
       sample.id = key;
       result.push(sample);
@@ -55,6 +55,10 @@ export class MineralDatabaseService {
     if (this.samples && !forceReload) {
       return this.samples;
     }
+
+    console.log('Loading data due to '
+    + (forceReload ? 'forceReload ' : ' ')
+    + ((this.samples == null) ? 'samples are null' : ''));
 
     var result: Sample[] = [];
     let localData = localStorage.getItem(this.#collectionName);

@@ -5,37 +5,29 @@
   Lade daten...
 </div>
 
-<mat-radio-group>
-  <div class="row">
-
-    <div class="col">
-      <button class="btn-primary btn" [routerLink]="['/samples/new']">Neu
-      </button>
-    </div>
-    <div class="col">
-      <mat-checkbox (change)="refresh($event.checked)"
-                    [checked]="printedFilter">Gedruckt
-      </mat-checkbox>
-    </div>
-    <div class="col">
-      <mat-radio-button value="all">Alle</mat-radio-button>
-    </div>
-    <div class="col">
-      <mat-radio-button value="2">2</mat-radio-button>
-    </div>
-    <div class="col">
-      <mat-radio-button value="4">4</mat-radio-button>
-    </div>
-    <div class="col">
-      <mat-radio-button value="GS">GS</mat-radio-button>
-    </div>
+<div class="row">
+  <div class="col">
+    <button class="btn btn-primary" [routerLink]="['/samples/new']">Neu
+    </button>
   </div>
-</mat-radio-group>
+
+  <div class="col" style="text-align: right">
+    <button class="btn btn-info" (click)="generateLabels('GS')">Drucken GS
+      ({{unprintedGs}})
+    </button>
+    <button class="btn btn-info" (click)="generateLabels('4')">Drucken 4
+      ({{unprinted4}})
+    </button>
+    <button class="btn btn-info" (click)="generateLabels('2')">Drucken 2
+      ({{unprinted2}})
+    </button>
+  </div>
+</div>
 
 <div style="height: 1rem"></div>
 
 <div class="alert alert-info" style="margin-top: 2rem"
-     *ngIf="allData && allData.length == 0">
+     *ngIf="samples && samples.length == 0">
   <h3>Keine Proben gefunden</h3>
 </div>
 
@@ -77,7 +69,7 @@
                      [width]="200"></kendo-grid-column>
   <kendo-grid-column field="printed" title="Gedruckt" [width]="200"
                      media="(min-width: 1500px)"
-                     [format]="'dd.MM.YYYY'"
+
   ></kendo-grid-column>
   <kendo-grid-column [width]="80">
 
@@ -95,3 +87,19 @@
 <!--<app-sample-list *ngIf="samples.length > 0" [samples]="samples"-->
 <!--                 [showEdit]="true"></app-sample-list>-->
 
+
+<kendo-dialog
+  title="Keine Etiketten"
+  *ngIf="dialogState.opened"
+  [minWidth]="250"
+  [width]="450"
+>
+  <p style="margin: 30px; text-align: center;">
+    {{dialogState.message}}
+  </p>
+  <kendo-dialog-actions>
+    <button kendoButton (click)="dialogState.opened = false" primary="true">
+      Ok
+    </button>
+  </kendo-dialog-actions>
+</kendo-dialog>

@@ -113,9 +113,17 @@
   <div class="form-group row">
     <label for="text6" class="col-4 col-form-label">Gedruckt</label>
     <div class="col-8">
-      <input id="printed" name="printed" type="text" class="form-control"
-             readonly="true"
-             [(ngModel)]="sample.printed">
+      <div class="input-group">
+
+        <input id="printed" name="printed" type="text" class="form-control"
+               readonly="true"
+               [(ngModel)]="sample.printed">
+        <div class="input-group-append">
+          <button class="btn btn-sm btn-warning"
+          (click)="resetPrinted()"
+          >Zurücksetzten</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -127,7 +135,7 @@
       </button>
     </div>
     <div class="col-4">
-      <button name="submit" type="submit" class="btn btn-outline-primary"
+      <button name="submit" type="submit" class="btn btn-outline-primary hide"
               [routerLink]="['/samples/overview']">Abbrechen
       </button>
     </div>
@@ -150,9 +158,11 @@
 
   <div *ngIf="!loaded">
 
-  <mat-spinner></mat-spinner>
-  Loading data...
-  <button class="btn btn-danger" (click)="this.sample = this.sample">Do what!</button>
+    <mat-spinner></mat-spinner>
+    Loading data...
+    <button class="btn btn-danger" (click)="this.sample = this.sample">Do
+      what!
+    </button>
   </div>
 </ng-template>
 

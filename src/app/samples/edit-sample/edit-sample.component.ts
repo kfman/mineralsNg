@@ -1,12 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {
-  AngularFirestore,
-  DocumentSnapshot
-} from '@angular/fire/compat/firestore';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AngularFireAuth} from '@angular/fire/compat/auth';
 import {Sample} from '../../models/Sample';
-import {CollectionNames} from '../../system-constants';
 import {ToastService} from '../../services/toast-service.service';
 import {UserData} from '../../models/UserData';
 import {NumberingService} from '../../services/numbering.service';
@@ -75,5 +69,13 @@ export class EditSampleComponent implements OnInit, OnDestroy {
       await this.database.delete(id);
     }
     this.router.navigate(['/samples/overview']);
+  }
+
+  resetPrinted() {
+    if (this.sample == null) {
+      return;
+    }
+
+    this.sample!.printed = undefined;
   }
 }

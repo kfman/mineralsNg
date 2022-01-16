@@ -37,6 +37,8 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { DialogsModule } from '@progress/kendo-angular-dialog';
+
 
 
 @NgModule({
@@ -99,6 +101,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     MatProgressSpinnerModule,
     MatCheckboxModule,
     MatProgressBarModule,
+    DialogsModule,
   ],
   providers: [
     AngularFireAuth,
