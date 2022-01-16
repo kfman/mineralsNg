@@ -18,9 +18,7 @@ export class EditSampleComponent implements OnInit, OnDestroy {
   public id: string = 'new';
   public loaded: boolean = false;
   public sample?: Sample;
-  private userId?: string;
-  private subscription?: Subscription;
-  private userData?: UserData;
+
 
 
   constructor(private route: ActivatedRoute,
@@ -60,8 +58,9 @@ export class EditSampleComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
+  async ngOnDestroy(): Promise<void> {
+    if (this.sample)
+      await this.database.update(this.id, this.sample);
   }
 
   async delete(id: string) {
@@ -76,6 +75,6 @@ export class EditSampleComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.sample!.printed = undefined;
+    this.sample!.printed = null;
   }
 }

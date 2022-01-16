@@ -31,7 +31,11 @@ export class OverviewComponent implements OnInit {
 
   public state: State = {
     skip: 0,
-    take: 50
+    take: 50,
+    sort: [{
+      field: 'sampleNumber',
+      dir: 'desc'
+    }]
   };
 
   public dialogState = {
@@ -95,7 +99,8 @@ export class OverviewComponent implements OnInit {
         break;
 
     }
-    if (page)
+    if (page) {
       this.pdfCreator.create(page);
+    }
   }
 }

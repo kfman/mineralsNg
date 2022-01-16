@@ -12,6 +12,7 @@ import {AngularFireDatabase} from '@angular/fire/compat/database';
 export class MineralDatabaseService {
 
   readonly #collectionName = 'samples';
+  readonly #lastChanged = 'lastChanged';
   private samples?: Sample[];
   private uid?: string;
 
@@ -56,23 +57,32 @@ export class MineralDatabaseService {
       return this.samples;
     }
 
+    let uid = await this.getUserId();
+    let lastChanged = Number(await this.firebase.database.ref(`/users/${uid}/lastChanged`).get());
+    if (lastChanged > Number(localStorage.getItem(this.#lastChanged))) {
+      forceReload = true;
+    }
+
     console.log('Loading data due to '
-    + (forceReload ? 'forceReload ' : ' ')
-    + ((this.samples == null) ? 'samples are null' : ''));
+      + (forceReload ? 'forceReload ' : ' ')
+      + ((this.samples == null) ? 'samples are null' : ''));
+
 
     var result: Sample[] = [];
     let localData = localStorage.getItem(this.#collectionName);
+
     if (!localData || forceReload) {
       console.log('Loading data from server');
       result = await this.loadFromServer();
-      await this.save(result, true);
+
+      await this.save(result, lastChanged, true);
     } else {
       let json = JSON.parse(localData!);
       for (let item of json) {
         result.push(item);
       }
     }
-    this.samples = result.sort((a: Sample, b: Sample) => b.sampleNumber.localeCompare(a.sampleNumber));
+    this.samples = result; //.sort((a: Sample, b: Sample) => b.sampleNumber.localeCompare(a.sampleNumber));
     return this.samples;
   }
 
@@ -103,18 +113,28 @@ export class MineralDatabaseService {
 
     sample.id = id;
     all.push(sample);
-    await this.save(all);
+
+    let lastChanged = Date.now();
+    let uid = await this.getUserId();
+    await this.firebase.database.ref(`/users/${uid}/samples/${id}`).set(sample);
+    await this.firebase.database.ref(`/users/${uid}`).update({'lastChanged': lastChanged});
+    await this.save(all, lastChanged);
   }
 
   async add(sample: Sample): Promise<string> {
     sample.id = sample.sampleNumber;
     let all = await this.getAll();
     all.push(sample);
+
+    let uid = await this.getUserId();
+    await this.firebase.database.ref(`/users/${uid}/samples`).push(sample);
+    await this.firebase.database.ref(`/users/${uid}`).update({'lastChanged': Date.now()});
+
     await this.save(all);
     return sample.id;
   }
 
-  private async save(dataset: Sample[], onlyLocal: boolean = false) {
+  private async save(dataset: Sample[], lastChanged?: number, onlyLocal: boolean = false) {
     let dbDump = JSON.stringify(dataset);
     await localStorage.setItem(this.#collectionName, dbDump);
     console.log(`Stored ${Math.round(dbDump.length / 1024)} kB locally`);
@@ -128,7 +148,7 @@ export class MineralDatabaseService {
       this.router.navigate(['/login']);
       console.log('Not logged in');
     }
-    // await this.firebase.database.ref(`/users/${uid}/samples`).set(dataset);
+    await localStorage.setItem(this.#lastChanged, (lastChanged ?? Date.now()).toString());
 
   }
 

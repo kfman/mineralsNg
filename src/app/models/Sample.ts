@@ -23,7 +23,7 @@ export class Sample implements IPrintSample {
   public size: string = '';
   public timeStamp: string = '';
   public value: number = 0;
-  public printed?: Date;
+  public printed?: Date | null;
 
 
   public static fromDocument(item: DocumentSnapshot<Sample>): Sample {
