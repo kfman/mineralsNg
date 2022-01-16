@@ -51,4 +51,8 @@ export class SettingsComponent implements OnInit {
     await this.database.updatePattern(this.numbering);
 
   }
+
+  async testDbLoad() {
+    console.log(this.database.getAll());
+  }
 }

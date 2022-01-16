@@ -14,14 +14,10 @@
 </div>
 
 <ul>
-  <li>
-
-    <button class="btn btn-info" (click)="createPdf()">Create PDF</button>
-  </li>
-  <li>
-    <div class="btn btn-dark" (click)="testToast()">Toast testen</div>
-  </li>
+  <li><button class="btn btn-info" (click)="createPdf()">Create PDF</button></li>
+  <li><div class="btn btn-dark" (click)="testToast()">Toast testen</div>  </li>
   <li><a class="btn btn-danger" [routerLink]="['/samples/import']" >Import</a></li>
+  <li><a class="btn btn-danger" (click)="testDbLoad()">Daten vom Server laden</a></li>
 </ul>
 
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>

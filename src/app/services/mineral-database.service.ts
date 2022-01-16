@@ -14,6 +14,15 @@ import {AngularFireDatabase} from '@angular/fire/compat/database';
 export class MineralDatabaseService {
 
   readonly #collectionName = 'samples';
+  private samples?: Sample[];
+  private uid?: string;
+
+  async getUserId(): Promise<string | undefined> {
+    if (this.uid == null) {
+      this.uid = (await firstValueFrom(this.auth.user))?.uid;
+    }
+    return this.uid;
+  }
 
   constructor(private numbering: NumberingService,
               private auth: AngularFireAuth,
@@ -35,22 +44,35 @@ export class MineralDatabaseService {
     return this.numbering.getNumber('CR 00000', lastIndex + 1);
   }
 
-  async getAll(): Promise<Sample[]> {
-    let localData = localStorage.getItem(this.#collectionName);
-    if (localData == null) {
-      let uid = (await firstValueFrom(this.auth.user))?.uid;
-      if (!uid) {
-        this.router.navigate(['/login']);
-      }
-      await this.firebase.database.ref(`/users/${uid}/samples`).get();
+  private async loadFromServer(): Promise<Sample[]> {
+    let data = await this.firebase.database.ref(`/users/${(await this.getUserId())}/samples`).get();
+    let sampleMap = data.val() as Map<string, Sample>;
+    let result: Sample[] = [];
+    for (let key in sampleMap.keys) {
+      sampleMap.get(key)!.id = key;
+      result.push(sampleMap.get(key)!);
     }
-    let result = [];
-    let json = JSON.parse(localData!);
-    for (let item of json) {
-      result.push(item);
-    }
-    return result.sort((a: Sample, b: Sample) => b.sampleNumber.localeCompare(a.sampleNumber));
+    return result;
+  }
 
+  async getAll(): Promise<Sample[]> {
+    if (this.samples) {
+      return this.samples;
+    }
+
+    let localData = localStorage.getItem(this.#collectionName);
+    var result: Sample[] = [];
+    if (localData == null) {
+      result = await this.loadFromServer();
+      await this.save(result, true);
+    } else {
+      let json = JSON.parse(localData!);
+      for (let item of json) {
+        result.push(item);
+      }
+    }
+    this.samples = result.sort((a: Sample, b: Sample) => b.sampleNumber.localeCompare(a.sampleNumber));
+    return this.samples;
   }
 
   async get(id: string): Promise<Sample | undefined> {
@@ -91,10 +113,15 @@ export class MineralDatabaseService {
     return sample.id;
   }
 
-  private async save(dataset: Sample[]) {
+  private async save(dataset: Sample[], onlyLocal: boolean = false) {
     let dbDump = JSON.stringify(dataset);
     await localStorage.setItem(this.#collectionName, dbDump);
     console.log(`Stored ${Math.round(dbDump.length / 1024)} kB locally`);
+
+    if (onlyLocal) {
+      return;
+    }
+
     let uid = (await firstValueFrom(this.auth.user))?.uid;
     if (!uid) {
       this.router.navigate(['/login']);
@@ -114,9 +141,9 @@ export class MineralDatabaseService {
     await this.firebase.database.ref(`/users/${uid}`).update({'pattern': numbering});
   }
 
-  async getPattern(): Promise<string>{
+  async getPattern(): Promise<string> {
     let uid = (await firstValueFrom(this.auth.user))?.uid;
-    let data =  await this.firebase.database.ref(`/users/${uid}/pattern`).get();
-  return data.val();
+    let data = await this.firebase.database.ref(`/users/${uid}/pattern`).get();
+    return data.val();
   }
 }
