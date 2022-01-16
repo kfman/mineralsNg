@@ -6,11 +6,12 @@
 
 # Development:
 
-## [0.0.7] - ???
+## [0.0.7] - 2022-01-16
  - store new sample
  - generate sample number
  - layout login
  - filtering samples
+ - changed database to firebase real time database
 
 
 ## [0.0.6] - 2022-01-07
