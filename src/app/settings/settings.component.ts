@@ -53,6 +53,7 @@ export class SettingsComponent implements OnInit {
   }
 
   async testDbLoad() {
-    console.log(this.database.getAll());
+    let temp = await this.database.getAll(true);
+    console.log(temp);
   }
 }

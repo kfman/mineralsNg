@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Sample} from '../models/Sample';
 import {NumberingService} from './numbering.service';
 import {AngularFireAuth} from '@angular/fire/compat/auth';
-import {firstValueFrom} from 'rxjs';
+import {firstValueFrom, sample} from 'rxjs';
 import {Router} from '@angular/router';
 import {AngularFireDatabase} from '@angular/fire/compat/database';
 
@@ -38,24 +38,28 @@ export class MineralDatabaseService {
   }
 
   private async loadFromServer(): Promise<Sample[]> {
-    let data = await this.firebase.database.ref(`/users/${(await this.getUserId())}/samples`).get();
+    let uid = (await this.getUserId());
+    let data = await this.firebase.database.ref(`/users/${uid}/samples`).get();
     let sampleMap = data.val() as Map<string, Sample>;
     let result: Sample[] = [];
-    for (let key in sampleMap.keys) {
-      sampleMap.get(key)!.id = key;
-      result.push(sampleMap.get(key)!);
+
+    for (let [key, value] of Object.entries(sampleMap)){
+      let sample = value;
+      sample.id = key;
+      result.push(sample);
     }
     return result;
   }
 
-  async getAll(): Promise<Sample[]> {
-    if (this.samples) {
+  async getAll(forceReload = false): Promise<Sample[]> {
+    if (this.samples && !forceReload) {
       return this.samples;
     }
 
-    let localData = localStorage.getItem(this.#collectionName);
     var result: Sample[] = [];
-    if (localData == null) {
+    let localData = localStorage.getItem(this.#collectionName);
+    if (!localData || forceReload) {
+      console.log('Loading data from server');
       result = await this.loadFromServer();
       await this.save(result, true);
     } else {
