@@ -99,6 +99,8 @@ export class MineralDatabaseService {
       }
     });
 
+    let uid = await this.getUserId();
+    await this.firebase.database.ref(`/users/${uid}/samples/${id}`).remove();
     this.save(all);
   }
 
@@ -121,17 +123,18 @@ export class MineralDatabaseService {
     await this.save(all, lastChanged);
   }
 
-  async add(sample: Sample): Promise<string> {
-    sample.id = sample.sampleNumber;
+  async add(sample: Sample): Promise<string | null> {
     let all = await this.getAll();
-    all.push(sample);
 
+    sample.id = sample.sampleNumber;
     let uid = await this.getUserId();
-    await this.firebase.database.ref(`/users/${uid}/samples`).push(sample);
+    let ref = await this.firebase.database.ref(`/users/${uid}/samples`).push(sample);
     await this.firebase.database.ref(`/users/${uid}`).update({'lastChanged': Date.now()});
+    sample.id = ref.key!;
 
+    all.push(sample);
     await this.save(all);
-    return sample.id;
+    return ref.key;
   }
 
   private async save(dataset: Sample[], lastChanged?: number, onlyLocal: boolean = false) {

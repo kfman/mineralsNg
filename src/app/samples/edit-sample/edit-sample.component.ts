@@ -2,9 +2,8 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Sample} from '../../models/Sample';
 import {ToastService} from '../../services/toast-service.service';
-import {UserData} from '../../models/UserData';
 import {NumberingService} from '../../services/numbering.service';
-import {firstValueFrom, Subscription} from 'rxjs';
+import {firstValueFrom} from 'rxjs';
 import {MineralDatabaseService} from '../../services/mineral-database.service';
 
 
@@ -18,7 +17,7 @@ export class EditSampleComponent implements OnInit, OnDestroy {
   public id: string = 'new';
   public loaded: boolean = false;
   public sample?: Sample;
-
+  public deleted = false;
 
 
   constructor(private route: ActivatedRoute,
@@ -46,8 +45,8 @@ export class EditSampleComponent implements OnInit, OnDestroy {
   async save() {
 
     if (this.id == 'new') {
-      let id = await this.database.add(this.sample!);
-      this.router.navigate([`/samples/${id}`]);
+      this.id = (await this.database.add(this.sample!))!;
+      this.router.navigate([`/samples/${this.id}`]);
       return;
     } else {
       await this.database.update(this.id, this.sample!);
@@ -59,11 +58,20 @@ export class EditSampleComponent implements OnInit, OnDestroy {
   }
 
   async ngOnDestroy(): Promise<void> {
-    if (this.sample)
-      await this.database.update(this.id, this.sample);
+    if (this.deleted)
+      return;
+
+    if (this.sample) {
+      if (this.id == 'new') {
+        this.id = (await this.database.add(this.sample))!;
+      } else {
+        await this.database.update(this.id, this.sample);
+      }
+    }
   }
 
   async delete(id: string) {
+    this.deleted = true;
     if (id != 'new') {
       await this.database.delete(id);
     }
