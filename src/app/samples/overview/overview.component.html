@@ -103,3 +103,24 @@
     </button>
   </kendo-dialog-actions>
 </kendo-dialog>
+
+
+<kendo-dialog
+  title="Speichern"
+  *ngIf="commitDialog.opened"
+>
+  <p style="margin: 30px; text-align: center;">
+    Sollen die Etiketten als <b>gedruckt</b> gespeichert werden?
+  </p>
+  <kendo-dialog-actions>
+    <button kendoButton
+            (click)="commitDialog.opened = false; storeAsPrinted(commitDialog.samples)"
+            primary="true">
+      Ja
+    </button>
+    <button kendoButton (click)="commitDialog.opened = false" primary="false">
+      Nein
+    </button>
+  </kendo-dialog-actions>
+
+</kendo-dialog>

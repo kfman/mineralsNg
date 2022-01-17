@@ -22,13 +22,25 @@ export class PdfCreatorService {
     let pageSamples = [];
 
     let labels = [];
-    for (let i = 0; i < page.width * page.height && i < pageSamples.length; i++) {
-      const temp = page.labelFrom(page.samples[i], 0, 0);
+    for (let i = 0; i < page.width * page.height && i < page.samples.length; i++) {
+      let column = i % page.width;
+      let row = i / page.width;
+      const temp = page.labelFrom(page.samples[i], row, column);
       labels.push(temp);
     }
 
+    console.log(labels);
     let document: TDocumentDefinitions = {
       pageSize: 'A4',
+      pageMargins: [0, 0, 0, 0],
+      info: {
+        title: 'MineralsNg',
+        author: 'Klaus Fischer',
+        subject: 'Label',
+        keywords: 'Minerals Label',
+      },
+      styles: page.getStyles(),
+
       content: labels,
     };
 
