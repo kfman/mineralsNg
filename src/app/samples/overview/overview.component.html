@@ -5,22 +5,25 @@
   Lade daten...
 </div>
 
-<div class="row">
-  <div class="col">
-    <button class="btn btn-primary" [routerLink]="['/samples/new']">Neu
-    </button>
-  </div>
+<div class="d-none d-md-block">
 
-  <div class="col" style="text-align: right">
-    <button class="btn btn-info" (click)="generateLabels('GS')">Drucken GS
-      ({{unprintedGs}})
-    </button>
-    <button class="btn btn-info" (click)="generateLabels('4')">Drucken 4
-      ({{unprinted4}})
-    </button>
-    <button class="btn btn-info" (click)="generateLabels('2')">Drucken 2
-      ({{unprinted2}})
-    </button>
+  <div class="row">
+    <div class="col-4">
+      <button class="btn btn-primary" [routerLink]="['/samples/new']">Neu
+      </button>
+    </div>
+
+    <div class="col-8" style="text-align: right">
+      <button class="btn btn-info" (click)="generateLabels('GS')">Drucken GS
+        ({{unprintedGs}})
+      </button>
+      <button class="btn btn-info" (click)="generateLabels('4')">Drucken 4
+        ({{unprinted4}})
+      </button>
+      <button class="btn btn-info" (click)="generateLabels('2')">Drucken 2
+        ({{unprinted2}})
+      </button>
+    </div>
   </div>
 </div>
 
