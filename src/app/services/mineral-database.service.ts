@@ -14,13 +14,9 @@ export class MineralDatabaseService {
   readonly #collectionName = 'samples';
   readonly #lastChanged = 'lastChanged';
   private samples?: Sample[];
-  private uid?: string;
 
   async getUserId(): Promise<string | undefined> {
-    if (this.uid == null) {
-      this.uid = (await firstValueFrom(this.auth.user))?.uid;
-    }
-    return this.uid;
+    return (await firstValueFrom(this.auth.user))?.uid;
   }
 
   constructor(private numbering: NumberingService,
@@ -188,5 +184,23 @@ export class MineralDatabaseService {
     }
     await localStorage.setItem(this.#lastChanged, (timeStamp.getTime() ?? Date.now()).toString());
     await this.firebase.database.ref(`/users/${uid}`).update({'lastChanged': timeStamp.getTime()});
+  }
+
+  async updateUser(values: Object) {
+    let uid = await this.getUserId();
+    await this.firebase.database.ref(`/users/${uid}`).update(values);
+  }
+
+  async getName() {
+    let uid = (await firstValueFrom(this.auth.user))?.uid;
+    let data = await this.firebase.database.ref(`/users/${uid}/name`).get();
+    return data.val();
+
+  }
+
+  async getIndex() {
+    let uid = (await firstValueFrom(this.auth.user))?.uid;
+    let data = await this.firebase.database.ref(`/users/${uid}/index`).get();
+    return data.val();
   }
 }
