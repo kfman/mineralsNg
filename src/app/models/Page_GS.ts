@@ -49,14 +49,14 @@ export class Page_GS extends ILabelPage {
                 },
                 style: 'timeStamp'
             },
-            {
-                text: sample.sideMineral,
-                absolutePosition: {
-                    x: cellOffset.innerX,
-                    y: cellOffset.innerY + 40
-                },
-                style: 'sideMineral'
-            },
+            // {
+            //     text: sample.sideMineral,
+            //     absolutePosition: {
+            //         x: cellOffset.innerX,
+            //         y: cellOffset.innerY + 40
+            //     },
+            //     style: 'sideMineral'
+            // },
         ];
     };
 
@@ -72,13 +72,13 @@ export class Page_GS extends ILabelPage {
                 fontSize: 10,
                 bold: true,
                 italics: false,
-                alignment: 'right'
+                alignment: 'center'
             },
             value: {
                 fontSize: 10,
                 bold: true,
                 italics: false,
-                alignment: 'left'
+                alignment: 'center'
             },
             mineral: {
                 fontSize: 10,

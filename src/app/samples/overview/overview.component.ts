@@ -43,6 +43,11 @@ export class OverviewComponent implements OnInit {
     message: 'Keine Etiketten in der Größe'
   };
 
+  public commitDialog: { opened: boolean, samples: Sample[] } = {
+    opened: false,
+    samples: []
+  };
+
   public gridView: GridDataResult = process(this.samples, this.state);
 
 
@@ -101,6 +106,13 @@ export class OverviewComponent implements OnInit {
     }
     if (page) {
       this.pdfCreator.create(page);
+      this.commitDialog.samples = samples;
+      this.commitDialog.opened = true;
     }
+  }
+
+  storeAsPrinted(samples: Sample[]) {
+    this.database.storeAsPrinted(samples);
+
   }
 }
