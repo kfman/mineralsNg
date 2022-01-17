@@ -66,9 +66,9 @@ export class OverviewComponent implements OnInit {
     this.samples = (await this.database.getAll());
     this.loadData();
 
-    this.unprintedGs = this.samples.filter(s => s.size == 'GS' && s.printed == null).length;
-    this.unprinted4 = this.samples.filter(s => s.size == '4' && s.printed == null).length;
-    this.unprinted2 = this.samples.filter(s => s.size == '2' && s.printed == null).length;
+    this.unprintedGs = this.samples.filter(s => s.size == 'GS' && !s.printed).length;
+    this.unprinted4 = this.samples.filter(s => s.size == '4' && !s.printed).length;
+    this.unprinted2 = this.samples.filter(s => s.size == '2' && !s.printed).length;
   }
 
   loadData() {

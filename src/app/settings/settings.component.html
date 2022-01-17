@@ -1,23 +1,63 @@
 <div style="padding: 3em">
 
-  <input type="text" class="form-control" [(ngModel)]="numbering"
-         [ngClass]="{'bg-danger': patternError}">
-  <div class="btn btn-secondary"  (click)="testNumbers()">Nummern laufen lassen
+
+  <div class="row">
+    <div class="col-2"><h2>Name</h2></div>
+    <div class="col-8"><input type="text" class="form-control"
+                              [(ngModel)]="name"></div>
+    <div class="col-2">
+      <button class="btn btn-primary" (click)="saveName()">Name speichern</button>
+    </div>
   </div>
 
-  <button class="btn btn-primary" (click)="savePattern()">Pattern speichern</button>
 
-  <ul *ngIf="numbers">
-    <li *ngFor="let number of numbers">{{number}}</li>
-  </ul>
+  <div class="row">
+    <div class="col-2"><h2>Pattern</h2></div>
+    <div class="col-8"><input type="text" class="form-control"
+                              [(ngModel)]="numbering"
+                              [ngClass]="{'bg-danger': patternError}"></div>
+    <div class="col-2">
+      <button class="btn btn-primary" (click)="savePattern()">Pattern
+        speichern
+      </button>
+    </div>
+  </div>
 
+  <div class="row">
+    <div class="col-2"><h2>Index</h2></div>
+    <div class="col-8"><input type="text" class="form-control"
+                              [(ngModel)]="index"
+                              [ngClass]="{'bg-danger': indexError}"></div>
+    <div class="col-2">
+      <button class="btn btn-primary" (click)="saveIndex()">Index setzen</button>
+    </div>
+  </div>
+
+  <div class="d-none">
+
+    <div class="btn btn-secondary" (click)="testNumbers()">Nummern laufen lassen
+    </div>
+
+
+    <ul *ngIf="numbers">
+      <li *ngFor="let number of numbers">{{number}}</li>
+    </ul>
+
+
+    <ul>
+      <li>
+        <button class="btn btn-info" (click)="createPdf()">Create PDF</button>
+      </li>
+      <li>
+        <div class="btn btn-dark" (click)="testToast()">Toast testen</div>
+      </li>
+      <li><a class="btn btn-danger"
+             [routerLink]="['/samples/import']">Import</a>
+      </li>
+      <li><a class="btn btn-danger" (click)="testDbLoad()">Daten vom Server
+        laden</a></li>
+    </ul>
+  </div>
 </div>
-
-<ul>
-  <li><button class="btn btn-info" (click)="createPdf()">Create PDF</button></li>
-  <li><div class="btn btn-dark" (click)="testToast()">Toast testen</div>  </li>
-  <li><a class="btn btn-danger" [routerLink]="['/samples/import']" >Import</a></li>
-  <li><a class="btn btn-danger" (click)="testDbLoad()">Daten vom Server laden</a></li>
-</ul>
 
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>

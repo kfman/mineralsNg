@@ -13,6 +13,9 @@ export class SettingsComponent implements OnInit {
   numbering: string = '';
   numbers: string[] | undefined;
   patternError = false;
+  name: string = '';
+  index: number = 0;
+  indexError: boolean = false;
 
   constructor(private pdfService: PdfCreatorService,
               private toastService: ToastService,
@@ -22,6 +25,8 @@ export class SettingsComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.numbering = await this.database.getPattern();
+    this.name = await this.database.getName();
+    this.index = await this.database.getIndex();
   }
 
   createPdf() {
@@ -47,13 +52,20 @@ export class SettingsComponent implements OnInit {
     }
   }
 
-  async savePattern() {
-    await this.database.updatePattern(this.numbering);
-
-  }
-
   async testDbLoad() {
     let temp = await this.database.getAll(true);
     console.log(temp);
+  }
+
+  async savePattern() {
+    await this.database.updateUser({'pattern': this.numbering});
+  }
+
+  async saveName() {
+    await this.database.updateUser({'name': this.name});
+  }
+
+  async saveIndex() {
+    await this.database.updateUser({'index': this.index});
   }
 }
