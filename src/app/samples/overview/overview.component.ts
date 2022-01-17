@@ -63,7 +63,9 @@ export class OverviewComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.printedFilter = (await firstValueFrom(this.route.queryParamMap))
       .get('printed') == 'true' ?? false;
-    this.samples = (await this.database.getAll());
+    this.samples = (await this.database.getAll()).sort((a, b) => {
+      return b.sampleNumber.localeCompare(a.sampleNumber);
+    });
     this.loadData();
 
     this.unprintedGs = this.samples.filter(s => s.size == 'GS' && !s.printed).length;
