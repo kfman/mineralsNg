@@ -5,22 +5,25 @@
   Lade daten...
 </div>
 
-<div class="row">
-  <div class="col">
-    <button class="btn btn-primary" [routerLink]="['/samples/new']">Neu
-    </button>
-  </div>
+<div class="d-none d-md-block">
 
-  <div class="col" style="text-align: right">
-    <button class="btn btn-info" (click)="generateLabels('GS')">Drucken GS
-      ({{unprintedGs}})
-    </button>
-    <button class="btn btn-info" (click)="generateLabels('4')">Drucken 4
-      ({{unprinted4}})
-    </button>
-    <button class="btn btn-info" (click)="generateLabels('2')">Drucken 2
-      ({{unprinted2}})
-    </button>
+  <div class="row">
+    <div class="col-4">
+      <button class="btn btn-primary" [routerLink]="['/samples/new']">Neu
+      </button>
+    </div>
+
+    <div class="col-8" style="text-align: right">
+      <button class="btn btn-info" (click)="generateLabels('GS')">Drucken GS
+        ({{unprintedGs}})
+      </button>
+      <button class="btn btn-info" (click)="generateLabels('4')">Drucken 4
+        ({{unprinted4}})
+      </button>
+      <button class="btn btn-info" (click)="generateLabels('2')">Drucken 2
+        ({{unprinted2}})
+      </button>
+    </div>
   </div>
 </div>
 
@@ -31,7 +34,8 @@
   <h3>Keine Proben gefunden</h3>
 </div>
 
-<kendo-grid [data]="gridView"
+<kendo-grid class="d-none d-md-block"
+            [data]="gridView"
             [pageable]="true"
             [pageSize]="state.take!"
             [skip]="state.skip!"
@@ -87,6 +91,38 @@
 <!--<app-sample-list *ngIf="samples.length > 0" [samples]="samples"-->
 <!--                 [showEdit]="true"></app-sample-list>-->
 
+<div class="d-md-none">
+  <ng-container *ngFor="let sample of samples.slice(0,20)">
+    <table class="table table-bordered">
+      <tr>
+        <th style="width:10em">Probennummer</th>
+        <td>{{sample.sampleNumber}}</td>
+      </tr>
+      <tr>
+        <th>Mineral</th>
+        <td>{{sample.mineral}}</td>
+      </tr>
+      <tr>
+        <th>Größe</th>
+        <td>{{sample.size}}</td>
+      </tr>
+      <tr>
+        <th>Zeitpunkt</th>
+        <td>{{sample.timeStamp}}</td>
+      </tr>
+      <tr>
+        <th>Fundort</th>
+        <td>{{sample.location}}</td>
+      </tr>
+      <tr>
+        <th>&nbsp;</th>
+        <td><a class="btn btn-primary btn-sm"
+               [routerLink]="['/samples/'+sample.id]">Edit</a></td>
+      </tr>
+    </table>
+  </ng-container>
+</div>
+
 
 <kendo-dialog
   title="Keine Etiketten"
@@ -102,4 +138,25 @@
       Ok
     </button>
   </kendo-dialog-actions>
+</kendo-dialog>
+
+
+<kendo-dialog
+  title="Speichern"
+  *ngIf="commitDialog.opened"
+>
+  <p style="margin: 30px; text-align: center;">
+    Sollen die Etiketten als <b>gedruckt</b> gespeichert werden?
+  </p>
+  <kendo-dialog-actions>
+    <button kendoButton
+            (click)="commitDialog.opened = false; storeAsPrinted(commitDialog.samples)"
+            primary="true">
+      Ja
+    </button>
+    <button kendoButton (click)="commitDialog.opened = false" primary="false">
+      Nein
+    </button>
+  </kendo-dialog-actions>
+
 </kendo-dialog>

@@ -14,13 +14,9 @@ export class MineralDatabaseService {
   readonly #collectionName = 'samples';
   readonly #lastChanged = 'lastChanged';
   private samples?: Sample[];
-  private uid?: string;
 
   async getUserId(): Promise<string | undefined> {
-    if (this.uid == null) {
-      this.uid = (await firstValueFrom(this.auth.user))?.uid;
-    }
-    return this.uid;
+    return (await firstValueFrom(this.auth.user))?.uid;
   }
 
   constructor(private numbering: NumberingService,
@@ -116,6 +112,8 @@ export class MineralDatabaseService {
     sample.id = id;
     all.push(sample);
 
+    console.log(sample);
+
     let lastChanged = Date.now();
     let uid = await this.getUserId();
     await this.firebase.database.ref(`/users/${uid}/samples/${id}`).set(sample);
@@ -168,6 +166,41 @@ export class MineralDatabaseService {
   async getPattern(): Promise<string> {
     let uid = (await firstValueFrom(this.auth.user))?.uid;
     let data = await this.firebase.database.ref(`/users/${uid}/pattern`).get();
+    return data.val();
+  }
+
+  async storeAsPrinted(samples: Sample[]) {
+    let timeStamp = new Date();
+
+    let uid = (await firstValueFrom(this.auth.user))?.uid;
+    for (let sample of samples) {
+      if (!sample.id) {
+        continue;
+      }
+      let dbSample = await this.get(sample.id!);
+      dbSample!.printed = timeStamp;
+      await this.update(sample.id, dbSample!);
+      await this.firebase.database.ref(`/users/${uid}/samples/${sample.id}`).update({'printed': timeStamp});
+    }
+    await localStorage.setItem(this.#lastChanged, (timeStamp.getTime() ?? Date.now()).toString());
+    await this.firebase.database.ref(`/users/${uid}`).update({'lastChanged': timeStamp.getTime()});
+  }
+
+  async updateUser(values: Object) {
+    let uid = await this.getUserId();
+    await this.firebase.database.ref(`/users/${uid}`).update(values);
+  }
+
+  async getName() {
+    let uid = (await firstValueFrom(this.auth.user))?.uid;
+    let data = await this.firebase.database.ref(`/users/${uid}/name`).get();
+    return data.val();
+
+  }
+
+  async getIndex() {
+    let uid = (await firstValueFrom(this.auth.user))?.uid;
+    let data = await this.firebase.database.ref(`/users/${uid}/index`).get();
     return data.val();
   }
 }
