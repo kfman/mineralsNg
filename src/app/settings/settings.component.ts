@@ -3,6 +3,8 @@ import {PdfCreatorService} from '../services/pdf-creator.service';
 import {ToastService} from '../services/toast-service.service';
 import {NumberingService} from '../services/numbering.service';
 import {MineralDatabaseService} from '../services/mineral-database.service';
+import {AngularFireAuth} from '@angular/fire/compat/auth';
+import {firstValueFrom} from 'rxjs';
 
 @Component({
   selector: 'app-settings',
@@ -16,9 +18,12 @@ export class SettingsComponent implements OnInit {
   name: string = '';
   index: number = 0;
   indexError: boolean = false;
+  showSetPasswordDialog = false;
+  passwordMismatch = false;
 
   constructor(private pdfService: PdfCreatorService,
               private toastService: ToastService,
+              private auth: AngularFireAuth,
               private database: MineralDatabaseService,
               private numberService: NumberingService) {
   }
@@ -67,5 +72,21 @@ export class SettingsComponent implements OnInit {
 
   async saveIndex() {
     await this.database.updateUser({'index': this.index});
+  }
+
+  async setPassword(password: string, passwordRpt: string){
+    if (password != passwordRpt){
+      this.passwordMismatch = true;
+      return;
+    }
+
+    try {
+      let user = await firstValueFrom(this.auth.user);
+      await user?.updatePassword(password);
+      this.showSetPasswordDialog = false;
+    }
+    catch (e){
+      console.log(e);
+    }
   }
 }
