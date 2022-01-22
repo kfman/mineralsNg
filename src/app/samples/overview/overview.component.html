@@ -55,14 +55,13 @@
   <kendo-grid-column field="timeStamp" title="Zeitpunkt"
                      media="(min-width: 768px)"
                      [filterable]="false"
-                     [width]="100"></kendo-grid-column>
+                     [width]="120"></kendo-grid-column>
   <kendo-grid-column field="value" title="Wert"
                      media="(min-width: 1500px)"
                      [class]="{ 'text-right': true }"
                      [width]="120"></kendo-grid-column>
   <kendo-grid-column field="location" title="Fundort"
-                     media="(min-width: 600px)"
-  >
+                     media="(min-width: 600px)">
 
   </kendo-grid-column>
   <kendo-grid-column field="origin" title="Herkunft"
@@ -75,7 +74,7 @@
                      media="(min-width: 1500px)"
 
   ></kendo-grid-column>
-  <kendo-grid-column [width]="80">
+  <kendo-grid-column [width]="80" [columnMenu]="false">
 
     <ng-template kendoGridCellTemplate let-dataItem>
       <button class="btn btn-sm btn-primary"
@@ -134,7 +133,7 @@
     {{dialogState.message}}
   </p>
   <kendo-dialog-actions>
-    <button kendoButton (click)="dialogState.opened = false" primary="true">
+    <button kendoButton (click)="dialogState.opened = false" [primary]=true>
       Ok
     </button>
   </kendo-dialog-actions>
@@ -151,10 +150,10 @@
   <kendo-dialog-actions>
     <button kendoButton
             (click)="commitDialog.opened = false; storeAsPrinted(commitDialog.samples)"
-            primary="true">
+            [primary]=true>
       Ja
     </button>
-    <button kendoButton (click)="commitDialog.opened = false" primary="false">
+    <button kendoButton (click)="commitDialog.opened = false" [primary]=false>
       Nein
     </button>
   </kendo-dialog-actions>

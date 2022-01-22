@@ -1,10 +1,17 @@
-/* You can add global styles to this file, and also import other style files */
+/* Error: Can't find stylesheet to import.
+ *    ,
+ * 12 | @import "~@progress/kendo-theme-material/dist/all.scss";
+ *    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ *    '
+ *   styles.scss 12:9  root stylesheet */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-.mat-spinner {
-  position: relative;
-  margin-left: 50%;
-  margin-right: 50%;
+body::before {
+  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
+      "Droid Sans Mono", monospace, monospace;
+  white-space: pre;
+  display: block;
+  padding: 1em;
+  margin-bottom: 1em;
+  border-bottom: 2px solid black;
+  content: "Error: Can't find stylesheet to import.\a    \2577 \a 12 \2502  @import \"~@progress/kendo-theme-material/dist/all.scss\";\a    \2502          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\a    \2575 \a   styles.scss 12:9  root stylesheet";
 }

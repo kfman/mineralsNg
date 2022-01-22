@@ -38,6 +38,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { DialogsModule } from '@progress/kendo-angular-dialog';
+import {ButtonsModule} from '@progress/kendo-angular-buttons';
 
 
 
@@ -102,6 +103,7 @@ import { DialogsModule } from '@progress/kendo-angular-dialog';
     MatCheckboxModule,
     MatProgressBarModule,
     DialogsModule,
+    ButtonsModule,
   ],
   providers: [
     AngularFireAuth,

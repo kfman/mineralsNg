@@ -90,7 +90,8 @@
     Sicherheit
   </div>
   <div class="col-7">
-    <button mat-button color="warn" (click)="showSetPasswordDialog = true; passwordMismatch = false;">
+    <button kendoButton
+            (click)="showSetPasswordDialog = true; passwordMismatch = false;">
       Passwort ändern
     </button>
   </div>
@@ -100,7 +101,7 @@
 
 
 <kendo-dialog *ngIf="showSetPasswordDialog"
-              title="Passwort ändern">
+              title="Passwort ändern" (close)="showSetPasswordDialog=false;">
   <p>
 
     <mat-form-field>
@@ -113,7 +114,8 @@
     <mat-form-field>
       <mat-label>Passwort wiederholen</mat-label>
       <input matInput type="password" #passwordRep>
-      <mat-error *ngIf="passwordMismatch">Passwörter stimmen nicht überein</mat-error>
+      <mat-error *ngIf="passwordMismatch">Passwörter stimmen nicht überein
+      </mat-error>
     </mat-form-field>
   </p>
   <div class="alert alert-danger" *ngIf="passwordMismatch">
