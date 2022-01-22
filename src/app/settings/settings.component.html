@@ -16,8 +16,8 @@
           </mat-form-field>
         </div>
         <div class="col-2">
-          <button mat-raised-button color="primary" (click)="saveName()">Name
-            speichern
+          <button mat-raised-button color="primary" (click)="saveName()">
+            Name speichern
           </button>
         </div>
       </div>
@@ -33,7 +33,8 @@
           </mat-form-field>
         </div>
         <div class="col-2">
-          <button mat-raised-button color="primary" (click)="savePattern()">Pattern
+          <button mat-raised-button color="primary" (click)="savePattern()">
+            Pattern
             speichern
           </button>
         </div>
@@ -103,14 +104,13 @@
 <kendo-dialog *ngIf="showSetPasswordDialog"
               title="Passwort ändern" (close)="showSetPasswordDialog=false;">
   <p>
-
     <mat-form-field>
       <mat-label>Neues Passwort</mat-label>
       <input matInput #password type="password">
     </mat-form-field>
   </p>
-  <p>
 
+  <p>
     <mat-form-field>
       <mat-label>Passwort wiederholen</mat-label>
       <input matInput type="password" #passwordRep>
@@ -118,6 +118,7 @@
       </mat-error>
     </mat-form-field>
   </p>
+
   <div class="alert alert-danger" *ngIf="passwordMismatch">
     Passwörter stimmen nicht überein
   </div>
