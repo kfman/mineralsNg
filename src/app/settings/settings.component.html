@@ -16,7 +16,7 @@
           </mat-form-field>
         </div>
         <div class="col-2">
-          <button mat-button color="primary" (click)="saveName()">Name
+          <button mat-raised-button color="primary" (click)="saveName()">Name
             speichern
           </button>
         </div>
@@ -33,7 +33,7 @@
           </mat-form-field>
         </div>
         <div class="col-2">
-          <button mat-button color="primary" (click)="savePattern()">Pattern
+          <button mat-raised-button color="primary" (click)="savePattern()">Pattern
             speichern
           </button>
         </div>
@@ -49,7 +49,7 @@
           </mat-form-field>
         </div>
         <div class="col-2">
-          <button mat-button color="primary" (click)="saveIndex()">Index
+          <button mat-raised-button color="primary" (click)="saveIndex()">Index
             setzen
           </button>
         </div>
@@ -79,18 +79,18 @@
       <li><a class="btn btn-danger"
              [routerLink]="['/samples/import']">Import</a>
       </li>
-      <li><a class="btn btn-danger" (click)="testDbLoad()">Daten vom Server
-        laden</a></li>
+      <li><a class="btn btn-danger" (click)="testDbLoad()">
+        Daten vom Server laden</a></li>
     </ul>
   </div>
 </div>
 
 <div class="row">
   <div class="col-3" style="text-align: center">
-    Sicherheit
+    <h2>Sicherheit</h2>
   </div>
   <div class="col-7">
-    <button kendoButton
+    <button mat-raised-button color="warn"
             (click)="showSetPasswordDialog = true; passwordMismatch = false;">
       Passwort ändern
     </button>

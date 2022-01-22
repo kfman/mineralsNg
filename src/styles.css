@@ -1,9 +1,9 @@
 /* Error: Can't find stylesheet to import.
- *    ,
- * 12 | @import "~@progress/kendo-theme-material/dist/all.scss";
- *    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- *    '
- *   styles.scss 12:9  root stylesheet */
+ *   ,
+ * 3 | @use "node_modules/@progress/kendo-theme-default/dist/all.css";
+ *   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ *   '
+ *   styles.scss 3:1  root stylesheet */
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
@@ -13,5 +13,5 @@ body::before {
   padding: 1em;
   margin-bottom: 1em;
   border-bottom: 2px solid black;
-  content: "Error: Can't find stylesheet to import.\a    \2577 \a 12 \2502  @import \"~@progress/kendo-theme-material/dist/all.scss\";\a    \2502          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\a    \2575 \a   styles.scss 12:9  root stylesheet";
+  content: "Error: Can't find stylesheet to import.\a   \2577 \a 3 \2502  @use \"node_modules/@progress/kendo-theme-default/dist/all.css\";\a   \2502  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\a   \2575 \a   styles.scss 3:1  root stylesheet";
 }

@@ -1,5 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 
+@use "node_modules/@progress/kendo-theme-default/dist/all.css";
+@use "node_modules/bootstrap/dist/css/bootstrap.min.css";
+@use "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
@@ -10,4 +14,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 @import "~@progress/kendo-theme-material/dist/all.scss";
+
+
 
