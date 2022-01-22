@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
-import {Sample} from '../models/Sample';
+import {IPrintSample, Sample} from '../models/Sample';
 import {NumberingService} from './numbering.service';
 import {AngularFireAuth} from '@angular/fire/compat/auth';
 import {firstValueFrom} from 'rxjs';
 import {Router} from '@angular/router';
 import {AngularFireDatabase} from '@angular/fire/compat/database';
+import {UserData} from '../models/UserData';
 
 @Injectable({
   providedIn: 'root'
@@ -169,7 +170,7 @@ export class MineralDatabaseService {
     return data.val();
   }
 
-  async storeAsPrinted(samples: Sample[]) {
+  async storeAsPrinted(samples: IPrintSample[]) {
     let timeStamp = new Date();
 
     let uid = (await firstValueFrom(this.auth.user))?.uid;
@@ -196,6 +197,23 @@ export class MineralDatabaseService {
     let data = await this.firebase.database.ref(`/users/${uid}/name`).get();
     return data.val();
 
+  }
+
+  async getAdminState() {
+    let uid = (await firstValueFrom(this.auth.user))?.uid;
+    let data = await this.firebase.database.ref(`/users/${uid}/isAdmin`).get();
+    return data.val();
+
+  }
+
+  async getUserData() : Promise<UserData>{
+    let result = new UserData();
+    let uid = (await firstValueFrom(this.auth.user))?.uid;
+    result.isAdmin = (await this.firebase.database.ref(`/users/${uid}/isAdmin`).get())?.val() ?? false;
+    result.index = (await this.firebase.database.ref(`/users/${uid}/index`).get())?.val() ?? 0;
+    result.name = (await this.firebase.database.ref(`/users/${uid}/name`).get())?.val() ?? '';
+    result.pattern =(await this.firebase.database.ref(`/users/${uid}/pattern`).get())?.val() ?? 'MIN 0000';
+    return result;
   }
 
   async getIndex() {

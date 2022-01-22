@@ -1,93 +1,140 @@
 <h1>Proben</h1>
 
+<div *ngIf="loaded; else loading">
 
-<div *ngIf="!samples" class="alert alert-info">
-  Lade daten...
-</div>
 
-<div class="row">
-  <div class="col">
-    <button class="btn btn-primary" [routerLink]="['/samples/new']">Neu
-    </button>
+  <div class="d-none d-md-block">
+
+    <div class="row">
+      <div class="col-4">
+        <button class="btn btn-primary" [routerLink]="['/samples/new']">Neu
+        </button>
+      </div>
+
+      <div class="col-8" style="text-align: right">
+        <mat-checkbox #alsoOld [ngClass]="{'d-none':!userData.isAdmin}"
+                      class="header-item">Auch
+          alte Etiketten
+        </mat-checkbox>
+        <button class="btn btn-info header-item"
+                (click)="generateLabels('GS', alsoOld.checked)">Drucken GS
+          ({{unprintedGs}})
+        </button>
+        <button class="btn btn-info header-item"
+                (click)="generateLabels('4', alsoOld.checked)">Drucken 4
+          ({{unprinted4}})
+        </button>
+        <button class="btn btn-info header-item"
+                (click)="generateLabels('2', alsoOld.checked)">Drucken 2
+          ({{unprinted2}})
+        </button>
+      </div>
+    </div>
   </div>
 
-  <div class="col" style="text-align: right">
-    <button class="btn btn-info" (click)="generateLabels('GS')">Drucken GS
-      ({{unprintedGs}})
-    </button>
-    <button class="btn btn-info" (click)="generateLabels('4')">Drucken 4
-      ({{unprinted4}})
-    </button>
-    <button class="btn btn-info" (click)="generateLabels('2')">Drucken 2
-      ({{unprinted2}})
-    </button>
+  <div style="height: 1rem"></div>
+
+  <div class="alert alert-info" style="margin-top: 2rem"
+       *ngIf="samples && samples.length == 0">
+    <h3>Keine Proben gefunden</h3>
   </div>
-</div>
 
-<div style="height: 1rem"></div>
-
-<div class="alert alert-info" style="margin-top: 2rem"
-     *ngIf="samples && samples.length == 0">
-  <h3>Keine Proben gefunden</h3>
-</div>
-
-<kendo-grid [data]="gridView"
-            [pageable]="true"
-            [pageSize]="state.take!"
-            [skip]="state.skip!"
-            [sort]="state.sort!"
-            [sortable]="true"
-            [resizable]="true"
-            [filter]="state.filter!"
-            [columnMenu]="{ filter: true }"
-            (dataStateChange)="dataChanged($event)"
->
-
-  <kendo-grid-column field="sampleNumber" title="ID"
-                     [width]="150"></kendo-grid-column>
-  <kendo-grid-column field="mineral" title="Mineral"></kendo-grid-column>
-  <kendo-grid-column field="size" title="Größe"
-                     [width]="120"></kendo-grid-column>
-  <kendo-grid-column field="timeStamp" title="Zeitpunkt"
-                     media="(min-width: 768px)"
-                     [filterable]="false"
-                     [width]="100"></kendo-grid-column>
-  <kendo-grid-column field="value" title="Wert"
-                     media="(min-width: 1500px)"
-                     [class]="{ 'text-right': true }"
-                     [width]="120"></kendo-grid-column>
-  <kendo-grid-column field="location" title="Fundort"
-                     media="(min-width: 600px)"
+  <kendo-grid class="d-none d-md-block"
+              [data]="gridView"
+              [pageable]="true"
+              [pageSize]="state.take!"
+              [skip]="state.skip!"
+              [sort]="state.sort!"
+              [sortable]="true"
+              [resizable]="true"
+              [filter]="state.filter!"
+              [columnMenu]="{ filter: true }"
+              (dataStateChange)="dataChanged($event)"
   >
 
-  </kendo-grid-column>
-  <kendo-grid-column field="origin" title="Herkunft"
-                     media="(min-width: 1500px)"
-                     [width]="200"></kendo-grid-column>
-  <kendo-grid-column field="annotation" title="Bemerkung"
-                     media="(min-width: 1024px)"
-                     [width]="200"></kendo-grid-column>
-  <kendo-grid-column field="printed" title="Gedruckt" [width]="200"
-                     media="(min-width: 1500px)"
+    <kendo-grid-column field="sampleNumber" title="ID"
+                       [width]="150"></kendo-grid-column>
+    <kendo-grid-column field="mineral" title="Mineral"></kendo-grid-column>
+    <kendo-grid-column field="size" title="Größe"
+                       [width]="120"></kendo-grid-column>
+    <kendo-grid-column field="timeStamp" title="Zeitpunkt"
+                       media="(min-width: 768px)"
+                       [filterable]="false"
+                       [width]="120"></kendo-grid-column>
+    <kendo-grid-column field="value" title="Wert"
+                       media="(min-width: 1500px)"
+                       [class]="{ 'text-right': true }"
+                       [width]="120"></kendo-grid-column>
+    <kendo-grid-column field="location" title="Fundort"
+                       media="(min-width: 600px)">
 
-  ></kendo-grid-column>
-  <kendo-grid-column [width]="80">
+    </kendo-grid-column>
+    <kendo-grid-column field="origin" title="Herkunft"
+                       media="(min-width: 1500px)"
+                       [width]="200"></kendo-grid-column>
+    <kendo-grid-column field="annotation" title="Bemerkung"
+                       media="(min-width: 1024px)"
+                       [width]="200"></kendo-grid-column>
+    <kendo-grid-column field="printed" title="Gedruckt" [width]="200"
+                       [format]=""
+                       media="(min-width: 1500px)"
 
-    <ng-template kendoGridCellTemplate let-dataItem>
-      <button class="btn btn-sm btn-primary"
-              [routerLink]="['/samples/' + dataItem.id]"
-      >Edit
-      </button>
-    </ng-template>
+    >
+      <ng-template kendoGridCellTemplate let-dataItem>
+        {{dataItem.printed | date:'dd.MM.y' }}
 
-  </kendo-grid-column>
+      </ng-template>
 
-</kendo-grid>
+    </kendo-grid-column>
+    <kendo-grid-column [width]="95" [columnMenu]="false">
 
-<!--<app-sample-list *ngIf="samples.length > 0" [samples]="samples"-->
-<!--                 [showEdit]="true"></app-sample-list>-->
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <button class="btn btn-sm btn-primary"
+                [routerLink]="['/samples/' + dataItem.id]"
+        >Edit
+        </button>
+      </ng-template>
 
+    </kendo-grid-column>
 
+  </kendo-grid>
+
+  <!--<app-sample-list *ngIf="samples.length > 0" [samples]="samples"-->
+  <!--                 [showEdit]="true"></app-sample-list>-->
+
+  <div class="d-md-none">
+    <ng-container *ngFor="let sample of samples.slice(0,20)">
+      <table class="table table-bordered">
+        <tr>
+          <th style="width:10em">Probennummer</th>
+          <td>{{sample.sampleNumber}}</td>
+        </tr>
+        <tr>
+          <th>Mineral</th>
+          <td>{{sample.mineral}}</td>
+        </tr>
+        <tr>
+          <th>Größe</th>
+          <td>{{sample.size}}</td>
+        </tr>
+        <tr>
+          <th>Zeitpunkt</th>
+          <td>{{sample.timeStamp}}</td>
+        </tr>
+        <tr>
+          <th>Fundort</th>
+          <td>{{sample.location}}</td>
+        </tr>
+        <tr>
+          <th>&nbsp;</th>
+          <td><a class="btn btn-primary btn-sm"
+                 [routerLink]="['/samples/'+sample.id]">Edit</a></td>
+        </tr>
+      </table>
+    </ng-container>
+  </div>
+
+</div>
 <kendo-dialog
   title="Keine Etiketten"
   *ngIf="dialogState.opened"
@@ -98,7 +145,7 @@
     {{dialogState.message}}
   </p>
   <kendo-dialog-actions>
-    <button kendoButton (click)="dialogState.opened = false" primary="true">
+    <button kendoButton (click)="dialogState.opened = false" [primary]=true>
       Ok
     </button>
   </kendo-dialog-actions>
@@ -109,18 +156,25 @@
   title="Speichern"
   *ngIf="commitDialog.opened"
 >
+
   <p style="margin: 30px; text-align: center;">
     Sollen die Etiketten als <b>gedruckt</b> gespeichert werden?
   </p>
   <kendo-dialog-actions>
     <button kendoButton
-            (click)="commitDialog.opened = false; storeAsPrinted(commitDialog.samples)"
-            primary="true">
+            (click)="storeAsPrinted(commitDialog.samples)"
+            [primary]=true>
       Ja
     </button>
-    <button kendoButton (click)="commitDialog.opened = false" primary="false">
+    <button kendoButton (click)="commitDialog.opened = false" [primary]=false>
       Nein
     </button>
   </kendo-dialog-actions>
 
 </kendo-dialog>
+
+
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+  Lade Daten...
+</ng-template>

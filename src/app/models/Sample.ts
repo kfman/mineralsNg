@@ -2,6 +2,7 @@ import {DocumentSnapshot} from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat';
 
 export interface IPrintSample {
+  id?: string;
   mineral: string;
   sideMineral: string;
   location: string;

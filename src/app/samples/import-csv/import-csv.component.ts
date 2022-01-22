@@ -17,7 +17,7 @@ export class ImportCsvComponent implements OnInit {
   private useRealTimeDatabase = true;
   public samples: Sample[] = [];
   public userId: string | undefined = undefined;
-  public count?:number;
+  public count?: number;
 
   constructor(private firestore: AngularFirestore,
               private firebase: AngularFireDatabase,
@@ -120,6 +120,14 @@ export class ImportCsvComponent implements OnInit {
       for (let sample of this.samples) {
         await this.firebase.database.ref(`/users/${uid!}/samples`).push(sample);
         this.count++;
+      }
+      let maxSampleNumber = this.samples.sort((a, b) => {
+        return b.sampleNumber.localeCompare(a.sampleNumber);
+      })[0].sampleNumber;
+      let number = (new RegExp('[0-9].')).exec(maxSampleNumber)?.pop();
+      if (number) {
+        let index = Number(number);
+        await this.firebase.database.ref(`/users/${uid!}/index`).set(index);
       }
       this.router.navigate(['/samples/overview']);
       return;

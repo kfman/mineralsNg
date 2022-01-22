@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AngularFirestore} from '@angular/fire/compat/firestore';
 import {AngularFireAuth} from '@angular/fire/compat/auth';
-import {Sample} from '../../models/Sample';
+import {IPrintSample, Sample} from '../../models/Sample';
 import {PdfCreatorService} from '../../services/pdf-creator.service';
 import {firstValueFrom, Subscription} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -13,6 +13,9 @@ import {
 import {process, State} from '@progress/kendo-data-query';
 import {Page_GS} from '../../models/Page_GS';
 import {ILabelPage} from '../../models/ILabelPage';
+import {Page_2} from '../../models/Page_2';
+import {Page_4} from '../../models/Page_4';
+import {UserData} from '../../models/UserData';
 
 @Component({
   selector: 'app-overview',
@@ -28,6 +31,8 @@ export class OverviewComponent implements OnInit {
   public unprinted4: number = 0;
   public unprinted2: number = 0;
   public dialogOpened = false;
+  public userData = new UserData();
+  public loaded = false;
 
   public state: State = {
     skip: 0,
@@ -43,9 +48,10 @@ export class OverviewComponent implements OnInit {
     message: 'Keine Etiketten in der Größe'
   };
 
-  public commitDialog: { opened: boolean, samples: Sample[] } = {
+  public commitDialog: { opened: boolean, loading: boolean, samples: IPrintSample[] } = {
     opened: false,
-    samples: []
+    samples: [],
+    loading: false,
   };
 
   public gridView: GridDataResult = process(this.samples, this.state);
@@ -63,9 +69,17 @@ export class OverviewComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.printedFilter = (await firstValueFrom(this.route.queryParamMap))
       .get('printed') == 'true' ?? false;
-    this.samples = (await this.database.getAll());
+    this.samples = (await this.database.getAll()).sort((a, b) => {
+      return b.sampleNumber.localeCompare(a.sampleNumber);
+    });
     this.loadData();
+    this.reloadLabelCounter();
 
+    this.loaded = true;
+    this.userData = await this.database.getUserData();
+  }
+
+  private reloadLabelCounter() {
     this.unprintedGs = this.samples.filter(s => s.size == 'GS' && !s.printed).length;
     this.unprinted4 = this.samples.filter(s => s.size == '4' && !s.printed).length;
     this.unprinted2 = this.samples.filter(s => s.size == '2' && !s.printed).length;
@@ -87,8 +101,8 @@ export class OverviewComponent implements OnInit {
     this.gridView = process(this.samples, this.state);
   }
 
-  async generateLabels(size: string): Promise<void> {
-    let samples = this.samples.filter(s => s.size == size && s.printed == null);
+  async generateLabels(size: string, alsoOld = false): Promise<void> {
+    let samples = this.samples.filter(s => s.size == size && (s.printed == null || alsoOld));
     if (samples.length == 0) {
       this.dialogState.message = `Keine Etiketten in der Größe ${size}`;
       this.dialogState.opened = true;
@@ -100,19 +114,32 @@ export class OverviewComponent implements OnInit {
       case 'GS':
         page = new Page_GS(samples);
         break;
+      case '4':
+        page = new Page_4(samples);
+        break;
+      case '2':
+        page = new Page_2(samples);
+        break;
       default:
         break;
 
     }
     if (page) {
-      this.pdfCreator.create(page);
-      this.commitDialog.samples = samples;
+      let printed = this.pdfCreator.create(page);
+
+      if (alsoOld) {
+        return;
+      }
+      this.commitDialog.samples = printed;
       this.commitDialog.opened = true;
     }
   }
 
-  storeAsPrinted(samples: Sample[]) {
-    this.database.storeAsPrinted(samples);
-
+  async storeAsPrinted(samples: IPrintSample[]) {
+    this.commitDialog.opened = false;
+    this.loaded = false;
+    await this.database.storeAsPrinted(samples);
+    this.reloadLabelCounter();
+    this.loaded = true;
   }
 }

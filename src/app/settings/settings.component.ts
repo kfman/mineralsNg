@@ -3,6 +3,10 @@ import {PdfCreatorService} from '../services/pdf-creator.service';
 import {ToastService} from '../services/toast-service.service';
 import {NumberingService} from '../services/numbering.service';
 import {MineralDatabaseService} from '../services/mineral-database.service';
+import {AngularFireAuth} from '@angular/fire/compat/auth';
+import {firstValueFrom} from 'rxjs';
+import {UserData} from '../models/UserData';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-settings',
@@ -10,23 +14,25 @@ import {MineralDatabaseService} from '../services/mineral-database.service';
   styleUrls: ['./settings.component.css']
 })
 export class SettingsComponent implements OnInit {
-  numbering: string = '';
   numbers: string[] | undefined;
   patternError = false;
-  name: string = '';
-  index: number = 0;
+  loaded = false;
+
+  userData = new UserData();
   indexError: boolean = false;
+  showSetPasswordDialog = false;
+  passwordMismatch = false;
 
   constructor(private pdfService: PdfCreatorService,
               private toastService: ToastService,
+              private auth: AngularFireAuth,
               private database: MineralDatabaseService,
               private numberService: NumberingService) {
   }
 
   async ngOnInit(): Promise<void> {
-    this.numbering = await this.database.getPattern();
-    this.name = await this.database.getName();
-    this.index = await this.database.getIndex();
+    this.userData = await this.database.getUserData();
+    this.loaded = true;
   }
 
   createPdf() {
@@ -43,7 +49,7 @@ export class SettingsComponent implements OnInit {
 
   testNumbers() {
     try {
-      this.numberService.getNumber(this.numbering, 0);
+      this.numberService.getNumber(this.userData.pattern, 0);
       this.patternError = false;
     } catch (e) {
       this.patternError = true;
@@ -58,14 +64,48 @@ export class SettingsComponent implements OnInit {
   }
 
   async savePattern() {
-    await this.database.updateUser({'pattern': this.numbering});
+    await this.database.updateUser({'pattern': this.userData.pattern});
   }
 
   async saveName() {
-    await this.database.updateUser({'name': this.name});
+    await this.database.updateUser({'name': this.userData.name});
   }
 
   async saveIndex() {
-    await this.database.updateUser({'index': this.index});
+    await this.database.updateUser({'index': this.userData.index});
+  }
+
+  async setPassword(password: string, passwordRpt: string) {
+    if (password != passwordRpt) {
+      this.passwordMismatch = true;
+      return;
+    }
+
+    try {
+      let user = await firstValueFrom(this.auth.user);
+      await user?.updatePassword(password);
+      this.showSetPasswordDialog = false;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  public progress = 0;
+  async resetPrintedDate() {
+
+
+    let samples = await this.database.getAll();
+    var count = 0;
+    for (let item of samples) {
+      item.printed = null;
+      await this.database.update(item.id!, item);
+      count++;
+      this.progress = count / samples.length * 100;
+    }
+
+
+    this.toastService.show(`Fertig (${count})`, {
+      classname: 'bg-danger'
+    });
   }
 }

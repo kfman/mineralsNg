@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Sample} from '../../models/Sample';
 import {ToastService} from '../../services/toast-service.service';
@@ -57,6 +57,7 @@ export class EditSampleComponent implements OnInit, OnDestroy {
     });
   }
 
+  @HostListener('window:beforeunload')
   async ngOnDestroy(): Promise<void> {
     if (this.deleted)
       return;

@@ -1,63 +1,135 @@
-<div style="padding: 3em">
-
+<div style="padding: 3em" *ngIf="loaded; else loading">
 
   <div class="row">
-    <div class="col-2"><h2>Name</h2></div>
-    <div class="col-8"><input type="text" class="form-control"
-                              [(ngModel)]="name"></div>
-    <div class="col-2">
-      <button class="btn btn-primary" (click)="saveName()">Name speichern</button>
+    <div class="col-3 vertical-center">
+      <mat-icon>settings</mat-icon>
+    </div>
+    <div class="col-9">
+
+      <div class="row">
+
+        <div class="col-7">
+          <mat-form-field appearance="fill" style="width: 100%">
+            <mat-label>Name</mat-label>
+            <input matInput
+                   [(ngModel)]="userData.name">
+          </mat-form-field>
+        </div>
+        <div class="col-2">
+          <button mat-raised-button color="primary" (click)="saveName()">
+            Name speichern
+          </button>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-7">
+          <mat-form-field style="width: 100%;" appearance="fill">
+            <mat-label>Pattern</mat-label>
+            <input matInput
+                   [(ngModel)]="userData.pattern"
+                   [ngClass]="{'bg-danger': patternError}">
+          </mat-form-field>
+        </div>
+        <div class="col-2">
+          <button mat-raised-button color="primary" (click)="savePattern()">
+            Pattern
+            speichern
+          </button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-7">
+          <mat-form-field style="width: 100%" appearance="fill">
+            <mat-label>Index</mat-label>
+            <input matInput
+                   [(ngModel)]="userData.index"
+                   [ngClass]="{'bg-danger': indexError}">
+          </mat-form-field>
+        </div>
+        <div class="col-2">
+          <button mat-raised-button color="primary" (click)="saveIndex()">Index
+            setzen
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
 
   <div class="row">
-    <div class="col-2"><h2>Pattern</h2></div>
-    <div class="col-8"><input type="text" class="form-control"
-                              [(ngModel)]="numbering"
-                              [ngClass]="{'bg-danger': patternError}"></div>
-    <div class="col-2">
-      <button class="btn btn-primary" (click)="savePattern()">Pattern
-        speichern
+    <div class="col-3" style="text-align: center">
+      <h2>Sicherheit</h2>
+    </div>
+    <div class="col-7">
+      <button mat-raised-button color="warn"
+              (click)="showSetPasswordDialog = true; passwordMismatch = false;">
+        Passwort ändern
       </button>
     </div>
+    <div class="col-2"></div>
   </div>
+  <div style="height: 1rem"></div>
 
   <div class="row">
-    <div class="col-2"><h2>Index</h2></div>
-    <div class="col-8"><input type="text" class="form-control"
-                              [(ngModel)]="index"
-                              [ngClass]="{'bg-danger': indexError}"></div>
-    <div class="col-2">
-      <button class="btn btn-primary" (click)="saveIndex()">Index setzen</button>
-    </div>
-  </div>
-
-  <div class="d-none">
-
-    <div class="btn btn-secondary" (click)="testNumbers()">Nummern laufen lassen
-    </div>
-
-
-    <ul *ngIf="numbers">
-      <li *ngFor="let number of numbers">{{number}}</li>
-    </ul>
-
-
-    <ul>
-      <li>
+    <div class="col-9 offset-3" *ngIf="userData.isAdmin">
+      <div>
         <button class="btn btn-info" (click)="createPdf()">Create PDF</button>
-      </li>
-      <li>
-        <div class="btn btn-dark" (click)="testToast()">Toast testen</div>
-      </li>
-      <li><a class="btn btn-danger"
-             [routerLink]="['/samples/import']">Import</a>
-      </li>
-      <li><a class="btn btn-danger" (click)="testDbLoad()">Daten vom Server
-        laden</a></li>
-    </ul>
+      </div>
+      <div class="btn btn-dark" (click)="testToast()">Toast testen</div>
+      <div><a class="btn btn-danger"
+              [routerLink]="['/samples/import']">Import</a></div>
+
+      <div><a class="btn btn-danger" (click)="testDbLoad()">
+        Daten vom Server laden</a></div>
+
+      <div>
+        <button mat-raised-button color="accent"
+        (click)="resetPrintedDate()"
+        >Alle <i>Gedruckt</i> daten
+          zurücksetzten
+        </button>
+      </div>
+      <mat-progress-bar [value]="progress"></mat-progress-bar>
+    </div>
   </div>
 </div>
 
+
+<kendo-dialog *ngIf="showSetPasswordDialog"
+              title="Passwort ändern" (close)="showSetPasswordDialog=false;">
+  <p>
+    <mat-form-field>
+      <mat-label>Neues Passwort</mat-label>
+      <input matInput #password type="password">
+    </mat-form-field>
+  </p>
+
+  <p>
+    <mat-form-field>
+      <mat-label>Passwort wiederholen</mat-label>
+      <input matInput type="password" #passwordRep>
+      <mat-error *ngIf="passwordMismatch">Passwörter stimmen nicht überein
+      </mat-error>
+    </mat-form-field>
+  </p>
+
+  <div class="alert alert-danger" *ngIf="passwordMismatch">
+    Passwörter stimmen nicht überein
+  </div>
+  <kendo-dialog-actions>
+    <button mat-button (click)="setPassword(password.value, passwordRep.value)">
+      Speichern
+    </button>
+    <button mat-button (click)="showSetPasswordDialog = false;">Abbrechen
+    </button>
+  </kendo-dialog-actions>
+</kendo-dialog>
+
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+</ng-template>
