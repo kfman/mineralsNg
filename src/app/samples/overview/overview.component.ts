@@ -48,9 +48,10 @@ export class OverviewComponent implements OnInit {
     message: 'Keine Etiketten in der Größe'
   };
 
-  public commitDialog: { opened: boolean, samples: IPrintSample[] } = {
+  public commitDialog: { opened: boolean, loading: boolean, samples: IPrintSample[] } = {
     opened: false,
-    samples: []
+    samples: [],
+    loading: false,
   };
 
   public gridView: GridDataResult = process(this.samples, this.state);
@@ -72,13 +73,16 @@ export class OverviewComponent implements OnInit {
       return b.sampleNumber.localeCompare(a.sampleNumber);
     });
     this.loadData();
-
-    this.unprintedGs = this.samples.filter(s => s.size == 'GS' && !s.printed).length;
-    this.unprinted4 = this.samples.filter(s => s.size == '4' && !s.printed).length;
-    this.unprinted2 = this.samples.filter(s => s.size == '2' && !s.printed).length;
+    this.reloadLabelCounter();
 
     this.loaded = true;
     this.userData = await this.database.getUserData();
+  }
+
+  private reloadLabelCounter() {
+    this.unprintedGs = this.samples.filter(s => s.size == 'GS' && !s.printed).length;
+    this.unprinted4 = this.samples.filter(s => s.size == '4' && !s.printed).length;
+    this.unprinted2 = this.samples.filter(s => s.size == '2' && !s.printed).length;
   }
 
   loadData() {
@@ -131,8 +135,11 @@ export class OverviewComponent implements OnInit {
     }
   }
 
-  storeAsPrinted(samples: IPrintSample[]) {
-    this.database.storeAsPrinted(samples);
-
+  async storeAsPrinted(samples: IPrintSample[]) {
+    this.commitDialog.opened = false;
+    this.loaded = false;
+    await this.database.storeAsPrinted(samples);
+    this.reloadLabelCounter();
+    this.loaded = true;
   }
 }

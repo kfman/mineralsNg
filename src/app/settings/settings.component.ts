@@ -90,8 +90,9 @@ export class SettingsComponent implements OnInit {
     }
   }
 
+  public progress = 0;
   async resetPrintedDate() {
-    this.loaded = false;
+
 
     let samples = await this.database.getAll();
     var count = 0;
@@ -99,9 +100,10 @@ export class SettingsComponent implements OnInit {
       item.printed = null;
       await this.database.update(item.id!, item);
       count++;
+      this.progress = count / samples.length * 100;
     }
 
-    this.loaded = true;
+
     this.toastService.show(`Fertig (${count})`, {
       classname: 'bg-danger'
     });

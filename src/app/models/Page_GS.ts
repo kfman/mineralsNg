@@ -29,7 +29,7 @@ export class Page_GS extends ILabelPage {
                 text: sample.mineral,
                 absolutePosition: {
                     x: cellOffset.innerX,
-                    y: cellOffset.innerY + 10
+                    y: cellOffset.innerY + 12
                 },
                 style: 'mineral'
             },
@@ -37,7 +37,7 @@ export class Page_GS extends ILabelPage {
                 text: sample.location,
                 absolutePosition: {
                     x: cellOffset.innerX,
-                    y: cellOffset.innerY + 20
+                    y: cellOffset.innerY + 24
                 },
                 style: 'location'
             },
@@ -45,7 +45,7 @@ export class Page_GS extends ILabelPage {
                 text: sample.timeStamp,
                 absolutePosition: {
                     x: cellOffset.innerX,
-                    y: cellOffset.innerY + 30
+                    y: cellOffset.innerY + 62
                 },
                 style: 'timeStamp'
             },
