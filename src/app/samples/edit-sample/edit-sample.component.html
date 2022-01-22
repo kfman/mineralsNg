@@ -120,8 +120,9 @@
                [(ngModel)]="sample.printed">
         <div class="input-group-append">
           <button class="btn btn-sm btn-warning"
-          (click)="resetPrinted()"
-          >Zurücksetzten</button>
+                  (click)="resetPrinted()"
+          >Zurücksetzten
+          </button>
         </div>
       </div>
     </div>
@@ -131,7 +132,8 @@
   <div class="form-group row">
     <div class="col-4">
       <button name="submit" type="submit" class="btn btn-outline-primary hide"
-              [routerLink]="['/samples/overview']">Speichern & Zurück
+              [routerLink]="['/samples/overview']">
+        Speichern & Zurück
       </button>
     </div>
     <div class="col-4 offset-4" style="text-align: right">
