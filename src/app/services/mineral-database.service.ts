@@ -131,8 +131,9 @@ export class MineralDatabaseService {
     await this.firebase.database.ref(`/users/${uid}`).update({'lastChanged': Date.now()});
     sample.id = ref.key!;
 
+
     all.push(sample);
-    await this.save(all);
+    await this.save(all, undefined, true);
     return ref.key;
   }
 
