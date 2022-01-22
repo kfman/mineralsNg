@@ -1,4 +1,4 @@
-<div style="padding: 3em">
+<div style="padding: 3em" *ngIf="loaded; else loading">
 
   <div class="row">
     <div class="col-3 vertical-center">
@@ -12,7 +12,7 @@
           <mat-form-field appearance="fill" style="width: 100%">
             <mat-label>Name</mat-label>
             <input matInput
-                   [(ngModel)]="name">
+                   [(ngModel)]="userData.name">
           </mat-form-field>
         </div>
         <div class="col-2">
@@ -28,7 +28,7 @@
           <mat-form-field style="width: 100%;" appearance="fill">
             <mat-label>Pattern</mat-label>
             <input matInput
-                   [(ngModel)]="numbering"
+                   [(ngModel)]="userData.pattern"
                    [ngClass]="{'bg-danger': patternError}">
           </mat-form-field>
         </div>
@@ -45,7 +45,7 @@
           <mat-form-field style="width: 100%" appearance="fill">
             <mat-label>Index</mat-label>
             <input matInput
-                   [(ngModel)]="index"
+                   [(ngModel)]="userData.index"
                    [ngClass]="{'bg-danger': indexError}">
           </mat-form-field>
         </div>
@@ -59,46 +59,42 @@
   </div>
 
 
-  <div class="d-none">
-
-    <div class="btn btn-secondary" (click)="testNumbers()">Nummern laufen lassen
+  <div class="row">
+    <div class="col-3" style="text-align: center">
+      <h2>Sicherheit</h2>
     </div>
+    <div class="col-7">
+      <button mat-raised-button color="warn"
+              (click)="showSetPasswordDialog = true; passwordMismatch = false;">
+        Passwort ändern
+      </button>
+    </div>
+    <div class="col-2"></div>
+  </div>
+  <div style="height: 1rem"></div>
 
-
-    <ul *ngIf="numbers">
-      <li *ngFor="let number of numbers">{{number}}</li>
-    </ul>
-
-
-    <ul>
-      <li>
+  <div class="row">
+    <div class="col-9 offset-3" *ngIf="userData.isAdmin">
+      <div>
         <button class="btn btn-info" (click)="createPdf()">Create PDF</button>
-      </li>
-      <li>
-        <div class="btn btn-dark" (click)="testToast()">Toast testen</div>
-      </li>
-      <li><a class="btn btn-danger"
-             [routerLink]="['/samples/import']">Import</a>
-      </li>
-      <li><a class="btn btn-danger" (click)="testDbLoad()">
-        Daten vom Server laden</a></li>
-    </ul>
-  </div>
-</div>
+      </div>
+      <div class="btn btn-dark" (click)="testToast()">Toast testen</div>
+      <div><a class="btn btn-danger"
+              [routerLink]="['/samples/import']">Import</a></div>
 
-<div class="row">
-  <div class="col-3" style="text-align: center">
-    <h2>Sicherheit</h2>
+      <div><a class="btn btn-danger" (click)="testDbLoad()">
+        Daten vom Server laden</a></div>
+
+      <div>
+        <button mat-raised-button color="accent"
+        (click)="resetPrintedDate()"
+        >Alle <i>Gedruckt</i> daten
+          zurücksetzten
+        </button>
+      </div>
+    </div>
   </div>
-  <div class="col-7">
-    <button mat-raised-button color="warn"
-            (click)="showSetPasswordDialog = true; passwordMismatch = false;">
-      Passwort ändern
-    </button>
-  </div>
-  <div class="col-2"></div>
 </div>
-<div style="height: 1rem"></div>
 
 
 <kendo-dialog *ngIf="showSetPasswordDialog"
@@ -132,3 +128,7 @@
 </kendo-dialog>
 
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+</ng-template>

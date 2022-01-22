@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {IPrintSample} from '../models/Sample';
+import {IPrintSample, Sample} from '../models/Sample';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import {ILabelPage} from '../models/ILabelPage';
@@ -18,18 +18,19 @@ export class PdfCreatorService {
     pdfMake.vfs = pdfFonts.pdfMake.vfs;
   }
 
-  create(page: ILabelPage) {
+  create(page: ILabelPage): IPrintSample[] {
     let pageSamples = [];
 
     let labels = [];
-    for (let i = 0; i < page.width * page.height && i < page.samples.length; i++) {
-      let column = i % page.width;
-      let row = i / page.width;
+    for (let i = 0; i < page.columns * page.rows && i < page.samples.length; i++) {
+      let column = i % page.columns;
+      let row = Math.floor(i / page.columns);
       const temp = page.labelFrom(page.samples[i], row, column);
       labels.push(temp);
+      pageSamples.push(page.samples[i]);
     }
 
-    console.log(labels);
+    console.log(`Created ${labels.length} labels`);
     let document: TDocumentDefinitions = {
       pageSize: 'A4',
       pageMargins: [0, 0, 0, 0],
@@ -46,6 +47,7 @@ export class PdfCreatorService {
 
     pdfMake.createPdf(document).download('export.pdf');
 
+    return pageSamples;
   }
 
   printerSetupPage() {
