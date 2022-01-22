@@ -42,29 +42,17 @@ export class EditSampleComponent implements OnInit, OnDestroy {
     this.loaded = true;
   }
 
-  async save() {
-
-    if (this.id == 'new') {
-      this.id = (await this.database.add(this.sample!))!;
-      this.router.navigate([`/samples/${this.id}`]);
-      return;
-    } else {
-      await this.database.update(this.id, this.sample!);
-    }
-    this.toastService.show('Probe gespeichert', {
-      classname: 'bg-success text-light',
-      delay: 3000
-    });
-  }
-
   @HostListener('window:beforeunload')
   async ngOnDestroy(): Promise<void> {
-    if (this.deleted)
+    if (this.deleted || !this.sample?.mineral) {
       return;
+    }
 
     if (this.sample) {
       if (this.id == 'new') {
         this.id = (await this.database.add(this.sample))!;
+        let index = (await this.database.getUserData()).index;
+        await this.database.updateUser({'index': ++index});
       } else {
         await this.database.update(this.id, this.sample);
       }

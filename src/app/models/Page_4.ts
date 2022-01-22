@@ -34,7 +34,7 @@ export class Page_4 extends ILabelPage {
         text: `${sample.timeStamp} ${sample.sampleNumber}`,
         absolutePosition: {
           x: cellOffset.innerX,
-          y: cellOffset.innerY + 40
+          y: cellOffset.innerY + 60
         },
         style: 'timeStamp'
       },
@@ -44,33 +44,33 @@ export class Page_4 extends ILabelPage {
   override getStyles(): StyleDictionary {
     return {
       mineral: {
-        fontSize: 12,
+        fontSize: 10,
         bold: true,
         italics: false,
         alignment: 'center'
       },
       location: {
-        fontSize: 10,
-        bold: true,
+        fontSize: 7,
+        bold: false,
         italics: false,
         alignment: 'center'
       },
       sideMineral: {
-        fontSize: 10,
+        fontSize: 7,
         bold: false,
         italics: false,
         alignment: 'center'
       },
       sampleNumber: {
-        fontSize: 10,
-        bold: true,
+        fontSize: 7,
+        bold: false,
         italics: false,
         alignment: 'center'
       },
       timeStamp: {
-        fontSize: 10,
-        bold: true,
-        italics: false,
+        fontSize: 6,
+        bold: false,
+        italics: true,
         alignment: 'center'
       }
     };
@@ -83,7 +83,7 @@ export class Page_4 extends ILabelPage {
     this.columns = 4;
     this.rows = 8;
     this.xOffset = 5;
-    this.yOffset = 12;
+    this.yOffset = 10;
   }
 
 }

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AngularFirestore} from '@angular/fire/compat/firestore';
 import {AngularFireAuth} from '@angular/fire/compat/auth';
 import {IPrintSample, Sample} from '../../models/Sample';
@@ -67,6 +67,7 @@ export class OverviewComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    console.log('ngOnInit called');
     this.printedFilter = (await firstValueFrom(this.route.queryParamMap))
       .get('printed') == 'true' ?? false;
     this.samples = (await this.database.getAll()).sort((a, b) => {
@@ -77,6 +78,8 @@ export class OverviewComponent implements OnInit {
 
     this.loaded = true;
     this.userData = await this.database.getUserData();
+    this.gridView = process(this.samples, this.state);
+    console.log('ngOnInit finished');
   }
 
   private reloadLabelCounter() {

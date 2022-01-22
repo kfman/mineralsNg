@@ -7,6 +7,11 @@ import {AngularFireAuth} from '@angular/fire/compat/auth';
 import {firstValueFrom} from 'rxjs';
 import {UserData} from '../models/UserData';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {ILabelPage} from '../models/ILabelPage';
+import {Page_GS} from '../models/Page_GS';
+import {Page_4} from '../models/Page_4';
+import {Page_2} from '../models/Page_2';
+import {IPrintSample, Sample} from '../models/Sample';
 
 @Component({
   selector: 'app-settings',
@@ -91,6 +96,7 @@ export class SettingsComponent implements OnInit {
   }
 
   public progress = 0;
+
   async resetPrintedDate() {
 
 
@@ -107,5 +113,40 @@ export class SettingsComponent implements OnInit {
     this.toastService.show(`Fertig (${count})`, {
       classname: 'bg-danger'
     });
+  }
+
+  async printPage(size: string) {
+    let samples: IPrintSample[] = [];
+
+    for (let i = 0; i < 60; i++){
+      let sample = new Sample();
+      sample.sampleNumber = `CR 00000`;
+      sample.sideMineral = 'Aurum';
+      sample.mineral = 'Diamant';
+      sample.timeStamp = '01.01.2001';
+      sample.location = 'Furth im Wald';
+      if (i % 3 == 0) sample.location += '\nBayern\nDeutschland';
+      else if (i % 2 == 0) sample.location += '\nBayern';
+      samples.push(sample);
+    }
+
+    let page: ILabelPage | undefined = undefined;
+    switch (size) {
+      case 'GS':
+        page = new Page_GS(samples);
+        break;
+      case '4':
+        page = new Page_4(samples);
+        break;
+      case '2':
+        page = new Page_2(samples);
+        break;
+      default:
+        break;
+
+    }
+    if (page) {
+      let printed = this.pdfService.create(page);
+    }
   }
 }

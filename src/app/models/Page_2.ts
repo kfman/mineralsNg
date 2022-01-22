@@ -7,18 +7,10 @@ export class Page_2 extends ILabelPage {
     const cellOffset = super.getCellOffset(row, column);
     return [
       {
-        text: sample.sampleNumber,
-        absolutePosition: {
-          x: cellOffset.innerX,
-          y: cellOffset.innerY
-        },
-        style: 'sampleNumber'
-      },
-      {
         text: sample.mineral,
         absolutePosition: {
           x: cellOffset.innerX,
-          y: cellOffset.innerY + 10
+          y: cellOffset.innerY
         },
         style: 'mineral'
       },
@@ -31,10 +23,10 @@ export class Page_2 extends ILabelPage {
         style: 'location'
       },
       {
-        text: sample.timeStamp,
+        text: `${sample.timeStamp} ${sample.sampleNumber}`,
         absolutePosition: {
           x: cellOffset.innerX,
-          y: cellOffset.innerY + 30
+          y: cellOffset.innerY + 45
         },
         style: 'timeStamp'
       },
@@ -42,7 +34,7 @@ export class Page_2 extends ILabelPage {
         text: sample.sideMineral,
         absolutePosition: {
           x: cellOffset.innerX,
-          y: cellOffset.innerY + 40
+          y: cellOffset.innerY + 10
         },
         style: 'sideMineral'
       },
@@ -52,20 +44,20 @@ export class Page_2 extends ILabelPage {
   override getStyles(): StyleDictionary {
     return {
       sampleNumber: {
-        fontSize: 12,
+        fontSize: 6,
         bold: true,
         italics: false,
         alignment: 'center'
       },
       location: {
-        fontSize: 10,
-        bold: true,
+        fontSize: 6,
+        bold: false,
         italics: false,
         alignment: 'center'
       },
       sideMineral: {
-        fontSize: 10,
-        bold: true,
+        fontSize: 6,
+        bold: false,
         italics: false,
         alignment: 'center'
       },
@@ -76,8 +68,8 @@ export class Page_2 extends ILabelPage {
         alignment: 'center'
       },
       timeStamp: {
-        fontSize: 8,
-        bold: true,
+        fontSize: 4,
+        bold: false,
         italics: false,
         alignment: 'center'
       }
@@ -92,7 +84,7 @@ export class Page_2 extends ILabelPage {
     this.columns = 6;
     this.rows = 10;
     this.xOffset = 1;
-    this.yOffset = 10;
+    this.yOffset = 8;
   }
 
 }
