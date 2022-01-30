@@ -50,6 +50,7 @@
     "pdfmake-unicode": "^0.0.1",
     "rxfire": "^6.0.0",
     "rxjs": "~7.4.0",
+    "tassign": "^1.0.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },
