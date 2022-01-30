@@ -5,6 +5,7 @@ import {ToastService} from '../../services/toast-service.service';
 import {NumberingService} from '../../services/numbering.service';
 import {firstValueFrom} from 'rxjs';
 import {MineralDatabaseService} from '../../services/mineral-database.service';
+import {tassign} from 'tassign';
 
 
 @Component({
@@ -37,9 +38,12 @@ export class EditSampleComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.id = (await firstValueFrom(this.route.params))['id'];
-    this.sample = await this.database.get(this.id);
-    this.loaded = true;
+    this.route.params.subscribe(async (params) => {
+      this.id = params['id'];
+      this.sample = await this.database.get(this.id);
+      this.loaded = true;
+    });
+
   }
 
   @HostListener('window:beforeunload')
@@ -73,5 +77,21 @@ export class EditSampleComponent implements OnInit, OnDestroy {
     }
 
     this.sample!.printed = null;
+  }
+
+  async createDuplicate(sample: Sample) {
+    this.loaded = false;
+    let created = new Sample();
+    Object.assign(created, sample);
+    created.id = undefined;
+    created.sampleNumber = await this.database.getSampleNumber();
+    let index = (await this.database.getUserData()).index;
+    await this.database.updateUser({'index': ++index});
+    let result = await this.database.add(created);
+    if (result) {
+      this.router.navigate([`/samples/${result}`]);
+    } else {
+      this.loaded = false;
+    }
   }
 }
