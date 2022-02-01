@@ -105,7 +105,7 @@ export class OverviewComponent implements OnInit {
   }
 
   async generateLabels(size: string, alsoOld = false): Promise<void> {
-    let samples = this.samples.filter(s => s.size == size && (s.printed == null || alsoOld));
+    let samples = this.samples.filter(s => s.size == size && (!s.printed || alsoOld));
     if (samples.length == 0) {
       this.dialogState.message = `Keine Etiketten in der Größe ${size}`;
       this.dialogState.opened = true;
@@ -144,5 +144,15 @@ export class OverviewComponent implements OnInit {
     await this.database.storeAsPrinted(samples);
     this.reloadLabelCounter();
     this.loaded = true;
+  }
+
+  formatPrinted(printed: string | Date) {
+    if (printed as Date) {
+      let printDate: Date= new Date();
+      Object.assign(printDate, (printed as Date));
+      return printDate.toLocaleDateString('de');
+    }
+
+    return printed;
   }
 }
