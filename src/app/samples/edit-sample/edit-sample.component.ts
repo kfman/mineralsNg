@@ -3,9 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Sample} from '../../models/Sample';
 import {ToastService} from '../../services/toast-service.service';
 import {NumberingService} from '../../services/numbering.service';
-import {firstValueFrom} from 'rxjs';
 import {MineralDatabaseService} from '../../services/mineral-database.service';
-import {tassign} from 'tassign';
 
 
 @Component({
@@ -68,7 +66,7 @@ export class EditSampleComponent implements OnInit, OnDestroy {
     if (id != 'new') {
       await this.database.delete(id);
     }
-    this.router.navigate(['/samples/overview']);
+    await this.router.navigate(['/samples/overview']);
   }
 
   resetPrinted() {
@@ -89,7 +87,7 @@ export class EditSampleComponent implements OnInit, OnDestroy {
     await this.database.updateUser({'index': ++index});
     let result = await this.database.add(created);
     if (result) {
-      this.router.navigate([`/samples/${result}`]);
+      await this.router.navigate([`/samples/${result}`]);
     } else {
       this.loaded = false;
     }
