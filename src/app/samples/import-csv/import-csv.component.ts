@@ -37,23 +37,7 @@ export class ImportCsvComponent implements OnInit {
     console.log('Reading json file');
     let fileReader: FileReader = new FileReader();
     fileReader.onload = (e) => {
-      let json = JSON.parse(fileReader.result!.toString());
-
-      for (let item of json) {
-        let sample = new Sample();
-        sample.sampleNumber = item['Identifikation'];
-        sample.id = sample.sampleNumber;
-        sample.mineral = item['Mineral'];
-        sample.location = item['FundortZeile1'] + '\n' + item['FundortZeile2'] + '\n' + item['FundortZeile3'];
-        sample.timeStamp = item['Datum'];
-        sample.value = item['Wert'].replace('.', '').replace(',', '.');
-        sample.origin = item['woher'];
-        sample.size = item['Größe'];
-        sample.annotation = item['Bemerkung'];
-        sample.printed = item['Gedruckt'];
-        sample.sideMineral = item['Begleitmineral'];
-        this.samples.push(sample);
-      }
+      this.samples = JSON.parse(fileReader.result!.toString());
     };
     fileReader.readAsText(file, 'UTF-8');
   }
