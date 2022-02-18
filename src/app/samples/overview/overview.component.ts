@@ -147,12 +147,8 @@ export class OverviewComponent implements OnInit {
   }
 
   formatPrinted(printed: string | Date) {
-    if (printed as Date) {
-      let printDate: Date= new Date();
-      Object.assign(printDate, (printed as Date));
-      return printDate.toLocaleDateString('de');
-    }
-
-    return printed;
+    if (!printed) return '';
+    let printDate: Date = new Date(printed);
+    return printDate.toLocaleDateString('de');
   }
 }
