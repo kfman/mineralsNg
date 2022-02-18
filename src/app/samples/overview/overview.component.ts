@@ -1,15 +1,12 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AngularFirestore} from '@angular/fire/compat/firestore';
 import {AngularFireAuth} from '@angular/fire/compat/auth';
 import {IPrintSample, Sample} from '../../models/Sample';
 import {PdfCreatorService} from '../../services/pdf-creator.service';
-import {firstValueFrom, Subscription} from 'rxjs';
+import {firstValueFrom} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MineralDatabaseService} from '../../services/mineral-database.service';
-import {
-  DataStateChangeEvent,
-  GridDataResult
-} from '@progress/kendo-angular-grid';
+import {DataStateChangeEvent, GridDataResult} from '@progress/kendo-angular-grid';
 import {process, State} from '@progress/kendo-data-query';
 import {Page_GS} from '../../models/Page_GS';
 import {ILabelPage} from '../../models/ILabelPage';
@@ -23,7 +20,6 @@ import {UserData} from '../../models/UserData';
   styleUrls: ['./overview.component.css']
 })
 export class OverviewComponent implements OnInit {
-  private subscription?: Subscription;
   public sizeFilter?: string;
   public printedFilter: boolean = false;
   public samples: Sample[] = [];

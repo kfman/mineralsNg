@@ -1,4 +1,4 @@
-<div class="form-container" style="text-align: center">
+<div class="form-container" style="text-align: center" *ngIf="!loggingIn; else loading">
   <h1>Login</h1>
   <p>
     <mat-form-field appearance="fill">
@@ -21,3 +21,8 @@
 <div class="alert alert-danger" *ngIf="showAlert">
   Login fehlgeschlagen {{alertMessage}}
 </div>
+
+
+<ng-template #loading>
+  <mat-progress-spinner></mat-progress-spinner>
+</ng-template>

@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
 
   showAlert = false;
   alertMessage = '';
+  public loggingIn: boolean = false;
 
   constructor(private auth: AngularFireAuth,
               private router: Router,
@@ -28,10 +29,12 @@ export class LoginComponent implements OnInit {
     try {
       let result = await this.auth.signInWithEmailAndPassword(username, password);
       if (result.user != null) {
+        this.loggingIn = true;
         const token = await result.user?.getIdToken();
         await this.database.getAll(true);
         localStorage.setItem('name', await this.database.getName());
-        this.router.navigate(['/samples/overview']);
+        await this.router.navigate(['/samples/overview']);
+        this.loggingIn = false;
       } else {
 
         this.showAlert = true;
