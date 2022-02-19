@@ -66,7 +66,8 @@ export class OverviewComponent implements OnInit {
     console.log('ngOnInit called');
     this.printedFilter = (await firstValueFrom(this.route.queryParamMap))
       .get('printed') == 'true' ?? false;
-    this.samples = (await this.database.getAll()).sort((a, b) => {
+    this.samples = await this.database.getAll();
+    this.samples = this.samples.sort((a, b) => {
       return b.sampleNumber.localeCompare(a.sampleNumber);
     });
     this.loadData();
@@ -75,13 +76,6 @@ export class OverviewComponent implements OnInit {
     this.loaded = true;
     this.userData = await this.database.getUserData();
     this.gridView = process(this.samples, this.state);
-    console.log('ngOnInit finished');
-  }
-
-  private reloadLabelCounter() {
-    this.unprintedGs = this.samples.filter(s => s.size == 'GS' && !s.printed).length;
-    this.unprinted4 = this.samples.filter(s => s.size == '4' && !s.printed).length;
-    this.unprinted2 = this.samples.filter(s => s.size == '2' && !s.printed).length;
   }
 
   loadData() {
@@ -143,12 +137,14 @@ export class OverviewComponent implements OnInit {
   }
 
   formatPrinted(printed: string | Date) {
-    if (printed as Date) {
-      let printDate: Date= new Date();
-      Object.assign(printDate, (printed as Date));
-      return printDate.toLocaleDateString('de');
-    }
+    if (!printed) return '';
+    let printDate: Date = new Date(printed);
+    return printDate.toLocaleDateString('de');
+  }
 
-    return printed;
+  private reloadLabelCounter() {
+    this.unprintedGs = this.samples.filter(s => s.size == 'GS' && !s.printed).length;
+    this.unprinted4 = this.samples.filter(s => s.size == '4' && !s.printed).length;
+    this.unprinted2 = this.samples.filter(s => s.size == '2' && !s.printed).length;
   }
 }

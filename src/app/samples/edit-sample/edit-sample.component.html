@@ -117,7 +117,7 @@
 
         <input id="printed" name="printed" type="text" class="form-control"
                readonly="true"
-               [(ngModel)]="sample.printed">
+               value="{{ sample.printed | date:'dd.MM.YYYY' }}">
         <div class="input-group-append">
           <button class="btn btn-sm btn-warning"
                   (click)="resetPrinted()"

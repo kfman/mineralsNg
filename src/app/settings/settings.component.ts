@@ -13,6 +13,7 @@ import {Page_4} from '../models/Page_4';
 import {Page_2} from '../models/Page_2';
 import {IPrintSample, Sample} from '../models/Sample';
 import {parseNumber} from '@progress/kendo-angular-intl';
+import {saveAs, encodeBase64} from '@progress/kendo-file-saver';
 
 @Component({
   selector: 'app-settings',
@@ -152,5 +153,10 @@ export class SettingsComponent implements OnInit {
     if (page) {
       let printed = this.pdfService.create(page);
     }
+  }
+
+  async downloadBackup() {
+    let data = await this.database.getAll();
+    saveAs("data:text/plain;base64," + encodeBase64(JSON.stringify(data)), 'backup.json');
   }
 }
