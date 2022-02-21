@@ -46,19 +46,19 @@ export class EditSampleComponent implements OnInit, OnDestroy {
 
   @HostListener('window:beforeunload')
   async ngOnDestroy(): Promise<void> {
-    if (this.deleted || !this.sample?.mineral) {
-      return;
-    }
-
-    if (this.sample) {
-      if (this.id == 'new') {
-        this.id = (await this.database.add(this.sample))!;
-        let index = (await this.database.getUserData()).index;
-        await this.database.updateUser({'index': ++index});
-      } else {
-        await this.database.update(this.id, this.sample);
-      }
-    }
+    // if (this.deleted || !this.sample?.mineral) {
+    //   return;
+    // }
+    //
+    // if (this.sample) {
+    //   if (this.id == 'new') {
+    //     this.id = (await this.database.add(this.sample))!;
+    //     let index = (await this.database.getUserData()).index;
+    //     await this.database.updateUser({'index': ++index});
+    //   } else {
+    //     await this.database.update(this.id, this.sample);
+    //   }
+    // }
   }
 
   async delete(id: string) {
