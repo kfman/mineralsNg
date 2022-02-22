@@ -77,15 +77,19 @@ export class EditSampleComponent implements OnInit, OnDestroy {
     this.sample!.printed = null;
   }
 
-  async createDuplicate(sample: Sample) {
+  async createDuplicate(sample: Sample, count: number = 1) {
     this.loaded = false;
-    let created = new Sample();
-    Object.assign(created, sample);
-    created.id = undefined;
-    created.sampleNumber = await this.database.getSampleNumber();
-    let index = (await this.database.getUserData()).index;
-    await this.database.updateUser({'index': ++index});
-    let result = await this.database.add(created);
+    let result: string | null = null;
+    for (let i = 0; i < count; i++) {
+
+      let created = new Sample();
+      Object.assign(created, sample);
+      created.id = undefined;
+      created.sampleNumber = await this.database.getSampleNumber();
+      let index = (await this.database.getUserData()).index;
+      await this.database.updateUser({'index': ++index});
+      result = await this.database.add(created);
+    }
     if (result) {
       await this.router.navigate([`/samples/${result}`]);
     } else {
