@@ -77,9 +77,12 @@ export class EditSampleComponent implements OnInit, OnDestroy {
     this.sample!.printed = null;
   }
 
-  async createDuplicate(sample: Sample, count: number = 1) {
+  async createDuplicate(sample: Sample, count: string | number = 1) {
     this.loaded = false;
     let result: string | null = null;
+    if (typeof (count) === 'string')
+      count = parseInt(count);
+
     for (let i = 0; i < count; i++) {
 
       let created = new Sample();
@@ -91,7 +94,7 @@ export class EditSampleComponent implements OnInit, OnDestroy {
       result = await this.database.add(created);
     }
     if (result) {
-      await this.router.navigate([`/samples/${result}`]);
+      await this.router.navigate([`/samples/overview`]);
     } else {
       this.loaded = false;
     }

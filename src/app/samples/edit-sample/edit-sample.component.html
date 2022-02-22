@@ -136,11 +136,14 @@
         Speichern & Zurück
       </button>
     </div>
-    <div class="col-4">
+    <div class="col" style="text-align: right">
+      <input type="number" min="1" max="99" value="1" class="form-control" #duplicateCount>
+    </div>
+    <div class="col">
       <button name="submit" type="submit"
-              (click)="createDuplicate(sample)"
+              (click)="createDuplicate(sample, duplicateCount.value ?? 1)"
               class="btn btn-outline-primary hide">
-        Duplikat anlegen
+        Duplikat(e) anlegen
       </button>
     </div>
     <div class="col-4" style="text-align: right">
