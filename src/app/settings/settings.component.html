@@ -79,8 +79,6 @@
         <button class="btn btn-info" (click)="createPdf()">Create PDF</button>
       </div>
       <div class="btn btn-dark" (click)="testToast()">Toast testen</div>
-      <div><a class="btn btn-danger"
-              [routerLink]="['/samples/import']">Import</a></div>
 
       <div><a class="btn btn-danger" (click)="testDbLoad()">
         Daten vom Server laden</a></div>
@@ -100,6 +98,12 @@
     <button class="btn btn-info" (click)="printPage('GS')">Drucken (GS)</button>
     <button class="btn btn-info" (click)="printPage('4')">Drucken (4)</button>
     <button class="btn btn-info" (click)="printPage('2')">Drucken (2)</button>
+  </div>
+
+  <div class="col-9 offset-3" style="padding-top: 20px">
+    <button class="btn btn-info" (click)="downloadBackup()">Backup erstellen</button>
+    <a class="btn btn-danger"
+       [routerLink]="['/samples/import']">Import</a>
   </div>
 </div>
 
@@ -133,6 +137,8 @@
     </button>
   </kendo-dialog-actions>
 </kendo-dialog>
+
+<button class="btn btn-primary">Bootstrap button</button>
 
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
 

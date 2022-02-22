@@ -3,9 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Sample} from '../../models/Sample';
 import {ToastService} from '../../services/toast-service.service';
 import {NumberingService} from '../../services/numbering.service';
-import {firstValueFrom} from 'rxjs';
 import {MineralDatabaseService} from '../../services/mineral-database.service';
-import {tassign} from 'tassign';
 
 
 @Component({
@@ -48,19 +46,19 @@ export class EditSampleComponent implements OnInit, OnDestroy {
 
   @HostListener('window:beforeunload')
   async ngOnDestroy(): Promise<void> {
-    if (this.deleted || !this.sample?.mineral) {
-      return;
-    }
-
-    if (this.sample) {
-      if (this.id == 'new') {
-        this.id = (await this.database.add(this.sample))!;
-        let index = (await this.database.getUserData()).index;
-        await this.database.updateUser({'index': ++index});
-      } else {
-        await this.database.update(this.id, this.sample);
-      }
-    }
+    // if (this.deleted || !this.sample?.mineral) {
+    //   return;
+    // }
+    //
+    // if (this.sample) {
+    //   if (this.id == 'new') {
+    //     this.id = (await this.database.add(this.sample))!;
+    //     let index = (await this.database.getUserData()).index;
+    //     await this.database.updateUser({'index': ++index});
+    //   } else {
+    //     await this.database.update(this.id, this.sample);
+    //   }
+    // }
   }
 
   async delete(id: string) {
@@ -68,7 +66,7 @@ export class EditSampleComponent implements OnInit, OnDestroy {
     if (id != 'new') {
       await this.database.delete(id);
     }
-    this.router.navigate(['/samples/overview']);
+    await this.router.navigate(['/samples/overview']);
   }
 
   resetPrinted() {
@@ -79,17 +77,24 @@ export class EditSampleComponent implements OnInit, OnDestroy {
     this.sample!.printed = null;
   }
 
-  async createDuplicate(sample: Sample) {
+  async createDuplicate(sample: Sample, count: string | number = 1) {
     this.loaded = false;
-    let created = new Sample();
-    Object.assign(created, sample);
-    created.id = undefined;
-    created.sampleNumber = await this.database.getSampleNumber();
-    let index = (await this.database.getUserData()).index;
-    await this.database.updateUser({'index': ++index});
-    let result = await this.database.add(created);
+    let result: string | null = null;
+    if (typeof (count) === 'string')
+      count = parseInt(count);
+
+    for (let i = 0; i < count; i++) {
+
+      let created = new Sample();
+      Object.assign(created, sample);
+      created.id = undefined;
+      created.sampleNumber = await this.database.getSampleNumber();
+      let index = (await this.database.getUserData()).index;
+      await this.database.updateUser({'index': ++index});
+      result = await this.database.add(created);
+    }
     if (result) {
-      this.router.navigate([`/samples/${result}`]);
+      await this.router.navigate([`/samples/overview`]);
     } else {
       this.loaded = false;
     }

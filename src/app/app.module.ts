@@ -8,9 +8,7 @@ import {AngularFireAuth} from '@angular/fire/compat/auth';
 import {AngularFireDatabase} from '@angular/fire/compat/database';
 import {LoginComponent} from './login/login.component';
 import {RouterModule} from '@angular/router';
-import {
-  NavigationBarComponent
-} from './widgets/navigation-bar/navigation-bar.component';
+import {NavigationBarComponent} from './widgets/navigation-bar/navigation-bar.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {SignUpComponent} from './sign-up/sign-up.component';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -25,22 +23,21 @@ import {LabelModule} from '@progress/kendo-angular-label';
 import {GridModule} from '@progress/kendo-angular-grid';
 import {OverviewComponent} from './samples/overview/overview.component';
 import {ImportCsvComponent} from './samples/import-csv/import-csv.component';
-import { SampleListComponent } from './widgets/sample-list/sample-list.component';
+import {SampleListComponent} from './widgets/sample-list/sample-list.component';
 import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
-import { SettingsComponent } from './settings/settings.component';
+import {SettingsComponent} from './settings/settings.component';
 import {environment} from '../environments/environment';
 import {PdfCreatorService} from './services/pdf-creator.service';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { ToastContainerComponent } from './widgets/toast-container/toast-container.component';
+import {ToastContainerComponent} from './widgets/toast-container/toast-container.component';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
-import { DialogsModule } from '@progress/kendo-angular-dialog';
+import {DialogsModule} from '@progress/kendo-angular-dialog';
 import {ButtonsModule} from '@progress/kendo-angular-buttons';
-import {MatSnackBar} from '@angular/material/snack-bar';
-
+import {LeaveEditPageGuard} from './guards/leave-edit-page.guard';
 
 
 @NgModule({
@@ -68,22 +65,24 @@ import {MatSnackBar} from '@angular/material/snack-bar';
         {
           path: 'samples/overview',
           component: OverviewComponent,
-          // canActivate: [AngularFireAuthGuard]
+          canActivate: [AngularFireAuthGuard]
         },
         {
           path: 'samples/import',
           component: ImportCsvComponent,
-          // canActivate: [AngularFireAuthGuard]
+          canActivate: [AngularFireAuthGuard]
         },
         {
           path: 'samples/new',
           component: EditSampleComponent,
-          // canActivate: [AngularFireAuthGuard]
+          canActivate: [AngularFireAuthGuard],
+          canDeactivate: [LeaveEditPageGuard],
         },
         {
           path: 'samples/:id',
           component: EditSampleComponent,
-          // canActivate: [AngularFireAuthGuard]
+          canActivate: [AngularFireAuthGuard],
+          canDeactivate: [LeaveEditPageGuard],
         },
       ],
     ),

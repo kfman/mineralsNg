@@ -16,10 +16,6 @@ export class MineralDatabaseService {
   readonly #lastChanged = 'lastChanged';
   private samples?: Sample[];
 
-  async getUserId(): Promise<string | undefined> {
-    return (await firstValueFrom(this.auth.user))?.uid;
-  }
-
   constructor(private numbering: NumberingService,
               private auth: AngularFireAuth,
               private firebase: AngularFireDatabase,
@@ -27,26 +23,15 @@ export class MineralDatabaseService {
   ) {
   }
 
+  async getUserId(): Promise<string | undefined> {
+    return (await firstValueFrom(this.auth.user))?.uid;
+  }
 
   async getSampleNumber(): Promise<string> {
     let uid = await this.getUserId();
     let pattern = (await this.firebase.database.ref(`/users/${uid}/pattern`).get()).val() as string;
     let lastIndex = (await this.firebase.database.ref(`/users/${uid}/index`).get()).val() as number;
     return this.numbering.getNumber(pattern, lastIndex + 1);
-  }
-
-  private async loadFromServer(): Promise<Sample[]> {
-    let uid = (await this.getUserId());
-    let data = await this.firebase.database.ref(`/users/${uid}/samples`).get();
-    let sampleMap = data.val() as Map<string, Sample>;
-    let result: Sample[] = [];
-
-    for (let [key, value] of Object.entries(sampleMap)) {
-      let sample = value;
-      sample.id = key;
-      result.push(sample);
-    }
-    return result;
   }
 
   async getAll(forceReload = false): Promise<Sample[]> {
@@ -113,8 +98,6 @@ export class MineralDatabaseService {
     sample.id = id;
     all.push(sample);
 
-    console.log(sample);
-
     let lastChanged = Date.now();
     let uid = await this.getUserId();
     await this.firebase.database.ref(`/users/${uid}/samples/${id}`).set(sample);
@@ -125,34 +108,16 @@ export class MineralDatabaseService {
   async add(sample: Sample): Promise<string | null> {
     let all = await this.getAll();
 
+    let lastChanged = Date.now();
     sample.id = sample.sampleNumber;
     let uid = await this.getUserId();
     let ref = await this.firebase.database.ref(`/users/${uid}/samples`).push(sample);
-    await this.firebase.database.ref(`/users/${uid}`).update({'lastChanged': Date.now()});
+    await this.firebase.database.ref(`/users/${uid}`).update({'lastChanged': lastChanged});
     sample.id = ref.key!;
 
-
     all.push(sample);
-    await this.save(all, undefined, true);
+    await this.save(all, lastChanged, true);
     return ref.key;
-  }
-
-  private async save(dataset: Sample[], lastChanged?: number, onlyLocal: boolean = false) {
-    let dbDump = JSON.stringify(dataset);
-    await localStorage.setItem(this.#collectionName, dbDump);
-    console.log(`Stored ${Math.round(dbDump.length / 1024)} kB locally`);
-
-    if (onlyLocal) {
-      return;
-    }
-
-    let uid = (await firstValueFrom(this.auth.user))?.uid;
-    if (!uid) {
-      this.router.navigate(['/login']);
-      console.log('Not logged in');
-    }
-    await localStorage.setItem(this.#lastChanged, (lastChanged ?? Date.now()).toString());
-
   }
 
   public async deleteServerData() {
@@ -207,13 +172,13 @@ export class MineralDatabaseService {
 
   }
 
-  async getUserData() : Promise<UserData>{
+  async getUserData(): Promise<UserData> {
     let result = new UserData();
     let uid = (await firstValueFrom(this.auth.user))?.uid;
     result.isAdmin = (await this.firebase.database.ref(`/users/${uid}/isAdmin`).get())?.val() ?? false;
     result.index = (await this.firebase.database.ref(`/users/${uid}/index`).get())?.val() ?? 0;
     result.name = (await this.firebase.database.ref(`/users/${uid}/name`).get())?.val() ?? '';
-    result.pattern =(await this.firebase.database.ref(`/users/${uid}/pattern`).get())?.val() ?? 'MIN 0000';
+    result.pattern = (await this.firebase.database.ref(`/users/${uid}/pattern`).get())?.val() ?? 'MIN 0000';
     return result;
   }
 
@@ -221,5 +186,37 @@ export class MineralDatabaseService {
     let uid = (await firstValueFrom(this.auth.user))?.uid;
     let data = await this.firebase.database.ref(`/users/${uid}/index`).get();
     return data.val();
+  }
+
+  private async loadFromServer(): Promise<Sample[]> {
+    let uid = (await this.getUserId());
+    let data = await this.firebase.database.ref(`/users/${uid}/samples`).get();
+    let sampleMap = data.val() as Map<string, Sample>;
+    let result: Sample[] = [];
+
+    for (let [key, value] of Object.entries(sampleMap)) {
+      let sample = value;
+      sample.id = key;
+      result.push(sample);
+    }
+    return result;
+  }
+
+  private async save(dataset: Sample[], lastChanged?: number, onlyLocal: boolean = false) {
+    let dbDump = JSON.stringify(dataset);
+    localStorage.setItem(this.#collectionName, dbDump);
+    console.log(`Stored ${Math.round(dbDump.length / 1024)} kB locally`);
+
+    if (onlyLocal) {
+      return;
+    }
+
+    let uid = (await firstValueFrom(this.auth.user))?.uid;
+    if (!uid) {
+      this.router.navigate(['/login']);
+      console.log('Not logged in');
+    }
+    await localStorage.setItem(this.#lastChanged, (lastChanged ?? Date.now()).toString());
+
   }
 }
