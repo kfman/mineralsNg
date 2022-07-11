@@ -11,7 +11,7 @@ export class Page_GS extends ILabelPage {
     this.rows = 8;
     this.xOffset = 5;
     this.yOffset = 0;
-    this.innerCellOffsetY = 20;
+    this.innerCellOffsetY = 10;
   }
 
   override labelFrom(sample: IPrintSample, row: number, column: number): any[] {
