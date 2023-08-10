@@ -29,6 +29,7 @@ export class OverviewComponent implements OnInit {
   public dialogOpened = false;
   public userData = new UserData();
   public loaded = false;
+  public filter: string = '';
 
   public state: State = {
     skip: 0,
@@ -146,5 +147,16 @@ export class OverviewComponent implements OnInit {
     this.unprintedGs = this.samples.filter(s => s.size == 'GS' && !s.printed).length;
     this.unprinted4 = this.samples.filter(s => s.size == '4' && !s.printed).length;
     this.unprinted2 = this.samples.filter(s => s.size == '2' && !s.printed).length;
+  }
+
+  async searchForFilter() {
+    this.samples = (await this.database.getAll()).filter(s => {
+      return s.sampleNumber.toLowerCase().includes(this.filter.toLowerCase())
+        || s.analytics.toLowerCase().includes(this.filter.toLowerCase())
+        || s.location.toLowerCase().includes(this.filter.toLowerCase())
+        || s.mineral.toLowerCase().includes(this.filter.toLowerCase())
+        || s.annotation.toLowerCase().includes(this.filter.toLowerCase());
+
+    });
   }
 }
